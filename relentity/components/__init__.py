@@ -1,1 +1,1 @@
-from .base import Component
+from .base import Component, T

@@ -1,54 +1,41 @@
-from relentity.components.base import Component
-from relentity.entities import Entity
+from relentity.components.ai_agents import AIAgent, AIAgentSystemPrompt
+from relentity.components.identity import Identity
+from relentity.components.position import Position
+from relentity.components.velocity import TooledVelocity, Velocity
+from relentity.entity import Entity
 from relentity.registry import Registry
-from relentity.systems import System
+from relentity.systems.ai_agents import AiAgentSystem
+from relentity.systems.movement import MovementSystem
 
 
-class Position(Component):
-    x: float
-    y: float
+async def on_position_updated(data):
+    print(f"Position updated: {data.x}, {data.y}")
 
 
-class Velocity(Component):
-    vx: float
-    vy: float
-
-
-class MovementSystem(System):
-    def update(self):
-        entities = self.registry.get_entities_with_components(Position, Velocity)
-        for entity in entities:
-            position = entity.get_component(Position)
-            velocity = entity.get_component(Velocity)
-            position.x += velocity.vx
-            position.y += velocity.vy
-
-
-def main():
+async def main():
     registry = Registry()
 
-    entity = Entity[
-        Position(x=0, y=0),
-        Velocity(vx=1, vy=1)
-    ](registry)
-
     NewPlayer = Entity[
+        Identity(name="John Ward", description="GO to 10, 20 and wait there"),
         Position(x=0, y=0),
-        Velocity(vx=0, vy=0)
+        Velocity(vx=1, vy=1),
+        TooledVelocity(),
+        AIAgentSystemPrompt(),
+        AIAgent(model="qwen2.5:14b"),
     ]
 
-    NewPlayer(registry)
-
-    # Alternatively
-    entity = Entity(registry)
-    entity.add_component(Position(x=0, y=0))
-    entity.add_component(Velocity(vx=1, vy=1))
+    entity = NewPlayer(registry)
+    entity.event_bus.register_handler("position_updated", on_position_updated)
 
     movement_system = MovementSystem(registry)
-    movement_system.update()
+    ai_agent_system = AiAgentSystem(registry)
 
-    print(entity.get_component(Position))
+    for _ in range(10):
+        await movement_system.update()
+        await ai_agent_system.update()
 
 
 if __name__ == "__main__":
-    main()
+    import asyncio
+
+    asyncio.run(main())

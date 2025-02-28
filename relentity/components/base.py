@@ -1,6 +1,7 @@
-from typing import TypeVar, ClassVar
+from typing import TypeVar
 
 from pydantic import BaseModel
 
-class Component(BaseModel):
-    T: ClassVar = TypeVar('T', bound=BaseModel)
+T = TypeVar('T', bound=BaseModel)
+
+class Component(BaseModel): ...

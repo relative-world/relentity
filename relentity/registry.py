@@ -10,10 +10,11 @@ class Registry:
                 self.component_to_entities[component_type] = []
             self.component_to_entities[component_type].append(entity)
 
-    def get_entities_with_components(self, *component_types):
+    async def entities_with_components(self, *component_types):
         if not component_types:
-            return []
+            raise StopAsyncIteration
         entities = set(self.component_to_entities.get(component_types[0], []))
         for component_type in component_types[1:]:
             entities &= set(self.component_to_entities.get(component_type, []))
-        return list(entities)
+        for entity in list(entities):
+            yield entity

@@ -5,5 +5,5 @@ class System:
     def __init__(self, registry: Registry):
         self.registry = registry
 
-    def update(self):
+    async def update(self):
         raise NotImplementedError

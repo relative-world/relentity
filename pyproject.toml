@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "relentity"
+version = "0.1.0"
+description = ""
+authors = ["Tyler Evans <tyler@poorlythoughtout.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pydantic = "^2.10.6"
+ollama = "^0.4.7"
+orjson = "^3.10.15"
+pydantic-settings = "^2.8.1"
+aiostream = "^0.6.4"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.4"
+pytest-coverage = "^0.0"
+black = "^25.1.0"
+ruff = "^0.9.8"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
