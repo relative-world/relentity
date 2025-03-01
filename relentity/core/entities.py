@@ -38,9 +38,14 @@ class Entity(metaclass=EntityMeta):
         for _, component in self.components.items():
             if isinstance(component, component_type):
                 return component
+        # Explicitly return None if no component is found
+        return None
 
     async def has_components(self, *component_types: Type[Component]) -> bool:
-        return all(await self.get_component(component_type) for component_type in component_types)
+        for component_type in component_types:
+            if await self.get_component(component_type) is None:
+                return False
+        return True
 
     async def remove_component(self, component_type: Type[Component]):
         if component_type in self.components:

@@ -137,7 +137,15 @@ def tool(func: callable|Awaitable):
 def wrap_with_actor(func, actor):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        # First argument (self) is the location instance
-        return func(*args, actor=actor, **kwargs)
+        # Insert actor as second parameter (after self)
+        # and shift remaining positional args
+        if args:
+            new_args = (args[0], actor) + args[1:]
+        else:
+            new_args = (actor,)
+
+        # Call with new args, ignoring any 'actor' in kwargs
+        filtered_kwargs = {k: v for k, v in kwargs.items() if k != 'actor'}
+        return func(*new_args, **filtered_kwargs)
 
     return wrapper

@@ -7,12 +7,10 @@ from pathlib import Path
 from pythonjsonlogger.json import JsonFormatter
 
 from relentity.ai.components import AIDriven, ToolEnabledComponent, TextPromptComponent
-from relentity.ai.components import (
-    pretty_name_entity, pretty_print_event
-)
 from relentity.ai.events import AI_RESPONSE_EVENT_TYPE
 from relentity.ai.pydantic_ollama.tools import tool
 from relentity.ai.systems import AIDrivenSystem
+from relentity.ai.utils import pretty_name_entity, pretty_print_event
 from relentity.core.components import Identity
 from relentity.core.entities import Entity
 from relentity.spatial import (
@@ -54,7 +52,7 @@ class Actor(Entity):
         super().__init__(registry, *args, **kwargs)
         self.add_component_sync(Identity(name=name, description=description))
         self.add_component_sync(Position(x=random.randint(-10, 10), y=random.randint(-10, 10)))
-        self.add_component_sync(Velocity(vx=0, vy=0, max_speed=40))
+        self.add_component_sync(Velocity(vx=0, vy=0))
 
         if private_info:
             self.add_component_sync(TextPromptComponent(text=private_info))
