@@ -51,11 +51,8 @@ class AIDrivenSystem(System):
             if issubclass(component_type, SystemPromptRenderableComponent):
                 system_prompt.append(await component.render_system_prompt())
 
-        if hasattr(entity, 'render_system_prompt'):
-            system_prompt.append(await entity.render_system_prompt())
-
-        if hasattr(entity, 'render_prompt'):
-            prompt.append(await entity.render_prompt())
+        system_prompt.append(await ai_driven_component.render_system_prompt())
+        prompt.append(await ai_driven_component.render_prompt())
 
         prompt_str = "\n".join(prompt) or "<No input this round>"
         system_prompt_str = "\n".join(system_prompt)

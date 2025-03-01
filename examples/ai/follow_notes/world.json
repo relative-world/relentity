@@ -1,0 +1,191 @@
+{
+  "entities": [
+    {
+      "type": "Actor",
+      "name": "Dave",
+      "description": "A person that woke up in an endless field of grass in a virtual world. Be sure to share information with those around you. Solve the puzzle as quickly as possible.",
+      "components": {
+        "Identity": {
+          "name": "Dave",
+          "description": "A person that woke up in an endless field of grass in a virtual world."
+        },
+        "Position": {
+          "x": 0,
+          "y": 0
+        },
+        "Velocity": {
+          "vx": 0,
+          "vy": 0,
+          "max_speed": 40
+        },
+        "AIMovementController": {},
+        "Vision": {
+          "max_range": 20
+        },
+        "Visible": {
+          "description": "Dave - A person that woke up in an endless field of grass in a virtual world."
+        },
+        "Audible": {
+          "volume": 50
+        },
+        "Hearing": {
+          "volume": 50
+        },
+        "AIDriven": {
+          "model": "qwen2.5:14b",
+          "update_interval": 1
+        }
+      }
+    },
+    {
+      "type": "Actor",
+      "name": "Bill",
+      "description": "A person that woke up in an endless field of grass in a virtual world. Be sure to share information with those around you. Solve the puzzle as quickly as possible.",
+      "components": {
+        "Identity": {
+          "name": "Bill",
+          "description": "A person that woke up in an endless field of grass in a virtual world."
+        },
+        "Position": {
+          "x": 0,
+          "y": 0
+        },
+        "Velocity": {
+          "vx": 0,
+          "vy": 0,
+          "max_speed": 40
+        },
+        "AIMovementController": {},
+        "Vision": {
+          "max_range": 20
+        },
+        "Visible": {
+          "description": "Bill - A person that woke up in an endless field of grass in a virtual world."
+        },
+        "Audible": {
+          "volume": 50
+        },
+        "Hearing": {
+          "volume": 50
+        },
+        "AIDriven": {
+          "model": "qwen2.5:14b",
+          "update_interval": 1
+        }
+      }
+    },
+    {
+      "type": "Ball",
+      "components": {
+        "Identity": {
+          "name": "a ball",
+          "description": "A ball"
+        },
+        "Position": {
+          "x": 0,
+          "y": 1
+        },
+        "Visible": {
+          "description": "A large red kickball, it's well inflated and says 'Spalding' on the side."
+        },
+        "Hearing": {}
+      }
+    },
+    {
+      "type": "Entity",
+      "components": {
+        "Identity": {
+          "name": "a tree",
+          "description": "A tree"
+        },
+        "Position": {
+          "x": 205,
+          "y": 98
+        },
+        "Visible": {
+          "description": "A large oak tree, its branches are full of leaves."
+        }
+      }
+    },
+    {
+      "type": "Entity",
+      "components": {
+        "Identity": {
+          "name": "a flower",
+          "description": "A flower"
+        },
+        "Position": {
+          "x": 100,
+          "y": 98
+        },
+        "Visible": {
+          "description": "A small yellow flower, its petals are wilting."
+        }
+      }
+    },
+    {
+      "type": "Entity",
+      "components": {
+        "Identity": {
+          "name": "a note",
+          "description": "A note"
+        },
+        "Position": {
+          "x": 2,
+          "y": 0
+        },
+        "Visible": {
+          "description": "A scrap of paper with some writing on it. the writing says 'a treasure awaits, seek the next clue at (100, 100)."
+        }
+      }
+    },
+    {
+      "type": "Entity",
+      "components": {
+        "Identity": {
+          "name": "a note",
+          "description": "A note"
+        },
+        "Position": {
+          "x": 100,
+          "y": 100
+        },
+        "Visible": {
+          "description": "The first part of the riddle: The answer is big and yellow. The next clue awaits you at (200, 100)"
+        }
+      }
+    },
+    {
+      "type": "Entity",
+      "components": {
+        "Identity": {
+          "name": "a note",
+          "description": "A note"
+        },
+        "Position": {
+          "x": 200,
+          "y": 100
+        },
+        "Visible": {
+          "description": "The second part of the riddle: the answer is hot. The final clue is at (300, 300)"
+        }
+      }
+    },
+    {
+      "type": "Entity",
+      "components": {
+        "Identity": {
+          "name": "a note",
+          "description": "A note"
+        },
+        "Position": {
+          "x": 300,
+          "y": 300
+        },
+        "Visible": {
+          "description": "The final clue: the answer must be spoken near the big red ball to reveal the door"
+        }
+      }
+    }
+  ]
+}
