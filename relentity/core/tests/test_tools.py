@@ -1,8 +1,7 @@
 import pytest
-import asyncio
+
 from relentity.ai.pydantic_ollama.tools import (
-    tool, call_tool, function_to_schema, tools_to_schema,
-    py_type_to_param_type, ToolCallRequest, ToolCallResponse,
+    tool, call_tool, function_to_schema, py_type_to_param_type, ToolCallRequest, ToolCallResponse,
     wrap_with_actor
 )
 
