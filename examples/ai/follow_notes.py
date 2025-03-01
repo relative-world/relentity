@@ -104,13 +104,13 @@ async def main():
     Entity[
         Identity(name="a tree", description="A tree"),
         Position(x=205, y=98),
-        Visible(description="A large oak tree, it's branches are full of leaves."),
+        Visible(description="A large oak tree, its branches are full of leaves."),
     ](registry)
 
     Entity[
         Identity(name="a flower", description="A flower"),
         Position(x=100, y=98),
-        Visible(description="A small yellow flower, it's petals are wilting."),
+        Visible(description="A small yellow flower, its petals are wilting."),
     ](registry)
 
     note_0 = Entity[
