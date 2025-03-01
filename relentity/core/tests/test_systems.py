@@ -1,5 +1,5 @@
 import pytest
-import asyncio
+
 from relentity.core.systems import System
 
 

@@ -1,7 +1,7 @@
 import pytest
-import asyncio
-from relentity.core.entities import Entity
+
 from relentity.core.components import Component
+from relentity.core.entities import Entity
 
 
 # Define test components

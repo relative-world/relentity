@@ -1,7 +1,7 @@
-import pytest
-import asyncio
 from unittest.mock import AsyncMock
-from relentity.core.event_bus import EventBus
+
+import pytest
+
 from relentity.core.exceptions import InvalidEventNameException, InvalidEventPatternException
 
 

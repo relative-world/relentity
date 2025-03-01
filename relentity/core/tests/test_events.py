@@ -1,4 +1,3 @@
-import pytest
 from relentity.core.events import Event
 
 
