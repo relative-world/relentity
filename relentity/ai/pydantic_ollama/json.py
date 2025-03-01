@@ -6,7 +6,7 @@ import orjson
 from ollama import AsyncClient as OllamaAsyncClient
 from pydantic import BaseModel
 
-from relentity.pydantic_ollama.exceptions import UnparsableResponseError
+from .exceptions import UnparsableResponseError
 from relentity.settings import settings
 
 logger = logging.getLogger(__name__)

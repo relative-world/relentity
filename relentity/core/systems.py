@@ -1,4 +1,4 @@
-from relentity.registry import Registry
+from .registry import Registry
 
 
 class System:

@@ -2,7 +2,7 @@ from typing import Generic, TypeVar
 
 from pydantic import BaseModel
 
-from relentity.pydantic_ollama.tools import ToolCallRequest
+from .tools import ToolCallRequest
 
 
 class BasicResponse(BaseModel):

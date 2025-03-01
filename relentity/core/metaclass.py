@@ -1,11 +1,13 @@
-from typing import Callable
+from typing import Callable, FrozenSet, Any
+from weakref import WeakValueDictionary
 
-from relentity.components import Component
+from relentity.core import Component
 
 
 class EntityMeta(type):
-    def __getitem__(cls, components: list[Component]):
-        _component_classes: list[type[Component] | Callable] = set(type(component) for component in components)
+
+    def __getitem__(cls, components: list[Component | Callable]) -> 'EntityMeta':
+        _component_classes: FrozenSet[Component | Callable] = frozenset(type(component) for component in components)
 
         class EntityWithComponents(cls):
             def __init__(self, *args, **kwargs):
@@ -17,10 +19,5 @@ class EntityMeta(type):
                         self.add_component_sync(component())
                     else:
                         raise TypeError("Component must be a Component instance or a callable")
-
-            def __subclasscheck__(self, subclass):
-                return super().__subclasscheck__(subclass) and all(
-                    issubclass(component, subclass) for component in components
-                )
 
         return EntityWithComponents

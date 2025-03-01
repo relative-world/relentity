@@ -5,9 +5,9 @@ import orjson
 from ollama import AsyncClient as AsyncOllamaClient, GenerateResponse
 from pydantic import BaseModel
 
-from relentity.pydantic_ollama.json import maybe_parse_json, fix_json_response, inline_json_schema_defs
-from relentity.pydantic_ollama.responses import BasicResponse, TooledResponse
-from relentity.pydantic_ollama.tools import call_tool, ToolCallResponse, ToolDefinition, TOOL_CALLING_SYSTEM_PROMPT
+from .json import maybe_parse_json, fix_json_response, inline_json_schema_defs
+from .responses import BasicResponse, TooledResponse
+from .tools import call_tool, ToolCallResponse, ToolDefinition, TOOL_CALLING_SYSTEM_PROMPT
 from relentity.settings import settings
 
 logger = logging.getLogger(__name__)
@@ -79,6 +79,7 @@ class PydanticOllamaClient:
             f"\n{system}\n\nOnly respond with json content, any text outside of the structure will break the system. "
             f"The structured output format should match this json schema:\n{output_schema}."
         )
+
         response = await ollama_generate(
             client=self._client,
             model=model or self.default_model,
@@ -87,16 +88,18 @@ class PydanticOllamaClient:
             context=context,
         )
         response_text = response.response
-
         try:
             data = maybe_parse_json(response_text)
         except orjson.JSONDecodeError:
-            data = await fix_json_response(self._client, response_text, response_model)
+            try:
+                data = await fix_json_response(self._client, response_text, response_model)
+            except orjson.JSONDecodeError:
+                return None  # we tried our best, let's move on
 
         response_obj = response_model.model_validate(data)
         if tools:
             if response_obj.tool_call:
-                await call_tool(tools, response_obj.tool_call)
+                result = await call_tool(tools, response_obj.tool_call)
         return response, response_obj
 
 
