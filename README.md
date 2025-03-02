@@ -93,7 +93,7 @@ await builder.set_task(BuildTask())
 
 ## Configuration
 
-Relentity uses environment variables and a configuration file to manage settings. The primary configuration is handled through the `OllamaSettings` class in `relentity/settings.py`, which uses `pydantic_settings` for validation and management.
+Relentity uses environment variables and a configuration file to manage settings. The primary configuration is handled through the `RelentitySettings` class in `relentity/settings.py`, which uses `pydantic_settings` for validation and management.
 
 ### Environment Variables
 
@@ -119,7 +119,7 @@ The `RelentitySettings` class in `relentity/settings.py` loads these environment
 ```python
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-class OllamaSettings(BaseSettings):
+class RelentitySettings(BaseSettings):
     base_url: str = "http://192.168.1.14:11434"
     default_model: str = "qwen2.5:14b"
     json_fix_model: str = "qwen2.5:14b"
