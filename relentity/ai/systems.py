@@ -16,6 +16,16 @@ from relentity.spatial import Position, Velocity
 
 
 async def render_basic_information(entity, component_types):
+    """
+    Renders basic information about an entity based on its components.
+
+    Args:
+        entity (Entity): The entity to render information for.
+        component_types (list[Type[Component]]): The types of components to include in the information.
+
+    Returns:
+        str: The rendered basic information.
+    """
     info = []
     for component_type in component_types:
         component = await entity.get_component(component_type)
@@ -35,17 +45,39 @@ async def render_basic_information(entity, component_types):
 
 
 class AIDrivenSystem(System):
+    """
+    System for processing entities driven by AI.
+
+    Attributes:
+        _client (PydanticOllamaClient): The client for interacting with the AI model.
+    """
+
     def __init__(self, registry: Registry):
+        """
+        Initializes the AIDrivenSystem with a registry and AI client.
+
+        Args:
+            registry (Registry): The registry to be used by the system.
+        """
         super().__init__(registry)
         self._client = PydanticOllamaClient(settings.base_url, settings.default_model)
 
     async def update(self):
+        """
+        Updates the system by processing all entities with the AIDriven component.
+        """
         tasks = []
         async for entity in self.registry.entities_with_components(AIDriven):
             tasks.append(self.process_entity(entity))
         await asyncio.gather(*tasks)
 
     async def process_entity(self, entity):
+        """
+        Processes an entity with the AIDriven component.
+
+        Args:
+            entity (Entity): The entity to process.
+        """
         ai_driven_component = await entity.get_component(AIDriven)
         ai_driven_component._update_count += 1
 
