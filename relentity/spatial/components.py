@@ -16,11 +16,6 @@ class Velocity(Component):
     vy: float
 
 
-class Acceleration(Component):
-    vx: float
-    vy: float
-
-
 class Vision(Component):
     max_range: float
 
