@@ -12,7 +12,7 @@ from relentity.spatial import (
     SpatialRegistry,
 )
 from relentity.tasks.events import TASK_PROGRESS_EVENT_TYPE, TASK_COMPLETE_EVENT_TYPE, TASK_ABANDONED_EVENT_TYPE
-from relentity.core import Entity, Event
+from relentity.core import Entity
 from relentity.spatial.events import EntitySeenEvent, SoundEvent
 from relentity.tasks.components import Task
 

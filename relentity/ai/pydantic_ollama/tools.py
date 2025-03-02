@@ -64,17 +64,17 @@ class ToolDefinition(BaseModel):
 
 
 def py_type_to_param_type(annotation):
-    if annotation == str:
+    if annotation is str:
         return "string"
-    elif annotation == int:
+    elif annotation is int:
         return "integer"
-    elif annotation == float:
+    elif annotation is float:
         return "number"
-    elif annotation == bool:
+    elif annotation is bool:
         return "boolean"
-    elif annotation == list:
+    elif annotation is list:
         return "array"
-    elif annotation == dict:
+    elif annotation is dict:
         return "object"
     else:
         return "string"

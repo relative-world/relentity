@@ -50,7 +50,7 @@ class TestJsonFunctions:
 class TestPydanticOllamaClient:
     @pytest.fixture
     def client(self):
-        with patch("relentity.ai.pydantic_ollama.client.AsyncOllamaClient") as mock_client:
+        with patch("relentity.ai.pydantic_ollama.client.AsyncOllamaClient"):
             client = PydanticOllamaClient("http://localhost:11434", "llama2")
             client._client = AsyncMock()
             yield client

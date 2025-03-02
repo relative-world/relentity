@@ -1,7 +1,9 @@
-from typing import Set, Dict, Type, AsyncIterator
+from typing import Set, Dict, Type, AsyncIterator, TYPE_CHECKING
 
 from .components import Component
 
+if TYPE_CHECKING:
+    from .entities import Entity
 
 class Registry:
     def __init__(self):

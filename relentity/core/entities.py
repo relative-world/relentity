@@ -1,10 +1,11 @@
-from typing import Dict, Type, TypeVar, Optional
+from typing import Dict, Type, Optional, TYPE_CHECKING
 
 from .components import Component, T
 from .event_bus import EventBus
 from .metaclass import EntityMeta
 
-T = TypeVar("T", bound=Component)
+if TYPE_CHECKING:
+    from .registry import Registry
 
 
 class Entity(metaclass=EntityMeta):

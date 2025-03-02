@@ -1,5 +1,4 @@
 from typing import Callable, FrozenSet, Any, Union, List
-from weakref import WeakValueDictionary
 
 from relentity.core import Component
 

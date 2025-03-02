@@ -1,4 +1,3 @@
-import asyncio
 import pytest
 from unittest.mock import AsyncMock
 
@@ -49,7 +48,7 @@ async def test_entity_does_not_see_outside_vision_range(registry, vision_system)
     observer_entity = Entity[Position(x=0, y=0), Vision(max_range=50)](registry)
 
     # Create a visible entity outside the vision range
-    visible_entity = Entity[Position(x=60, y=0), Visible()](registry)  # Distance = 60 > 50
+    Entity[Position(x=60, y=0), Visible()](registry)  # Distance = 60 > 50
 
     # Mock the emit method to track calls
     observer_entity.event_bus.emit = AsyncMock()
@@ -99,7 +98,7 @@ async def test_entity_without_vision_component(registry, vision_system):
     observer_entity = Entity[Position(x=0, y=0)](registry)
 
     # Create a visible entity
-    visible_entity = Entity[Position(x=10, y=0), Visible()](registry)
+    Entity[Position(x=10, y=0), Visible()](registry)
 
     # Mock the emit method to track calls
     observer_entity.event_bus.emit = AsyncMock()
