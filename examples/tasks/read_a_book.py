@@ -39,10 +39,10 @@ class EngagedActor(TaskedEntity):
 
 async def main():
     registry = Registry()
-
-    reader = EngagedActor[Task(task="petting dog"),](registry)
-
     task_system = TaskSystem(registry=registry)
+
+    # side effects rule
+    EngagedActor[Task(task="petting dog")](registry)
 
     while True:
         await task_system.update()

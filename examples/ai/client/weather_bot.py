@@ -32,7 +32,7 @@ def check_weather(
 async def main():
     ollama_client = PydanticOllamaClient(settings.base_url, settings.default_model)
     tools = tools_to_schema({"check_weather": check_weather})
-    prompt = f"What's the weather in San Francisco?"
+    prompt = "What's the weather in San Francisco?"
 
     _, response = await ollama_client.generate(
         system="You're a weather bot", prompt=prompt, tools=tools, response_model=WeatherResponse

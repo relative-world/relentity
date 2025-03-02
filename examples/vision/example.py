@@ -28,8 +28,7 @@ class Actor(Entity):
         self.add_component_sync(Position(x=random.randint(-5, 5), y=random.randint(-5, 5)))
         self.add_component_sync(Velocity(vx=random.randint(-1, 1), vy=random.randint(-1, 1)))
         self.add_component_sync(Vision(max_range=10))
-        self.add_component_sync(Visible(description="A person named {name}"))
-        self.add_component_sync(AIDriven(model="qwen2.5:14b"))
+        self.add_component_sync(Visible(description=f"A person named {name}"))
         self.event_bus.register_handler(ENTITY_SEEN_EVENT_TYPE, self.on_entity_seen)
 
     async def on_entity_seen(self, event: EntitySeenEvent):
@@ -40,7 +39,8 @@ class Actor(Entity):
 async def main():
     registry = SpatialRegistry()
 
-    actors = [Actor(registry, "Alice"), Actor(registry, "Bob"), Actor(registry, "Charlie")]
+    for name in ["Alice", "Bob", "Charlie"]:
+        Actor(registry, name)
 
     movement_system = MovementSystem(registry=registry)
     vision_system = VisionSystem(registry=registry)
