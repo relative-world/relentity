@@ -38,7 +38,8 @@ asyncio_mode = "auto"
 
 [tool.coverage.run]
 omit = [
-    "tests/*"
+    "*/test*",
+    "*examples*"
 ]
 
 [tool.coverage.report]
