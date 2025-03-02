@@ -12,12 +12,6 @@ Relentity is an asynchronous Entity-Component-System (ECS) framework for buildin
 - **AI Integration**: AI-driven entities, tool-based interactions, and event-aware agents
 - **Asynchronous Design**: Built for efficient concurrent processing
 
-## Installation
-
-```bash
-pip install relentity
-```
-
 ## Core Modules
 
 ### [relentity.core](relentity/core/README.md)
