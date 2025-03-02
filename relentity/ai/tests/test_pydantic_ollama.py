@@ -12,7 +12,7 @@ from relentity.ai.pydantic_ollama.json import (
 from relentity.ai.pydantic_ollama.responses import BasicResponse, TooledResponse
 from relentity.ai.pydantic_ollama.tools import (
     ToolCallRequest, ToolCallResponse, tool,
-    tools_to_schema, function_to_schema, call_tool, wrap_with_actor
+    tools_to_schema, function_to_schema, call_tool, wrap_with_actor, ToolDefinition
 )
 
 
@@ -96,8 +96,12 @@ class TestPydanticOllamaClient:
         mock_response.response = '{"tool_call": {"function_name": "test_tool", "function_args": {"arg1": "value"}}}'
         mock_generate.return_value = mock_response
 
-        tool_def = MagicMock()
-        tool_def._callable = AsyncMock(return_value="Tool result")
+        tool_def = ToolDefinition(
+            name="test_tool",
+            description="A test tool",
+            parameters={"arg1": {"type": "string"}},
+            _callable=AsyncMock(return_value="Tool result")
+        )
         tools = {"test_tool": tool_def}
 
         with patch('relentity.ai.pydantic_ollama.client.call_tool') as mock_call_tool:
@@ -115,7 +119,6 @@ class TestPydanticOllamaClient:
 
             assert isinstance(response_obj, TooledResponse)
             mock_call_tool.assert_called_once()
-
 
 class TestToolFunctions:
     def test_tool_decorator(self):
