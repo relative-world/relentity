@@ -17,6 +17,8 @@ Please ensure the user input matches the expected json format and output the cor
 If the input does not match the structure, attempt to re-structure it to match the expected format, 
 if that can be done without adding information.
 
+If multiple json objects are present, only fix and return the first one.
+
 Only respond with json content, any text outside of the structure will break the system.
 The structured output format should match this json schema:
 
