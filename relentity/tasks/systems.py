@@ -4,8 +4,7 @@ from relentity.tasks.components import Task
 
 class TaskSystem(System):
     async def update(self):
-        entities = await self.registry.entities_with_components(Task, include_subclasses=True)
-        for entity in entities:
+        async for entity in self.registry.entities_with_components(Task, include_subclasses=True):
             task = await entity.get_component(Task, include_subclasses=True)
 
             if task:

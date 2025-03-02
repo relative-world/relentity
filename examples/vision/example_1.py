@@ -2,10 +2,11 @@ import asyncio
 import random
 
 from relentity.ai.components import AIDriven
-from relentity.core import Entity, Position, Registry
-from relentity.core.components import Velocity, Component
+from relentity.core import Entity
+from relentity.core.components import Component
+from relentity.spatial.registry import SpatialRegistry
 from relentity.spatial.systems import MovementSystem, VisionSystem
-from relentity.spatial.components import Vision
+from relentity.spatial.components import Vision, Velocity, Position, Visible
 from relentity.spatial.events import ENTITY_SEEN_EVENT_TYPE, EntitySeenEvent
 
 
@@ -21,6 +22,7 @@ class Actor(Entity):
         self.add_component_sync(Position(x=random.randint(-5, 5), y=random.randint(-5, 5)))
         self.add_component_sync(Velocity(vx=random.randint(-1, 1), vy=random.randint(-1, 1)))
         self.add_component_sync(Vision(max_range=10))
+        self.add_component_sync(Visible(description="A person named {name}"))
         self.add_component_sync(AIDriven(model="qwen2.5:14b"))
         self.event_bus.register_handler(ENTITY_SEEN_EVENT_TYPE, self.on_entity_seen)
 
@@ -30,7 +32,7 @@ class Actor(Entity):
 
 
 async def main():
-    registry = Registry()
+    registry = SpatialRegistry()
 
     actors = [
         Actor(registry, "Alice"),

@@ -39,7 +39,7 @@ class Registry:
             raise StopAsyncIteration
 
         if include_subclasses:
-            for entity in self.entities:
+            for entity in self.entities.copy():
                 if all([await entity.get_component(component_type, include_subclasses) for component_type in
                         component_types]):
                     yield entity
