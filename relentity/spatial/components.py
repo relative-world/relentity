@@ -26,7 +26,7 @@ class Vision(Component):
 
 
 class Visible(Component):
-    description: str
+    description: str = "A visible entity"
 
 
 class Audible(Component):
