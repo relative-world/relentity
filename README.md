@@ -91,6 +91,51 @@ builder = TaskedEntity(registry, "Builder")
 await builder.set_task(BuildTask())
 ```
 
+## Configuration
+
+Relentity uses environment variables and a configuration file to manage settings. The primary configuration is handled through the `OllamaSettings` class in `relentity/settings.py`, which uses `pydantic_settings` for validation and management.
+
+### Environment Variables
+
+The environment variables are defined in the `.env` file. Here are the key variables:
+
+- `relentity_base_url`: The base URL for the Relentity service.
+- `relentity_default_model`: The default model used by the AI components.
+- `relentity_json_fix_model`: The model used for JSON fixes.
+- `relentity_model_keep_alive`: The duration (in seconds) to keep the model alive.
+
+Example `.env` file:
+```dotenv
+relentity_base_url=http://192.168.1.14:11434
+relentity_default_model="qwen2.5:14b"
+relentity_json_fix_model="qwen2.5:14b"
+relentity_model_keep_alive=300.0
+```
+
+### Configuration Class
+
+The `RelentitySettings` class in `relentity/settings.py` loads these environment variables and provides default values. It uses the `pydantic_settings` library to ensure the configuration is valid.
+
+```python
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+class OllamaSettings(BaseSettings):
+    base_url: str = "http://192.168.1.14:11434"
+    default_model: str = "qwen2.5:14b"
+    json_fix_model: str = "qwen2.5:14b"
+    model_keep_alive: float = 300.0
+
+    model_config = SettingsConfigDict(
+        env_file='.env',
+        env_file_encoding='utf-8',
+        env_prefix = "relentity_"
+    )
+
+settings = OllamaSettings()
+```
+
+This class reads the environment variables from the `.env` file and provides a structured way to access these settings throughout the application.
+
 ## Complete Example
 
 ```python

@@ -1,7 +1,7 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-class OllamaSettings(BaseSettings):
+class RelentitySettings(BaseSettings):
     base_url: str = "http://192.168.1.14:11434"
     default_model: str = "qwen2.5:14b"  # we do what we can
     json_fix_model: str = "qwen2.5:14b"
@@ -13,4 +13,4 @@ class OllamaSettings(BaseSettings):
         env_prefix = "relentity_"
     )
 
-settings = OllamaSettings()
+settings = RelentitySettings()
