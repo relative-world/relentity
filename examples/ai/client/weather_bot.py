@@ -12,19 +12,19 @@ class WeatherResponse(BaseModel):
 
 
 def check_weather(
-        city: str,  # annotations used to explain args to the LLM
+    city: str,  # annotations used to explain args to the LLM
 ) -> str:
     """Check the weather in a city via API"""  # docstrings exposed to LLM for understanding calls
 
-    if city.lower() == 'san francisco':
+    if city.lower() == "san francisco":
         temp = 43
-        conditions = 'Foggy'
-    elif city.lower() == 'san diego':
+        conditions = "Foggy"
+    elif city.lower() == "san diego":
         temp = 80
-        conditions = 'Sunny'
+        conditions = "Sunny"
     else:
         temp = 58
-        conditions = 'Partially Sunny'
+        conditions = "Partially Sunny"
 
     return f"The weather in {city} is {temp}F and {conditions}."
 
@@ -35,10 +35,7 @@ async def main():
     prompt = f"What's the weather in San Francisco?"
 
     _, response = await ollama_client.generate(
-        system="You're a weather bot",
-        prompt=prompt,
-        tools=tools,
-        response_model=WeatherResponse
+        system="You're a weather bot", prompt=prompt, tools=tools, response_model=WeatherResponse
     )
 
     print(response)  # temp_f=58 description='Partially Sunny' emoji='☀️'
@@ -46,4 +43,5 @@ async def main():
 
 if __name__ == "__main__":
     import asyncio
+
     asyncio.run(main())

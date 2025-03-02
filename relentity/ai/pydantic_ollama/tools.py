@@ -85,7 +85,7 @@ def function_to_schema(function: callable) -> FunctionSchema:
     signature = inspect.signature(function)
     required = []
     for name, parameter in signature.parameters.items():
-        if parameter.default == inspect.Parameter.empty and name not in {'self', 'actor'}:
+        if parameter.default == inspect.Parameter.empty and name not in {"self", "actor"}:
             required.append(name)
 
     fs = FunctionSchema(
@@ -98,7 +98,7 @@ def function_to_schema(function: callable) -> FunctionSchema:
                     "description": parameter.annotation.__name__,
                 }
                 for name, parameter in signature.parameters.items()
-                if name not in {'self', 'actor'}
+                if name not in {"self", "actor"}
             },
             required=required,
         )
@@ -128,7 +128,7 @@ async def call_tool(tools, tool_call):
     )
 
 
-def tool(func: callable|Awaitable):
+def tool(func: callable | Awaitable):
     """Decorator to mark a function as a tool"""
     func._is_tool = True
     return func
@@ -145,7 +145,7 @@ def wrap_with_actor(func, actor):
             new_args = (actor,)
 
         # Call with new args, ignoring any 'actor' in kwargs
-        filtered_kwargs = {k: v for k, v in kwargs.items() if k != 'actor'}
+        filtered_kwargs = {k: v for k, v in kwargs.items() if k != "actor"}
         return func(*new_args, **filtered_kwargs)
 
     return wrapper

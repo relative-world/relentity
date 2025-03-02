@@ -16,8 +16,7 @@ def registry():
 @pytest.fixture
 def entity(registry):
     AiEntity = Entity[
-        Identity(name="Test Entity", description="Test description"),
-        AIDriven(model="test-model", update_interval=1)
+        Identity(name="Test Entity", description="Test description"), AIDriven(model="test-model", update_interval=1)
     ]
     return AiEntity(registry)
 
@@ -30,14 +29,14 @@ def system(registry):
 @pytest.mark.asyncio
 async def test_update(system, registry, entity):
     registry.register_entity(entity)
-    with patch.object(system, 'process_entity', new_callable=AsyncMock) as mock_process_entity:
+    with patch.object(system, "process_entity", new_callable=AsyncMock) as mock_process_entity:
         await system.update()
         mock_process_entity.assert_awaited_once_with(entity)
 
 
 @pytest.mark.asyncio
 async def test_process_entity(system, entity):
-    with patch.object(system._client, 'generate', new_callable=AsyncMock) as mock_generate:
+    with patch.object(system._client, "generate", new_callable=AsyncMock) as mock_generate:
         mock_generate.return_value = (MagicMock(), BasicResponse(text="Test response"))
         response = await system.process_entity(entity)
         assert response.text == "Test response"

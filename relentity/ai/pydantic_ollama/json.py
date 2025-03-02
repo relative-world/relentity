@@ -57,9 +57,7 @@ def inline_json_schema_defs(schema):
     return resolve_refs(schema)
 
 
-async def fix_json_response(
-        client: OllamaAsyncClient, bad_json: str, response_model: Type[BaseModel]
-) -> dict:
+async def fix_json_response(client: OllamaAsyncClient, bad_json: str, response_model: Type[BaseModel]) -> dict:
     """
     Attempt to fix a malformed JSON response using the Ollama client.
 
@@ -78,12 +76,10 @@ async def fix_json_response(
         "fix_json_response::input",
         extra={"bad_json": bad_json, "response_model": response_model.__name__},
     )
-    response_model_json_schema = orjson.dumps(
-        inline_json_schema_defs(response_model.model_json_schema())
-    ).decode("utf-8")
-    system_prompt = FIX_JSON_SYSTEM_PROMPT.format(
-        response_model_json_schema=response_model_json_schema
+    response_model_json_schema = orjson.dumps(inline_json_schema_defs(response_model.model_json_schema())).decode(
+        "utf-8"
     )
+    system_prompt = FIX_JSON_SYSTEM_PROMPT.format(response_model_json_schema=response_model_json_schema)
 
     response = await client.generate(
         model=settings.json_fix_model,

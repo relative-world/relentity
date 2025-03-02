@@ -18,7 +18,7 @@ class MovementSystem(SpatialSystem):
         async for entity in self.registry.entities_with_components(Position, Velocity):
             position = await entity.get_component(Position)
             velocity = await entity.get_component(Velocity)
-            speed = (velocity.vx ** 2 + velocity.vy ** 2) ** 0.5
+            speed = (velocity.vx**2 + velocity.vy**2) ** 0.5
             if speed > self.max_speed:
                 velocity.vx = velocity.vx / speed * self.max_speed
                 velocity.vy = velocity.vy / speed * self.max_speed

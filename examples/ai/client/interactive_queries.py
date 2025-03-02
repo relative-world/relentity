@@ -23,6 +23,7 @@ action='Provide the canonical answer from Monty Python and also mention that it 
 emoji='🤣🐦'
 
 """
+
 from pydantic import BaseModel
 
 from relentity.ai.pydantic_ollama.client import PydanticOllamaClient
@@ -46,9 +47,7 @@ async def main():
             break
 
         _, response = await ollama_client.generate(
-            system="You are a snarky but helpful AI assistant.",
-            prompt=prompt,
-            response_model=EmotiveResponse
+            system="You are a snarky but helpful AI assistant.", prompt=prompt, response_model=EmotiveResponse
         )
 
         print(f"{response}\n")
@@ -56,4 +55,5 @@ async def main():
 
 if __name__ == "__main__":
     import asyncio
+
     asyncio.run(main())

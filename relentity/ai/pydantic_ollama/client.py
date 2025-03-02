@@ -33,14 +33,14 @@ class PydanticOllamaClient:
         self.default_model = default_model
 
     async def generate(
-            self,
-            prompt: str,
-            system: str,
-            response_model: Type[BaseModel] = BasicResponse,
-            model: str | None = None,
-            tools: list[ToolDefinition] | None = None,
-            previous_tool_invocations: list[ToolCallResponse] | None = None,
-            context: list[int] | None = None,
+        self,
+        prompt: str,
+        system: str,
+        response_model: Type[BaseModel] = BasicResponse,
+        model: str | None = None,
+        tools: list[ToolDefinition] | None = None,
+        previous_tool_invocations: list[ToolCallResponse] | None = None,
+        context: list[int] | None = None,
     ) -> tuple[GenerateResponse | AsyncIterator[GenerateResponse], BaseModel]:
         """
         Generate a response from Ollama API and validate it against a Pydantic model.
@@ -62,17 +62,17 @@ class PydanticOllamaClient:
             response_model = TooledResponse[response_model]
 
         previous_tool_invocations = previous_tool_invocations or []
-        output_schema = orjson.dumps(
-            inline_json_schema_defs(response_model.model_json_schema())
-        ).decode("utf-8")
+        output_schema = orjson.dumps(inline_json_schema_defs(response_model.model_json_schema())).decode("utf-8")
 
         system_message = ""
         if tools:
             system_message = TOOL_CALLING_SYSTEM_PROMPT.format(
                 tool_definitions_json=orjson.dumps({name: tool.model_dump() for name, tool in tools.items()}).decode(
-                    "utf-8"),
+                    "utf-8"
+                ),
                 previous_tool_invocations=orjson.dumps([tc.model_dump() for tc in previous_tool_invocations]).decode(
-                    "utf-8"),
+                    "utf-8"
+                ),
             )
 
         system_message += (
@@ -110,17 +110,15 @@ def get_ollama_client() -> "PydanticOllamaClient":
     Returns:
         PydanticOllamaClient: A client configured with the base_url and default_model.
     """
-    return PydanticOllamaClient(
-        base_url=settings.base_url, default_model=settings.default_model
-    )
+    return PydanticOllamaClient(base_url=settings.base_url, default_model=settings.default_model)
 
 
 async def ollama_generate(
-        client: AsyncOllamaClient,
-        model: str,
-        prompt: str,
-        system: str,
-        context: list[int] | None = None,
+    client: AsyncOllamaClient,
+    model: str,
+    prompt: str,
+    system: str,
+    context: list[int] | None = None,
 ) -> GenerateResponse | AsyncIterator[GenerateResponse]:
     """
     Generate a response from the Ollama client.

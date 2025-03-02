@@ -11,6 +11,7 @@ class Identity(Component):
     name: str
     description: str
 
+
 async def main():
     registry = Registry()
 

@@ -3,6 +3,7 @@ from weakref import WeakValueDictionary
 
 from relentity.core import Component
 
+
 class EntityMeta(type):
     """
     EntityMeta is a metaclass that allows the composition of Entities with components
@@ -26,7 +27,9 @@ class EntityMeta(type):
     are added to the entity as long as `super().__init__()` is called in the entity's `__init__` method.
     """
 
-    def __getitem__(cls, components: Union[Component, Callable[[], Component], List[Union[Component, Callable[[], Component]]]]) -> 'EntityMeta':
+    def __getitem__(
+        cls, components: Union[Component, Callable[[], Component], List[Union[Component, Callable[[], Component]]]]
+    ) -> "EntityMeta":
         """
         This method is called when square braces are used with the Entity class.
         It takes a list of components, which can be either Component instances or callables
@@ -43,7 +46,9 @@ class EntityMeta(type):
             components = (components,)
 
         # Create a frozen set of component classes to ensure immutability and uniqueness
-        _component_classes: FrozenSet[Union[Component, Callable[[], Component]]] = frozenset(type(component) for component in components)
+        _component_classes: FrozenSet[Union[Component, Callable[[], Component]]] = frozenset(
+            type(component) for component in components
+        )
 
         class EntityWithComponents(cls):
             """

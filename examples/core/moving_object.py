@@ -6,6 +6,7 @@ from relentity.spatial.components import Velocity, Position
 async def on_position_updated(data):
     print(f"Position updated: {data.x}, {data.y}")
 
+
 async def main():
     registry = Registry()
 
@@ -26,4 +27,5 @@ async def main():
 
 if __name__ == "__main__":
     import asyncio
+
     asyncio.run(main())

@@ -7,6 +7,7 @@ from .exceptions import InvalidEventNameException, InvalidEventPatternException
 
 logger = logging.getLogger(__name__)
 
+
 class EventBus:
     def __init__(self):
         """
@@ -24,7 +25,7 @@ class EventBus:
         Raises:
             InvalidEventNameException: If the event name is invalid.
         """
-        if not re.match(r'^[a-zA-Z0-9_.]+$', event_name):
+        if not re.match(r"^[a-zA-Z0-9_.]+$", event_name):
             raise InvalidEventNameException(f"Invalid event name: {event_name}")
 
     def validate_event_pattern(self, event_pattern: str) -> None:
@@ -37,7 +38,7 @@ class EventBus:
         Raises:
             InvalidEventPatternException: If the event pattern is invalid.
         """
-        if not re.match(r'^[a-zA-Z0-9_.\*]+$', event_pattern):
+        if not re.match(r"^[a-zA-Z0-9_.\*]+$", event_pattern):
             raise InvalidEventPatternException(f"Invalid event pattern: {event_pattern}")
 
     def register_handler(self, event_pattern: str, handler: Callable[[Any], Awaitable[None]]) -> None:
@@ -49,7 +50,7 @@ class EventBus:
             handler (Callable[[Any], Awaitable[None]]): The handler to register.
         """
         self.validate_event_pattern(event_pattern)
-        pattern = re.compile(event_pattern.replace('*', '.*'))
+        pattern = re.compile(event_pattern.replace("*", ".*"))
         if pattern not in self.handlers:
             self.handlers[pattern] = []
         self.handlers[pattern].append(handler)
@@ -65,10 +66,7 @@ class EventBus:
         """
         self.validate_event_name(event_name)
         matching_handlers = [
-            handler
-            for pattern, handlers in self.handlers.items()
-            if pattern.match(event_name)
-            for handler in handlers
+            handler for pattern, handlers in self.handlers.items() if pattern.match(event_name) for handler in handlers
         ]
         if matching_handlers:
             logger.debug(f"Emitting event: {event_name} to {len(matching_handlers)} handlers")

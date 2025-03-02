@@ -9,7 +9,7 @@ class BasicResponse(BaseModel):
     text: str
 
 
-DataT = TypeVar('DataT')
+DataT = TypeVar("DataT")
 
 
 class TooledResponse(BaseModel, Generic[DataT]):

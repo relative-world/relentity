@@ -4,7 +4,8 @@ from .components import Component, T
 from .event_bus import EventBus
 from .metaclass import EntityMeta
 
-T = TypeVar('T', bound=Component)
+T = TypeVar("T", bound=Component)
+
 
 class Entity(metaclass=EntityMeta):
     """
@@ -16,7 +17,7 @@ class Entity(metaclass=EntityMeta):
         event_bus (EventBus): The event bus for handling events related to the entity.
     """
 
-    def __init__(self, registry: 'Registry'):
+    def __init__(self, registry: "Registry"):
         """
         Initializes a new entity and registers it with the given registry.
 

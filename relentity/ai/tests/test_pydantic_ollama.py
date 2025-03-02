@@ -6,13 +6,17 @@ from pydantic import BaseModel
 
 from relentity.ai.pydantic_ollama.client import PydanticOllamaClient, ollama_generate
 from relentity.ai.pydantic_ollama.exceptions import UnparsableResponseError
-from relentity.ai.pydantic_ollama.json import (
-    maybe_parse_json, fix_json_response, inline_json_schema_defs
-)
+from relentity.ai.pydantic_ollama.json import maybe_parse_json, fix_json_response, inline_json_schema_defs
 from relentity.ai.pydantic_ollama.responses import BasicResponse, TooledResponse
 from relentity.ai.pydantic_ollama.tools import (
-    ToolCallRequest, ToolCallResponse, tool,
-    tools_to_schema, function_to_schema, call_tool, wrap_with_actor, ToolDefinition
+    ToolCallRequest,
+    ToolCallResponse,
+    tool,
+    tools_to_schema,
+    function_to_schema,
+    call_tool,
+    wrap_with_actor,
+    ToolDefinition,
 )
 
 
@@ -35,19 +39,10 @@ class TestJsonFunctions:
     def test_inline_json_schema_defs(self):
         schema = {
             "type": "object",
-            "properties": {
-                "foo": {"$ref": "#/$defs/bar"}
-            },
-            "$defs": {
-                "bar": {"type": "string"}
-            }
+            "properties": {"foo": {"$ref": "#/$defs/bar"}},
+            "$defs": {"bar": {"type": "string"}},
         }
-        expected = {
-            "type": "object",
-            "properties": {
-                "foo": {"type": "string"}
-            }
-        }
+        expected = {"type": "object", "properties": {"foo": {"type": "string"}}}
         result = inline_json_schema_defs(schema)
         assert result == expected
 
@@ -55,42 +50,38 @@ class TestJsonFunctions:
 class TestPydanticOllamaClient:
     @pytest.fixture
     def client(self):
-        with patch('relentity.ai.pydantic_ollama.client.AsyncOllamaClient') as mock_client:
+        with patch("relentity.ai.pydantic_ollama.client.AsyncOllamaClient") as mock_client:
             client = PydanticOllamaClient("http://localhost:11434", "llama2")
             client._client = AsyncMock()
             yield client
 
-    @patch('relentity.ai.pydantic_ollama.client.ollama_generate')
+    @patch("relentity.ai.pydantic_ollama.client.ollama_generate")
     async def test_generate_basic_response(self, mock_generate, client):
         mock_response = MagicMock()
         mock_response.response = '{"text": "Hello World"}'
         mock_generate.return_value = mock_response
 
         response, response_obj = await client.generate(
-            prompt="Hello",
-            system="You are a helpful assistant",
-            response_model=BasicResponse
+            prompt="Hello", system="You are a helpful assistant", response_model=BasicResponse
         )
 
         assert response_obj.text == "Hello World"
         mock_generate.assert_called_once()
 
-    @patch('relentity.ai.pydantic_ollama.client.ollama_generate')
+    @patch("relentity.ai.pydantic_ollama.client.ollama_generate")
     async def test_generate_invalid_json(self, mock_generate, client):
         mock_response = MagicMock()
-        mock_response.response = 'Invalid JSON'
+        mock_response.response = "Invalid JSON"
         mock_generate.return_value = mock_response
 
-        with patch('relentity.ai.pydantic_ollama.client.fix_json_response') as mock_fix:
+        with patch("relentity.ai.pydantic_ollama.client.fix_json_response") as mock_fix:
             mock_fix.return_value = {"text": "Fixed response"}
             _, response_obj = await client.generate(
-                prompt="Hello",
-                system="You are a helpful assistant",
-                response_model=BasicResponse
+                prompt="Hello", system="You are a helpful assistant", response_model=BasicResponse
             )
             assert response_obj.text == "Fixed response"
 
-    @patch('relentity.ai.pydantic_ollama.client.ollama_generate')
+    @patch("relentity.ai.pydantic_ollama.client.ollama_generate")
     async def test_generate_with_tools(self, mock_generate, client):
         mock_response = MagicMock()
         mock_response.response = '{"tool_call": {"function_name": "test_tool", "function_args": {"arg1": "value"}}}'
@@ -100,21 +91,18 @@ class TestPydanticOllamaClient:
             name="test_tool",
             description="A test tool",
             parameters={"arg1": {"type": "string"}},
-            _callable=AsyncMock(return_value="Tool result")
+            _callable=AsyncMock(return_value="Tool result"),
         )
         tools = {"test_tool": tool_def}
 
-        with patch('relentity.ai.pydantic_ollama.client.call_tool') as mock_call_tool:
+        with patch("relentity.ai.pydantic_ollama.client.call_tool") as mock_call_tool:
             mock_call_tool.return_value = ToolCallResponse(
                 tool_call=ToolCallRequest(function_name="test_tool", function_args={"arg1": "value"}),
-                result="Tool result"
+                result="Tool result",
             )
 
             _, response_obj = await client.generate(
-                prompt="Hello",
-                system="You are a helpful assistant",
-                response_model=BasicResponse,
-                tools=tools
+                prompt="Hello", system="You are a helpful assistant", response_model=BasicResponse, tools=tools
             )
 
             assert isinstance(response_obj, TooledResponse)
@@ -207,12 +195,7 @@ class TestResponseModels:
         assert response.tool_call is None
 
         # Test with tool call only
-        data = {
-            "tool_call": {
-                "function_name": "test_tool",
-                "function_args": {"arg1": "value"}
-            }
-        }
+        data = {"tool_call": {"function_name": "test_tool", "function_args": {"arg1": "value"}}}
         response = TooledResponse[BasicResponse].model_validate(data)
         assert response.response is None
         assert response.tool_call.function_name == "test_tool"
@@ -220,7 +203,7 @@ class TestResponseModels:
 
 
 class TestFixJsonResponse:
-    @patch('relentity.ai.pydantic_ollama.json.orjson.dumps')
+    @patch("relentity.ai.pydantic_ollama.json.orjson.dumps")
     async def test_fix_json_response(self, mock_dumps):
         mock_dumps.return_value = b'{"type":"object","properties":{"text":{"type":"string"}}}'
 
@@ -232,25 +215,25 @@ class TestFixJsonResponse:
         class TestModel(BaseModel):
             text: str
 
-        result = await fix_json_response(client_mock, 'broken json', TestModel)
+        result = await fix_json_response(client_mock, "broken json", TestModel)
 
         assert result == {"text": "Fixed text"}
         client_mock.generate.assert_called_once()
 
-    @patch('relentity.ai.pydantic_ollama.json.orjson.dumps')
+    @patch("relentity.ai.pydantic_ollama.json.orjson.dumps")
     async def test_fix_json_response_failure(self, mock_dumps):
-        mock_dumps.return_value = b'{}'
+        mock_dumps.return_value = b"{}"
 
         client_mock = AsyncMock()
         mock_response = MagicMock()
-        mock_response.response = 'still broken'
+        mock_response.response = "still broken"
         client_mock.generate.return_value = mock_response
 
         class TestModel(BaseModel):
             text: str
 
         with pytest.raises(UnparsableResponseError):
-            await fix_json_response(client_mock, 'broken json', TestModel)
+            await fix_json_response(client_mock, "broken json", TestModel)
 
 
 class TestOllamaGenerate:
@@ -258,22 +241,14 @@ class TestOllamaGenerate:
         client_mock = AsyncMock()
         client_mock.generate.return_value = MagicMock(response="Test response")
 
-        with patch('relentity.ai.pydantic_ollama.client.settings') as mock_settings:
+        with patch("relentity.ai.pydantic_ollama.client.settings") as mock_settings:
             mock_settings.model_keep_alive = "5m"
 
             response = await ollama_generate(
-                client=client_mock,
-                model="test-model",
-                prompt="Hello",
-                system="You are a test",
-                context=[1, 2, 3]
+                client=client_mock, model="test-model", prompt="Hello", system="You are a test", context=[1, 2, 3]
             )
 
             client_mock.generate.assert_called_once_with(
-                model="test-model",
-                prompt="Hello",
-                system="You are a test",
-                context=[1, 2, 3],
-                keep_alive="5m"
+                model="test-model", prompt="Hello", system="You are a test", context=[1, 2, 3], keep_alive="5m"
             )
             assert response.response == "Test response"

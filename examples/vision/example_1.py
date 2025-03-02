@@ -34,11 +34,7 @@ class Actor(Entity):
 async def main():
     registry = SpatialRegistry()
 
-    actors = [
-        Actor(registry, "Alice"),
-        Actor(registry, "Bob"),
-        Actor(registry, "Charlie")
-    ]
+    actors = [Actor(registry, "Alice"), Actor(registry, "Bob"), Actor(registry, "Charlie")]
 
     movement_system = MovementSystem(registry=registry)
     vision_system = VisionSystem(registry=registry)

@@ -6,6 +6,7 @@ from relentity.spatial import Position, Velocity
 
 # Use fixtures from conftest.py for registry and entity
 
+
 @pytest.mark.asyncio
 async def test_add_component(entity):
     """Test adding a component to an entity."""
@@ -27,7 +28,7 @@ async def test_get_component(entity_with_components):
 @pytest.mark.asyncio
 async def test_has_components(entity_with_components):
     """Test checking if an entity has specific components."""
-    assert (await entity_with_components.has_components(Position, Velocity))
+    assert await entity_with_components.has_components(Position, Velocity)
     assert await entity_with_components.has_components(Identity)
     assert not await entity_with_components.has_components(Component)  # Should be False
 

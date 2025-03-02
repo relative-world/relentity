@@ -30,7 +30,7 @@ class Visible(Component):
 
 
 class Audible(Component):
-    volume: float = 50.
+    volume: float = 50.0
     _output_queue: Annotated[list[SoundEvent], PrivateAttr()] = []
 
     def queue_sound(self, sound_event: SoundEvent):
@@ -44,7 +44,7 @@ class Audible(Component):
 
 
 class Hearing(Component):
-    volume: float = 50.
+    volume: float = 50.0
     _output_queue: Annotated[list[SoundEvent], PrivateAttr()] = []
 
     def queue_sound(self, sound_event: SoundEvent):
@@ -55,4 +55,3 @@ class Hearing(Component):
         if clear:
             self._output_queue = []
         return output
-

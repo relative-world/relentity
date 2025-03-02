@@ -9,6 +9,7 @@ from relentity.core import Component
 
 class AIDriven(Component):
     """Entities that include this component are driven by an AI agent."""
+
     model: str
     update_interval: int = 1
     _update_count: int = PrivateAttr(default=0)
@@ -68,9 +69,13 @@ class AIDriven(Component):
         output = self._system_prompt_queue
         if clear:
             self._system_prompt_queue = []
-        return ("\n".join(output) +
-                "\n100 most recent events:" + "\n".join(self._ai_event_history[-100::]) +
-                "\ndistinct memories" + "\n".join(rendered_events))
+        return (
+            "\n".join(output)
+            + "\n100 most recent events:"
+            + "\n".join(self._ai_event_history[-100::])
+            + "\ndistinct memories"
+            + "\n".join(rendered_events)
+        )
 
 
 class PromptRenderableComponent(Component):
@@ -107,6 +112,7 @@ class ToolEnabledComponent(Component):
 
     The tools are exposed as a dictionary of tool names to tool definitions in the _tools attribute.
     """
+
     _tools: Annotated[dict[str, ToolDefinition], PrivateAttr()] = {}
 
     def __init__(self, *args, **kwargs):

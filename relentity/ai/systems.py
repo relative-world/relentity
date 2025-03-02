@@ -1,7 +1,11 @@
 import asyncio
 
-from relentity.ai.components import AIDriven, ToolEnabledComponent, PromptRenderableComponent, \
-    SystemPromptRenderableComponent
+from relentity.ai.components import (
+    AIDriven,
+    ToolEnabledComponent,
+    PromptRenderableComponent,
+    SystemPromptRenderableComponent,
+)
 from relentity.ai.events import AI_RESPONSE_EVENT_TYPE
 from relentity.ai.pydantic_ollama.client import PydanticOllamaClient
 from relentity.ai.pydantic_ollama.responses import BasicResponse
@@ -28,6 +32,7 @@ async def render_basic_information(entity, component_types):
             info.append(f"{component_type.__name__}: {component}")
 
     return "\n".join(info)
+
 
 class AIDrivenSystem(System):
     def __init__(self, registry: Registry):
@@ -67,10 +72,7 @@ class AIDrivenSystem(System):
         prompt_str = "\n".join(prompt) or "<No input this round>"
         system_prompt_str = "\n".join(system_prompt)
 
-        tools = {
-            k: v.copy(update={'_callable': wrap_with_actor(v._callable, actor=entity)})
-            for k, v in tools.items()
-        }
+        tools = {k: v.copy(update={"_callable": wrap_with_actor(v._callable, actor=entity)}) for k, v in tools.items()}
 
         _, response = await self._client.generate(
             prompt=prompt_str,

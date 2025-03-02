@@ -14,8 +14,11 @@ from relentity.ai.utils import pretty_name_entity, pretty_print_event
 from relentity.core.components import Identity
 from relentity.core.entities import Entity
 from relentity.spatial import (
-    ENTITY_SEEN_EVENT_TYPE, POSITION_UPDATED_EVENT_TYPE,
-    SoundEvent, SOUND_HEARD_EVENT_TYPE, SOUND_CREATED_EVENT_TYPE
+    ENTITY_SEEN_EVENT_TYPE,
+    POSITION_UPDATED_EVENT_TYPE,
+    SoundEvent,
+    SOUND_HEARD_EVENT_TYPE,
+    SOUND_CREATED_EVENT_TYPE,
 )
 from relentity.spatial import Position, Velocity, Vision, Visible, Audible, Hearing
 from relentity.spatial import SpatialRegistry
@@ -107,7 +110,8 @@ class Ball(Entity):
         self.add_component_sync(Identity(name="a ball", description="A ball"))
         self.add_component_sync(Position(x=0, y=1))
         self.add_component_sync(
-            Visible(description="A large red kickball, it's well inflated and says 'Spalding' on the side."))
+            Visible(description="A large red kickball, it's well inflated and says 'Spalding' on the side.")
+        )
         self.add_component_sync(Hearing())
         self.event_bus.register_handler(SOUND_HEARD_EVENT_TYPE, self.on_sound_heard_event)
 
@@ -116,7 +120,7 @@ class Ball(Entity):
             Entity[
                 Identity(name="a mysterious door", description="A mysterious door"),
                 Position(x=10, y=0),
-                Visible(description="A mysterious door")
+                Visible(description="A mysterious door"),
             ](self.registry)
 
 

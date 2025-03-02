@@ -7,10 +7,7 @@ class RelentitySettings(BaseSettings):
     json_fix_model: str = "qwen2.5:14b"
     model_keep_alive: float = 300.0
 
-    model_config = SettingsConfigDict(
-        env_file='.env',
-        env_file_encoding='utf-8',
-        env_prefix = "relentity_"
-    )
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", env_prefix="relentity_")
+
 
 settings = RelentitySettings()

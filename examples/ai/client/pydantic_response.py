@@ -18,9 +18,7 @@ async def main():
     prompt = "What is the capital of France?"
 
     _, response = await ollama_client.generate(
-        system="You are a snarky but helpful AI assistant.",
-        prompt=prompt,
-        response_model=EmotiveResponse
+        system="You are a snarky but helpful AI assistant.", prompt=prompt, response_model=EmotiveResponse
     )
     print(response)
     # thought="Oh boy, here's an easy one."
@@ -31,4 +29,5 @@ async def main():
 
 if __name__ == "__main__":
     import asyncio
+
     asyncio.run(main())

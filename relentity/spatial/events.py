@@ -12,7 +12,7 @@ SOUND_CREATED_EVENT_TYPE = "sound_created"
 
 
 class EntitySeenEvent:
-    def __init__(self, entity: 'Entity', position: 'Position', velocity: 'Velocity'):
+    def __init__(self, entity: "Entity", position: "Position", velocity: "Velocity"):
         self.entity = entity
         self.position = position
         self.velocity = velocity

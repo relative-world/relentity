@@ -1,5 +1,6 @@
 from .registry import Registry
 
+
 class System:
     def __init__(self, registry: Registry):
         """
