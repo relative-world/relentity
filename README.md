@@ -131,7 +131,7 @@ class RelentitySettings(BaseSettings):
         env_prefix = "relentity_"
     )
 
-settings = OllamaSettings()
+settings = RelentitySettings()
 ```
 
 This class reads the environment variables from the `.env` file and provides a structured way to access these settings throughout the application.
