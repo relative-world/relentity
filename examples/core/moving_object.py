@@ -1,6 +1,5 @@
 from relentity.core import Entity, Registry
-from relentity.spatial.systems import MovementSystem
-from relentity.spatial.components import Velocity, Position
+from relentity.spatial import MovementSystem, Velocity, Position
 
 
 async def on_position_updated(data):

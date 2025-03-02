@@ -1,8 +1,5 @@
 from relentity.core import Registry
-from relentity.spatial.systems import MovementSystem
-from relentity.tasks.components import Task
-from relentity.tasks.entities import TaskedEntity
-from relentity.tasks.systems import TaskSystem
+from relentity.tasks import Task, TaskedEntity, TaskSystem
 
 
 class BookReading(Task):
@@ -49,11 +46,9 @@ async def main():
     # await reader.start_reading()
 
     task_system = TaskSystem(registry=registry)
-    movement_system = MovementSystem(registry=registry)
 
     while True:
         await task_system.update()
-        await movement_system.update()
         await asyncio.sleep(0.5)  # To see the progression
 
 

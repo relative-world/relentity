@@ -6,23 +6,33 @@ from pathlib import Path
 
 from pythonjsonlogger.json import JsonFormatter
 
-from relentity.ai.components import AIDriven, ToolEnabledComponent, TextPromptComponent
-from relentity.ai.events import AI_RESPONSE_EVENT_TYPE
-from relentity.ai.pydantic_ollama.tools import tool
-from relentity.ai.systems import AIDrivenSystem
+from relentity.ai import (
+    AIDriven,
+    ToolEnabledComponent,
+    TextPromptComponent,
+    AI_RESPONSE_EVENT_TYPE,
+    tool,
+    AIDrivenSystem,
+)
 from relentity.ai.utils import pretty_name_entity, pretty_print_event
-from relentity.core.components import Identity
-from relentity.core.entities import Entity
+from relentity.core import Entity, Identity
 from relentity.spatial import (
     ENTITY_SEEN_EVENT_TYPE,
     POSITION_UPDATED_EVENT_TYPE,
     SoundEvent,
     SOUND_HEARD_EVENT_TYPE,
     SOUND_CREATED_EVENT_TYPE,
+    Position,
+    Velocity,
+    Vision,
+    Visible,
+    Audible,
+    Hearing,
+    SpatialRegistry,
+    MovementSystem,
+    VisionSystem,
+    AudioSystem,
 )
-from relentity.spatial import Position, Velocity, Vision, Visible, Audible, Hearing
-from relentity.spatial import SpatialRegistry
-from relentity.spatial.systems import MovementSystem, VisionSystem, AudioSystem
 
 # Configure logging
 logger = logging.getLogger("")

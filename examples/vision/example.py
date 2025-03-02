@@ -1,13 +1,19 @@
 import asyncio
 import random
 
-from relentity.ai.components import AIDriven
-from relentity.core import Entity
-from relentity.core.components import Component
-from relentity.spatial.registry import SpatialRegistry
-from relentity.spatial.systems import MovementSystem, VisionSystem
-from relentity.spatial.components import Vision, Velocity, Position, Visible
-from relentity.spatial.events import ENTITY_SEEN_EVENT_TYPE, EntitySeenEvent
+from relentity.ai import AIDriven
+from relentity.core import Entity, Component
+from relentity.spatial import (
+    SpatialRegistry,
+    MovementSystem,
+    VisionSystem,
+    Vision,
+    Velocity,
+    Position,
+    Visible,
+    ENTITY_SEEN_EVENT_TYPE,
+    EntitySeenEvent,
+)
 
 
 class Named(Component):
