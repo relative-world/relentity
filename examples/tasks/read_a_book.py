@@ -1,3 +1,5 @@
+import random
+
 from relentity.core import Registry
 from relentity.tasks import Task, TaskedEntity, TaskSystem
 
@@ -13,23 +15,19 @@ class PettingDog(Task):
     remaining_cycles: int = 3
 
 
-async def start_reading(self, book_title="The Great Gatsby", duration=4):
-    await self.set_task(BookReading(book_title="This is a book"))
-
-
-async def pet_dog(self):
-    await self.set_task(PettingDog())
-
-
 class EngagedActor(TaskedEntity):
 
     async def start_reading(self, book_title="The Great Gatsby", duration=4):
-        await self.set_task(BookReading(book_title="This is a book"))
+        await self.set_task(BookReading(book_title=book_title, remaining_cycles=duration))
 
     async def start_petting_dog(self):
         await self.set_task(PettingDog())
 
+    async def start_new_random_task(self):
+        await random.choice([self.start_reading, self.start_petting_dog])()
+
     async def on_task_complete(self, task: Task):
+        await self.start_new_random_task()
         print(f"Task complete: {task}")
 
     async def on_task_progress(self, task: Task):
@@ -42,8 +40,7 @@ class EngagedActor(TaskedEntity):
 async def main():
     registry = Registry()
 
-    reader = EngagedActor[Task(task="petting dog"),](registry, "Alice")
-    # await reader.start_reading()
+    reader = EngagedActor[Task(task="petting dog"),](registry)
 
     task_system = TaskSystem(registry=registry)
 

@@ -1,5 +1,6 @@
 from relentity.core import Entity
-from relentity.tasks.components import Task
+from .events import TASK_PROGRESS_EVENT_TYPE, TASK_COMPLETE_EVENT_TYPE, TASK_ABANDONED_EVENT_TYPE
+from .components import Task
 
 
 class TaskedEntity(Entity):
@@ -12,6 +13,11 @@ class TaskedEntity(Entity):
         on_task_complete: Handles task completion events.
         on_task_abandoned: Handles task abandonment events.
     """
+    def __init__(self, registry, *args, **kwargs):
+        super().__init__(registry, *args, **kwargs)
+        self.event_bus.register_handler(TASK_PROGRESS_EVENT_TYPE, self.on_task_progress)
+        self.event_bus.register_handler(TASK_COMPLETE_EVENT_TYPE, self.on_task_complete)
+        self.event_bus.register_handler(TASK_ABANDONED_EVENT_TYPE, self.on_task_abandoned)
 
     async def set_task(self, task: Task):
         """
@@ -20,6 +26,10 @@ class TaskedEntity(Entity):
         Args:
             task (Task): The task to assign.
         """
+        existing_task = await self.get_component(Task, include_subclasses=True)
+        if existing_task:
+            await self.remove_component(type(existing_task))
+            await self.event_bus.emit(TASK_ABANDONED_EVENT_TYPE, existing_task)
         await self.add_component(task)
 
     async def on_task_progress(self, task: Task):
