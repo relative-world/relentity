@@ -3,7 +3,6 @@ from typing import Dict, Type, TypeVar, Optional
 from .components import Component, T
 from .event_bus import EventBus
 from .metaclass import EntityMeta
-from .registry import Registry
 
 T = TypeVar('T', bound=Component)
 
@@ -17,7 +16,7 @@ class Entity(metaclass=EntityMeta):
         event_bus (EventBus): The event bus for handling events related to the entity.
     """
 
-    def __init__(self, registry: Registry):
+    def __init__(self, registry: 'Registry'):
         """
         Initializes a new entity and registers it with the given registry.
 
