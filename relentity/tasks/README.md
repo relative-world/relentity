@@ -179,5 +179,3 @@ class WorkerEntity(TaskedEntity):
             # Update worker's resources
             await self.add_resource(task.resource_id, 1)
 ```
-
-This module provides the foundation for building task-based behavior in simulations with the efficiency and flexibility of the core ECS framework.
