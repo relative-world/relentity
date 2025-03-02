@@ -99,7 +99,7 @@ Relentity uses environment variables and a configuration file to manage settings
 
 The environment variables are defined in the `.env` file. Here are the key variables:
 
-- `relentity_base_url`: The base URL for the Relentity service.
+- `relentity_base_url`: The base URL for the Ollama service (for AI components).
 - `relentity_default_model`: The default model used by the AI components.
 - `relentity_json_fix_model`: The model used for JSON fixes.
 - `relentity_model_keep_alive`: The duration (in seconds) to keep the model alive.
