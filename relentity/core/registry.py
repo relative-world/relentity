@@ -40,7 +40,8 @@ class Registry:
 
         if include_subclasses:
             for entity in self.entities:
-                if all([await entity.get_component(component_type, include_subclasses) for component_type in component_types]):
+                if all([await entity.get_component(component_type, include_subclasses) for component_type in
+                        component_types]):
                     yield entity
         else:
             entities = set(self.component_to_entities.get(component_types[0], []))

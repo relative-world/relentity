@@ -31,21 +31,22 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.black]
 line-length = 120
-target-version = ['py39']
+target-version = ['py310']
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 
 [tool.coverage.run]
 omit = [
-    "*test*"
+    "tests/*"
 ]
 
 [tool.coverage.report]
 # Include common configurations
 omit = [
     "tests/*",
-    "test_*"
+    "test_*",
+    "conftest.py",
 ]
 
 show_missing = true

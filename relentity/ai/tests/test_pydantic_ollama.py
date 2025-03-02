@@ -120,6 +120,7 @@ class TestPydanticOllamaClient:
             assert isinstance(response_obj, TooledResponse)
             mock_call_tool.assert_called_once()
 
+
 class TestToolFunctions:
     def test_tool_decorator(self):
         @tool

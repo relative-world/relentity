@@ -11,14 +11,23 @@ from relentity.settings import settings
 from relentity.spatial import Position, Velocity
 
 
-async def render_basic_information(entity):
-    identity = await entity.get_component(Identity)
-    position = await entity.get_component(Position)
-    velocity = await entity.get_component(Velocity)
+async def render_basic_information(entity, component_types):
+    info = []
+    for component_type in component_types:
+        component = await entity.get_component(component_type)
+        if not component:
+            continue
 
-    return (f"Name: {identity.name}\nDescription: {identity.description}\n"
-            f"Position: ({position.x}, {position.y})\nVelocity: ({velocity.vx}, {velocity.vy})")
+        if component_type == Identity:
+            info.append(f"Name: {component.name}\nDescription: {component.description}")
+        elif component_type == Position:
+            info.append(f"Position: ({component.x}, {component.y})")
+        elif component_type == Velocity:
+            info.append(f"Velocity: ({component.vx}, {component.vy})")
+        else:
+            info.append(f"{component_type.__name__}: {component}")
 
+    return "\n".join(info)
 
 class AIDrivenSystem(System):
     def __init__(self, registry: Registry):
@@ -28,6 +37,7 @@ class AIDrivenSystem(System):
     async def update(self):
         tasks = []
         async for entity in self.registry.entities_with_components(AIDriven):
+            print(entity)
             tasks.append(self.process_entity(entity))
         await asyncio.gather(*tasks)
 
@@ -42,7 +52,8 @@ class AIDrivenSystem(System):
         prompt = []
         tools = {}
 
-        system_prompt.append(await render_basic_information(entity))
+        component_types = [Identity, Position, Velocity]
+        system_prompt.append(await render_basic_information(entity, component_types))
         for component_type, component in entity.components.items():
             if issubclass(component_type, ToolEnabledComponent):
                 tools.update(component._tools)
