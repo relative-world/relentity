@@ -1,4 +1,4 @@
-from typing import Callable, FrozenSet, Any
+from typing import Callable, FrozenSet, Any, Union, List
 from weakref import WeakValueDictionary
 
 from relentity.core import Component
@@ -26,14 +26,14 @@ class EntityMeta(type):
     are added to the entity as long as `super().__init__()` is called in the entity's `__init__` method.
     """
 
-    def __getitem__(cls, components: Component | Callable | list[Component | Callable]) -> 'EntityMeta':
+    def __getitem__(cls, components: Union[Component, Callable[[], Component], List[Union[Component, Callable[[], Component]]]]) -> 'EntityMeta':
         """
         This method is called when square braces are used with the Entity class.
         It takes a list of components, which can be either Component instances or callables
         that return Component instances, and returns a new entity type with these components.
 
         Args:
-            components (list[Component | Callable]): A list of components to be added to the entity.
+            components (Union[Component, Callable[[], Component], List[Union[Component, Callable[[], Component]]]]): A list of components to be added to the entity.
 
         Returns:
             EntityMeta: A new entity type with the specified components.
@@ -43,7 +43,7 @@ class EntityMeta(type):
             components = (components,)
 
         # Create a frozen set of component classes to ensure immutability and uniqueness
-        _component_classes: FrozenSet[Component | Callable] = frozenset(type(component) for component in components)
+        _component_classes: FrozenSet[Union[Component, Callable[[], Component]]] = frozenset(type(component) for component in components)
 
         class EntityWithComponents(cls):
             """
@@ -53,7 +53,7 @@ class EntityMeta(type):
             during initialization.
             """
 
-            def __init__(self, *args, **kwargs):
+            def __init__(self, *args: Any, **kwargs: Any):
                 """
                 Initialize the new entity type and add the specified components.
 
