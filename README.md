@@ -97,20 +97,6 @@ builder = TaskedEntity(registry, "Builder")
 await builder.set_task(BuildTask())
 ```
 
-### relentity.movement
-
-Components for position and velocity:
-
-```python
-from relentity.movement.components import Position, Velocity
-
-# Create a moving entity
-entity = Entity[
-    Position(x=0, y=0),
-    Velocity(vx=5, vy=2)
-](registry)
-```
-
 ## Complete Example
 
 ```python
