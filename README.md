@@ -97,7 +97,7 @@ Relentity uses environment variables and a configuration file to manage settings
 
 ### Environment Variables
 
-The environment variables are defined in the `.env` file. Here are the key variables:
+Configuration can be provided via environment variable or a `.env` file. Here are the key variables:
 
 - `relentity_base_url`: The base URL for the Ollama service (for AI components).
 - `relentity_default_model`: The default model used by the AI components.
@@ -111,30 +111,6 @@ relentity_default_model="qwen2.5:14b"
 relentity_json_fix_model="qwen2.5:14b"
 relentity_model_keep_alive=300.0
 ```
-
-### Configuration Class
-
-The `RelentitySettings` class in `relentity/settings.py` loads these environment variables and provides default values. It uses the `pydantic_settings` library to ensure the configuration is valid.
-
-```python
-from pydantic_settings import BaseSettings, SettingsConfigDict
-
-class RelentitySettings(BaseSettings):
-    base_url: str = "http://192.168.1.14:11434"
-    default_model: str = "qwen2.5:14b"
-    json_fix_model: str = "qwen2.5:14b"
-    model_keep_alive: float = 300.0
-
-    model_config = SettingsConfigDict(
-        env_file='.env',
-        env_file_encoding='utf-8',
-        env_prefix = "relentity_"
-    )
-
-settings = RelentitySettings()
-```
-
-This class reads the environment variables from the `.env` file and provides a structured way to access these settings throughout the application.
 
 ## Complete Example
 
