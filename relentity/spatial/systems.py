@@ -12,7 +12,7 @@ class SpatialSystem(System):
 
 
 class MovementSystem(SpatialSystem):
-    max_speed = 10
+    max_speed = 30
 
     async def update(self):
         async for entity in self.registry.entities_with_components(Position, Velocity):

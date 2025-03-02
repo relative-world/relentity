@@ -26,11 +26,11 @@ async def pretty_print_event(event_type: str, data, past_tense=False):
             result += f" moving at velocity ({velocity.vx}, {velocity.vy})"
         return result
     elif event_type == "task.progress":
-        return f"Task progress: {data.task_name} - {data.progress}%"
+        return f"Task progress: {data.task} - {data.remaining_cycles} cycles remaining"
     elif event_type == "task.complete":
-        return f"Task complete: {data.task_name}"
+        return f"Task complete: {data.task}"
     elif event_type == "task.abandoned":
-        return f"Task abandoned: {data.task_name} - {data.progress}"
+        return f"Task abandoned: {data.task} - {data.remaining_cycles} cycles remained"
     elif event_type == SOUND_HEARD_EVENT_TYPE:
         entity_name = await pretty_name_entity(data.entity)
         return f"Sound heard: source={entity_name}, sound={data.sound}, type={data.sound_type}"
