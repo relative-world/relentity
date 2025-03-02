@@ -1,7 +1,11 @@
+import asyncio
+import uuid
 from typing import Dict, Type, Optional, TYPE_CHECKING
 
 from .components import Component, T
 from .event_bus import EventBus
+from .events import ENTITY_DESTROYED_EVENT, ENTITY_COMPONENT_UPDATED_EVENT, ENTITY_COMPONENT_ADDED_EVENT, \
+    ENTITY_CREATED_EVENT
 from .metaclass import EntityMeta
 
 if TYPE_CHECKING:
@@ -25,10 +29,14 @@ class Entity(metaclass=EntityMeta):
         Args:
             registry (Registry): The registry to register the entity with.
         """
+        self.id = uuid.uuid4()
         self.components: Dict[Type[Component], Component] = {}
         self.registry = registry
         self.registry.register_entity(self)
         self.event_bus = EventBus()
+        # Emit creation event
+        asyncio.create_task(self.event_bus.emit(ENTITY_CREATED_EVENT, self))
+
 
     def add_component_sync(self, component: Component) -> None:
         """
@@ -49,8 +57,16 @@ class Entity(metaclass=EntityMeta):
         Args:
             component (Component): The component to add.
         """
-        self.components[type(component)] = component
+        component_type = type(component)
+        is_update = component_type in self.components
+        self.components[component_type] = component
         self.registry.register_entity(self)
+
+        if is_update:
+            await self.event_bus.emit(ENTITY_COMPONENT_UPDATED_EVENT, (self, component))
+        else:
+            await self.event_bus.emit(ENTITY_COMPONENT_ADDED_EVENT, (self, component))
+
 
     async def get_component(self, component_type: Type[T], include_subclasses: bool = False) -> Optional[T]:
         """
@@ -95,3 +111,11 @@ class Entity(metaclass=EntityMeta):
         """
         if component_type in self.components:
             self.components.pop(component_type)
+
+    async def destroy(self) -> None:
+        """
+        Properly destroy this entity, cleaning up all references.
+        """
+        await self.registry.unregister_entity(self)
+        # Clear components
+        self.components.clear()
