@@ -1,7 +1,6 @@
 import asyncio
 import random
 
-from relentity.ai import AIDriven
 from relentity.core import Entity, Component
 from relentity.spatial import (
     SpatialRegistry,
