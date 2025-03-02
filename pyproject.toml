@@ -28,3 +28,18 @@ pytest-cov = "^6.0.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.coverage.run]
+omit = [
+    "*test*"
+]
+
+[tool.coverage.report]
+# Include common configurations
+omit = [
+    "tests/*",
+    "test_*"
+]
+
+show_missing = true
+skip_covered = true
