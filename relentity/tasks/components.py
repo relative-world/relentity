@@ -10,6 +10,7 @@ class Task(Component):
         task (str): The name of the task.
         remaining_cycles (int): The number of cycles remaining to complete the task.
     """
+
     task: str
     remaining_cycles: int = 5
 

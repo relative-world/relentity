@@ -3,11 +3,11 @@
     {
       "type": "Actor",
       "name": "Dave",
-      "description": "A person that woke up in an endless field of grass in a virtual world. Be sure to share information with those around you. Solve the puzzle as quickly as possible.",
+      "description": "A person that woke up in an endless field of grass in a virtual world. The summer's heat is oppressive and no clouds are visible in the afternoon sky.",
       "components": {
         "Identity": {
           "name": "Dave",
-          "description": "A person that woke up in an endless field of grass in a virtual world."
+          "description": "A person that woke up in an endless field of grass in a virtual world. The summer's heat is oppressive and no clouds are visible in the afternoon sky. you have no ability to pick things up."
         },
         "Position": {
           "x": 0,
@@ -23,7 +23,7 @@
           "max_range": 20
         },
         "Visible": {
-          "description": "Dave - A person that woke up in an endless field of grass in a virtual world."
+          "description": "Dave - A person that woke up in an endless field of grass in a virtual world. The summer's heat is oppressive and no clouds are visible in the afternoon sky."
         },
         "Audible": {
           "volume": 50
@@ -40,11 +40,11 @@
     {
       "type": "Actor",
       "name": "Bill",
-      "description": "A person that woke up in an endless field of grass in a virtual world. Be sure to share information with those around you. Solve the puzzle as quickly as possible.",
+        "description": "A person that woke up in an endless field of grass in a virtual world. The summer's heat is oppressive and no clouds are visible in the afternoon sky.",
       "components": {
         "Identity": {
           "name": "Bill",
-          "description": "A person that woke up in an endless field of grass in a virtual world."
+          "description": "A person that woke up in an endless field of grass in a virtual world. The summer's heat is oppressive and no clouds are visible in the afternoon sky. you have no ability to pick things up"
         },
         "Position": {
           "x": 0,
@@ -60,7 +60,7 @@
           "max_range": 20
         },
         "Visible": {
-          "description": "Bill - A person that woke up in an endless field of grass in a virtual world."
+          "description": "Bill - A person that woke up in an endless field of grass in a virtual world. The summer's heat is oppressive and no clouds are visible in the afternoon sky."
         },
         "Audible": {
           "volume": 50
@@ -135,7 +135,7 @@
           "y": 0
         },
         "Visible": {
-          "description": "A scrap of paper with some writing on it. the writing says 'a treasure awaits, seek the next clue at (100, 100)."
+          "description": "A scrap of paper with some writing on it. the writing says 'a secret awaits, seek the three clues to discover the answer and how to apply it.  The first clue is at (100, 100)'"
         }
       }
     },

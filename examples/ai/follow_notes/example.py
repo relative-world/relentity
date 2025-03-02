@@ -71,10 +71,10 @@ class Actor(Entity):
             self.add_component_sync(TextPromptComponent(text=private_info))
 
         self.add_component_sync(AIMovementController())
-        self.add_component_sync(Vision(max_range=20))
+        self.add_component_sync(Vision(max_range=1000))
         self.add_component_sync(Visible(description=f"{name} - {description}"))
-        self.add_component_sync(Audible(volume=50))
-        self.add_component_sync(Hearing(volume=50))
+        self.add_component_sync(Audible(volume=100))
+        self.add_component_sync(Hearing(volume=100))
         self.add_component_sync(AIDriven(model=model, update_interval=1))
 
         self.event_bus.register_handler(AI_RESPONSE_EVENT_TYPE, self.on_ai_response)

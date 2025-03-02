@@ -13,6 +13,7 @@ class TaskedEntity(Entity):
         on_task_complete: Handles task completion events.
         on_task_abandoned: Handles task abandonment events.
     """
+
     def __init__(self, registry, *args, **kwargs):
         super().__init__(registry, *args, **kwargs)
         self.event_bus.register_handler(TASK_PROGRESS_EVENT_TYPE, self.on_task_progress)

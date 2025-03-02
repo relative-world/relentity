@@ -31,6 +31,7 @@ class MovementSystem(SpatialSystem):
     Attributes:
         max_speed (float): The maximum speed an entity can move.
     """
+
     max_speed = 30
 
     async def update(self):

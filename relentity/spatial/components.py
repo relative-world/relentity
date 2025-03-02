@@ -14,6 +14,7 @@ class Position(Component):
         x (float): The x-coordinate of the entity.
         y (float): The y-coordinate of the entity.
     """
+
     x: float
     y: float
 
@@ -26,6 +27,7 @@ class Velocity(Component):
         vx (float): The velocity of the entity along the x-axis.
         vy (float): The velocity of the entity along the y-axis.
     """
+
     vx: float
     vy: float
 
@@ -37,6 +39,7 @@ class Vision(Component):
     Attributes:
         max_range (float): The maximum range of vision for the entity.
     """
+
     max_range: float
 
 
@@ -47,6 +50,7 @@ class Visible(Component):
     Attributes:
         description (str): A description of the visible entity.
     """
+
     description: str = "A visible entity"
 
 
@@ -58,6 +62,7 @@ class Audible(Component):
         volume (float): The volume level of the entity.
         _output_queue (list[SoundEvent]): A private queue of sound events to be emitted by the entity.
     """
+
     volume: float = 50.0
     _output_queue: Annotated[list[SoundEvent], PrivateAttr()] = []
 
@@ -94,6 +99,7 @@ class Hearing(Component):
         volume (float): The volume level of the entity's hearing.
         _output_queue (list[SoundEvent]): A private queue of sound events heard by the entity.
     """
+
     volume: float = 50.0
     _output_queue: Annotated[list[SoundEvent], PrivateAttr()] = []
 
