@@ -12,8 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Publish Docs
-        uses: totaldebug/action-sphinx@v2
+      - name: Sphinx Publish
+        uses: totaldebug/sphinx-publish-action@1.2.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           sphinx_src: './docs/source'
