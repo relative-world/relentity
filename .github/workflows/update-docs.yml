@@ -1,0 +1,19 @@
+name: Docs
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish Docs
+      - uses: totaldebug/action-sphinx@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          sphinx_src: './docs/source'
