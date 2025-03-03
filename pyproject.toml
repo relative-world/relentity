@@ -27,10 +27,6 @@ ruff = "^0.9.8"
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.black]
-line-length = 120
-target-version = ['py310']
-
 [tool.ruff]
 line-length = 120
 
