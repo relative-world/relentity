@@ -12,8 +12,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Sphinx Publish
-        uses: totaldebug/sphinx-publish-action@1.2.0
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          sphinx_src: './docs/source'
+          python-version: 3.11
+
+      - uses: abatilo/actions-poetry@v3
+      - name: Install dependencies
+        run: |
+          poetry install
+
+      - name: Build docs
+        run: poetry run sphinx-build -M html docs/source docs/build
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/build/html
