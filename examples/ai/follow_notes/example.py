@@ -43,7 +43,6 @@ logger.addHandler(handler)
 
 
 class AIMovementController(ToolEnabledComponent):
-
     @tool
     async def set_velocity(self, actor, vx: float, vy: float):
         velocity = await actor.get_component(Velocity)
@@ -60,18 +59,17 @@ class AIMovementController(ToolEnabledComponent):
 
 
 class Actor(Entity):
-
     def __init__(self, registry, name, description, *args, private_info=None, model="qwen2.5:14b", **kwargs):
         super().__init__(registry, *args, **kwargs)
         self.add_component_sync(Identity(name=name, description=description))
         self.add_component_sync(Position(x=random.randint(-10, 10), y=random.randint(-10, 10)))
-        self.add_component_sync(Velocity(vx=0, vy=0))
+        # self.add_component_sync(Velocity(vx=0, vy=0))
 
         if private_info:
             self.add_component_sync(TextPromptComponent(text=private_info))
 
-        self.add_component_sync(AIMovementController())
-        self.add_component_sync(Vision(max_range=1000))
+        # self.add_component_sync(AIMovementController())
+        self.add_component_sync(Vision(max_range=100))
         self.add_component_sync(Visible(description=f"{name} - {description}"))
         self.add_component_sync(Audible(volume=100))
         self.add_component_sync(Hearing(volume=100))
@@ -114,7 +112,6 @@ class Actor(Entity):
 
 
 class Ball(Entity):
-
     def __init__(self, registry, *args, **kwargs):
         super().__init__(registry, *args, **kwargs)
         self.add_component_sync(Identity(name="a ball", description="A ball"))

@@ -20,7 +20,6 @@ class Named(Component):
 
 
 class Actor(Entity):
-
     def __init__(self, registry, name, *args, **kwargs):
         super().__init__(registry, *args, **kwargs)
         self.add_component_sync(Named(name=name))

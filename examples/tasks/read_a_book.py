@@ -16,7 +16,6 @@ class PettingDog(Task):
 
 
 class EngagedActor(TaskedEntity):
-
     async def start_reading(self, book_title="The Great Gatsby", duration=4):
         await self.set_task(BookReading(book_title=book_title, remaining_cycles=duration))
 

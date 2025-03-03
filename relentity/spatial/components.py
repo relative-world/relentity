@@ -1,9 +1,10 @@
 from typing import Annotated
 
-from pydantic import PrivateAttr
+from pydantic import PrivateAttr, model_validator
 
 from relentity.core import Component
 from .events import SoundEvent
+from .utils import is_simple_polygon, point_in_polygon
 
 
 class Position(Component):
@@ -126,3 +127,28 @@ class Hearing(Component):
         if clear:
             self._output_queue = []
         return output
+
+
+class Area(Component):
+    """ """
+
+    center_point: tuple[float, float] = (0.0, 0.0)
+    geometry: list[tuple[float, float]]
+
+    @model_validator(mode="after")
+    def validate_geometry(cls, self):
+        if not is_simple_polygon(self.geometry):
+            raise ValueError("The geometry is not a simple polygon.")
+        return self
+
+    def point_within_bounds(self, x, y):
+        """
+        Check if a point is within the bounds of the location.
+
+        Args:
+            point (tuple[float, float]): The point to check.
+
+        Returns:
+            bool: True if the point is within the bounds, False otherwise.
+        """
+        point_in_polygon(x, y, self.geometry)

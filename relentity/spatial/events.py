@@ -5,24 +5,9 @@ if TYPE_CHECKING:
     from .components import Velocity, Position
 
 ENTITY_SEEN_EVENT_TYPE = "entity_seen"
-"""
-Constant representing the event type for an entity being seen.
-"""
-
 POSITION_UPDATED_EVENT_TYPE = "position_updated"
-"""
-Constant representing the event type for an entity's position being updated.
-"""
-
 SOUND_HEARD_EVENT_TYPE = "sound_heard"
-"""
-Constant representing the event type for a sound being heard.
-"""
-
 SOUND_CREATED_EVENT_TYPE = "sound_created"
-"""
-Constant representing the event type for a sound being created.
-"""
 
 
 class EntitySeenEvent:

@@ -99,7 +99,7 @@ class PydanticOllamaClient:
         response_obj = response_model.model_validate(data)
         if tools:
             if response_obj.tool_call:
-                 await call_tool(tools, response_obj.tool_call)
+                await call_tool(tools, response_obj.tool_call)
         return response, response_obj
 
 

@@ -4,8 +4,11 @@ from typing import Dict, Type, Optional, TYPE_CHECKING
 
 from .components import Component, T
 from .event_bus import EventBus
-from .events import ENTITY_DESTROYED_EVENT, ENTITY_COMPONENT_UPDATED_EVENT, ENTITY_COMPONENT_ADDED_EVENT, \
-    ENTITY_CREATED_EVENT
+from .events import (
+    ENTITY_COMPONENT_UPDATED_EVENT,
+    ENTITY_COMPONENT_ADDED_EVENT,
+    ENTITY_CREATED_EVENT,
+)
 from .metaclass import EntityMeta
 
 if TYPE_CHECKING:
@@ -37,7 +40,6 @@ class Entity(metaclass=EntityMeta):
         # Emit creation event
         asyncio.create_task(self.event_bus.emit(ENTITY_CREATED_EVENT, self))
 
-
     def add_component_sync(self, component: Component) -> None:
         """
         Adds a component to the entity synchronously.
@@ -66,7 +68,6 @@ class Entity(metaclass=EntityMeta):
             await self.event_bus.emit(ENTITY_COMPONENT_UPDATED_EVENT, (self, component))
         else:
             await self.event_bus.emit(ENTITY_COMPONENT_ADDED_EVENT, (self, component))
-
 
     async def get_component(self, component_type: Type[T], include_subclasses: bool = False) -> Optional[T]:
         """

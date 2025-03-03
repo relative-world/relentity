@@ -40,7 +40,7 @@ class Registry:
         await entity.event_bus.emit(ENTITY_DESTROYED_EVENT, entity)
 
     async def entities_with_components(
-            self, *component_types: Type[Component], include_subclasses: bool = False
+        self, *component_types: Type[Component], include_subclasses: bool = False
     ) -> AsyncIterator["Entity"]:
         """
         Yields entities that have all the specified components.
@@ -58,10 +58,10 @@ class Registry:
         if include_subclasses:
             for entity in self.entities.copy():
                 if all(
-                        [
-                            await entity.get_component(component_type, include_subclasses)
-                            for component_type in component_types
-                        ]
+                    [
+                        await entity.get_component(component_type, include_subclasses)
+                        for component_type in component_types
+                    ]
                 ):
                     yield entity
         else:

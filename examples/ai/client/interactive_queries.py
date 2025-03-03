@@ -33,6 +33,7 @@ from relentity.settings import settings
 # Define a Pydantic model to represent the response from the LLM
 class EmotiveResponse(BaseModel):
     thought: str
+    desire: str
     statement: str
     action: str
     emoji: str
@@ -47,7 +48,7 @@ async def main():
             break
 
         _, response = await ollama_client.generate(
-            system="You are a snarky but helpful AI assistant.", prompt=prompt, response_model=EmotiveResponse
+            system="You are an unhelpful AI assistant.", prompt=prompt, response_model=EmotiveResponse
         )
 
         print(f"{response}\n")
