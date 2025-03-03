@@ -123,13 +123,18 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Adds a component to the entity synchronously.</span>
 
-<span class="sd">        This method is primarily used for the metaclass sugar parts and should be avoided in favor of the async method.</span>
-
 <span class="sd">        Args:</span>
 <span class="sd">            component (Component): The component to add.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="nb">type</span><span class="p">(</span><span class="n">component</span><span class="p">)]</span> <span class="o">=</span> <span class="n">component</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">register_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+        <span class="n">component_type</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">component</span><span class="p">)</span>
+        <span class="n">is_update</span> <span class="o">=</span> <span class="n">component_type</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="n">component_type</span><span class="p">]</span> <span class="o">=</span> <span class="n">component</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">register_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">is_update</span><span class="p">:</span>
+            <span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">event_bus</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">ENTITY_COMPONENT_UPDATED_EVENT</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">component</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">event_bus</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">ENTITY_COMPONENT_ADDED_EVENT</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">component</span><span class="p">)))</span></div>
 
 
 <div class="viewcode-block" id="Entity.add_component">
@@ -168,8 +173,8 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">include_subclasses</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">component_type</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">component</span><span class="p">,</span> <span class="n">component_type</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">other_component_type</span><span class="p">,</span> <span class="n">component</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+            <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">other_component_type</span><span class="p">,</span> <span class="n">component_type</span><span class="p">):</span>
                 <span class="k">return</span> <span class="n">component</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
@@ -211,11 +216,28 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Properly destroy this entity, cleaning up all references.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">unregister_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">unregister_entity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
         <span class="c1"># Clear components</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
 </div>
 
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">attach_components_sync</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="o">*</span><span class="n">components</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># Add each component to the entity</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_inner</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="n">components</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">component</span><span class="p">,</span> <span class="n">Component</span><span class="p">):</span>
+                <span class="c1"># If the component is an instance of Component, add it directly</span>
+                <span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">add_component</span><span class="p">(</span><span class="n">component</span><span class="o">.</span><span class="n">model_copy</span><span class="p">())</span>
+            <span class="k">elif</span> <span class="nb">callable</span><span class="p">(</span><span class="n">component</span><span class="p">):</span>
+                <span class="c1"># If the component is a callable, call it to get the Component instance and add it</span>
+                <span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">add_component</span><span class="p">(</span><span class="n">component</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Raise an error if the component is neither a Component instance nor a callable</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Component must be a Component instance or a callable&quot;</span><span class="p">)</span>
+
+    <span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">_inner</span><span class="p">())</span>
 </pre></div>
 
            </div>

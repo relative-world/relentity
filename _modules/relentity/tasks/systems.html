@@ -71,6 +71,7 @@
              
   <h1>Source code for relentity.tasks.systems</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span><span class="w"> </span><span class="nn">relentity.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">System</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">relentity.core.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">UnknownComponentError</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">relentity.tasks.components</span><span class="w"> </span><span class="kn">import</span> <span class="n">Task</span>
 
 
@@ -92,7 +93,8 @@
 <span class="sd">        Decrements the remaining cycles for each task and emits progress events.</span>
 <span class="sd">        If a task is completed, emits a completion event and removes the task component from the entity.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">async</span> <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">entities_with_components</span><span class="p">(</span><span class="n">Task</span><span class="p">,</span> <span class="n">include_subclasses</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="k">async</span> <span class="k">for</span> <span class="n">entity_ref</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">entities_with_components</span><span class="p">(</span><span class="n">Task</span><span class="p">,</span> <span class="n">include_subclasses</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <span class="n">entity</span> <span class="o">=</span> <span class="k">await</span> <span class="n">entity_ref</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
             <span class="n">task</span> <span class="o">=</span> <span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">Task</span><span class="p">,</span> <span class="n">include_subclasses</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">task</span><span class="p">:</span>
@@ -101,7 +103,10 @@
 
                 <span class="k">if</span> <span class="n">task</span><span class="o">.</span><span class="n">remaining_cycles</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">event_bus</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="k">await</span> <span class="n">task</span><span class="o">.</span><span class="n">task_complete_event</span><span class="p">()))</span>
-                    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">remove_component_from_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">task</span><span class="p">))</span></div>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">remove_component_from_entity</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">task</span><span class="p">))</span>
+                    <span class="k">except</span> <span class="n">UnknownComponentError</span><span class="p">:</span>
+                        <span class="k">continue</span></div>
 </div>
 
 </pre></div>

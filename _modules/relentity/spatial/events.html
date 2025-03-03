@@ -70,16 +70,15 @@
            <div itemprop="articleBody">
              
   <h1>Source code for relentity.spatial.events</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
-
-<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">relentity.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Entity</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">.components</span><span class="w"> </span><span class="kn">import</span> <span class="n">Velocity</span><span class="p">,</span> <span class="n">Position</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">relentity.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">EntityRef</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.components</span><span class="w"> </span><span class="kn">import</span> <span class="n">Velocity</span><span class="p">,</span> <span class="n">Position</span><span class="p">,</span> <span class="n">Area</span>
 
 <span class="n">ENTITY_SEEN_EVENT_TYPE</span> <span class="o">=</span> <span class="s2">&quot;entity_seen&quot;</span>
 <span class="n">POSITION_UPDATED_EVENT_TYPE</span> <span class="o">=</span> <span class="s2">&quot;position_updated&quot;</span>
 <span class="n">SOUND_HEARD_EVENT_TYPE</span> <span class="o">=</span> <span class="s2">&quot;sound_heard&quot;</span>
 <span class="n">SOUND_CREATED_EVENT_TYPE</span> <span class="o">=</span> <span class="s2">&quot;sound_created&quot;</span>
+<span class="n">AREA_ENTERED_EVENT_TYPE</span> <span class="o">=</span> <span class="s2">&quot;area.entered&quot;</span>
+<span class="n">AREA_EXITED_EVENT_TYPE</span> <span class="o">=</span> <span class="s2">&quot;area.exited&quot;</span>
 
 
 <div class="viewcode-block" id="EntitySeenEvent">
@@ -96,7 +95,7 @@
 
 <div class="viewcode-block" id="EntitySeenEvent.__init__">
 <a class="viewcode-back" href="../../../api.html#relentity.spatial.EntitySeenEvent.__init__">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="s2">&quot;Entity&quot;</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="s2">&quot;Position&quot;</span><span class="p">,</span> <span class="n">velocity</span><span class="p">:</span> <span class="s2">&quot;Velocity&quot;</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity_ref</span><span class="p">:</span> <span class="n">EntityRef</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Position</span><span class="p">,</span> <span class="n">velocity</span><span class="p">:</span> <span class="n">Velocity</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initializes an EntitySeenEvent.</span>
 
@@ -105,7 +104,7 @@
 <span class="sd">            position (Position): The position of the seen entity.</span>
 <span class="sd">            velocity (Velocity): The velocity of the seen entity.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">entity</span> <span class="o">=</span> <span class="n">entity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entity_ref</span> <span class="o">=</span> <span class="n">entity_ref</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">position</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">velocity</span> <span class="o">=</span> <span class="n">velocity</span></div>
 </div>
@@ -126,7 +125,7 @@
 
 <div class="viewcode-block" id="SoundEvent.__init__">
 <a class="viewcode-back" href="../../../api.html#relentity.spatial.SoundEvent.__init__">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="s2">&quot;Entity&quot;</span><span class="p">,</span> <span class="n">sound_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sound</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity_ref</span><span class="p">:</span> <span class="n">EntityRef</span><span class="p">,</span> <span class="n">sound_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sound</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initializes a SoundEvent.</span>
 
@@ -135,11 +134,32 @@
 <span class="sd">            sound_type (str): The type of the sound.</span>
 <span class="sd">            sound (str): The sound itself.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">entity</span> <span class="o">=</span> <span class="n">entity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entity_ref</span> <span class="o">=</span> <span class="n">entity_ref</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sound_type</span> <span class="o">=</span> <span class="n">sound_type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sound</span> <span class="o">=</span> <span class="n">sound</span></div>
 </div>
 
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">AreaEvent</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Event representing an entity entering or exiting an area.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        entity (Entity): The entity that entered or exited the area.</span>
+<span class="sd">        area (str): The area that was entered or exited.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity_ref</span><span class="p">:</span> <span class="n">EntityRef</span><span class="p">,</span> <span class="n">area_entity_ref</span><span class="p">:</span> <span class="n">Area</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes an AreaEvent.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            entity (Entity): The entity that entered or exited the area.</span>
+<span class="sd">            area (str): The area that was entered or exited.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entity_ref</span> <span class="o">=</span> <span class="n">entity_ref</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">area_entity_ref</span> <span class="o">=</span> <span class="n">area_entity_ref</span>
 </pre></div>
 
            </div>

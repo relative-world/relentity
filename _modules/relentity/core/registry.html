@@ -70,10 +70,13 @@
            <div itemprop="articleBody">
              
   <h1>Source code for relentity.core.registry</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">AsyncIterator</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">uuid</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">AsyncIterator</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">.components</span><span class="w"> </span><span class="kn">import</span> <span class="n">Component</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.entity_ref</span><span class="w"> </span><span class="kn">import</span> <span class="n">EntityRef</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.events</span><span class="w"> </span><span class="kn">import</span> <span class="n">ENTITY_DESTROYED_EVENT</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">UnknownEntityError</span><span class="p">,</span> <span class="n">UnknownComponentError</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">.entities</span><span class="w"> </span><span class="kn">import</span> <span class="n">Entity</span>
@@ -89,8 +92,8 @@
 <span class="sd">        Initializes the Registry with an empty set of entities and a dictionary</span>
 <span class="sd">        mapping component types to sets of entities.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">entities</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="s2">&quot;Entity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">component_to_entities</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Component</span><span class="p">],</span> <span class="n">Set</span><span class="p">[</span><span class="s2">&quot;Entity&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entities</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">uuid</span><span class="o">.</span><span class="n">UUID</span><span class="p">,</span> <span class="n">Entity</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">component_to_entity_ids</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Component</span><span class="p">],</span> <span class="n">Set</span><span class="p">[</span><span class="n">uuid</span><span class="o">.</span><span class="n">UUID</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span></div>
 
 
 <div class="viewcode-block" id="Registry.register_entity">
@@ -102,22 +105,26 @@
 <span class="sd">        Args:</span>
 <span class="sd">            entity (Entity): The entity to register.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">entities</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entities</span><span class="p">[</span><span class="n">entity</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">entity</span>
+
         <span class="k">for</span> <span class="n">component_type</span> <span class="ow">in</span> <span class="n">entity</span><span class="o">.</span><span class="n">components</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">component_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">component_to_entities</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">component_to_entities</span><span class="p">[</span><span class="n">component_type</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">component_to_entities</span><span class="p">[</span><span class="n">component_type</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span></div>
+            <span class="k">if</span> <span class="n">component_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">component_to_entity_ids</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">component_to_entity_ids</span><span class="p">[</span><span class="n">component_type</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">component_to_entity_ids</span><span class="p">[</span><span class="n">component_type</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">id</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Registry.unregister_entity">
 <a class="viewcode-back" href="../../../api.html#relentity.core.Registry.unregister_entity">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">unregister_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="s2">&quot;Entity&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">unregister_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity_id</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove an entity completely from the registry.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">entities</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+        <span class="n">entity</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_entity_by_id</span><span class="p">(</span><span class="n">entity_id</span><span class="p">)</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">entities</span><span class="p">[</span><span class="n">entity_id</span><span class="p">]</span>
+
         <span class="c1"># Remove from component mappings</span>
         <span class="k">for</span> <span class="n">component_type</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
-            <span class="k">if</span> <span class="n">component_type</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">component_to_entities</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">component_to_entities</span><span class="p">[</span><span class="n">component_type</span><span class="p">]</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">component_type</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">component_to_entity_ids</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">component_to_entity_ids</span><span class="p">[</span><span class="n">component_type</span><span class="p">]</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+
         <span class="c1"># Emit destruction event via entity&#39;s event bus</span>
         <span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">event_bus</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">ENTITY_DESTROYED_EVENT</span><span class="p">,</span> <span class="n">entity</span><span class="p">)</span></div>
 
@@ -126,7 +133,7 @@
 <a class="viewcode-back" href="../../../api.html#relentity.core.Registry.entities_with_components">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">entities_with_components</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">component_types</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">Component</span><span class="p">],</span> <span class="n">include_subclasses</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncIterator</span><span class="p">[</span><span class="s2">&quot;Entity&quot;</span><span class="p">]:</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncIterator</span><span class="p">[</span><span class="n">EntityRef</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Yields entities that have all the specified components.</span>
 
@@ -141,25 +148,25 @@
             <span class="k">raise</span> <span class="ne">StopAsyncIteration</span>
 
         <span class="k">if</span> <span class="n">include_subclasses</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">entities</span><span class="o">.</span><span class="n">copy</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entities</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
                 <span class="k">if</span> <span class="nb">all</span><span class="p">(</span>
                     <span class="p">[</span>
                         <span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">component_type</span><span class="p">,</span> <span class="n">include_subclasses</span><span class="p">)</span>
                         <span class="k">for</span> <span class="n">component_type</span> <span class="ow">in</span> <span class="n">component_types</span>
                     <span class="p">]</span>
                 <span class="p">):</span>
-                    <span class="k">yield</span> <span class="n">entity</span>
+                    <span class="k">yield</span> <span class="n">EntityRef</span><span class="p">(</span><span class="n">entity_id</span><span class="o">=</span><span class="n">entity</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">registry</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">entities</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">component_to_entities</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">component_types</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[]))</span>
+            <span class="n">entity_ids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">component_to_entity_ids</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">component_types</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[]))</span>
             <span class="k">for</span> <span class="n">component_type</span> <span class="ow">in</span> <span class="n">component_types</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
-                <span class="n">entities</span> <span class="o">&amp;=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">component_to_entities</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">component_type</span><span class="p">,</span> <span class="p">[]))</span>
-            <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">entities</span><span class="p">):</span>
-                <span class="k">yield</span> <span class="n">entity</span></div>
+                <span class="n">entity_ids</span> <span class="o">&amp;=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">component_to_entity_ids</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">component_type</span><span class="p">,</span> <span class="p">[]))</span>
+            <span class="k">for</span> <span class="n">entity_id</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">entity_ids</span><span class="p">):</span>
+                <span class="k">yield</span> <span class="n">EntityRef</span><span class="p">(</span><span class="n">entity_id</span><span class="o">=</span><span class="n">entity_id</span><span class="p">,</span> <span class="n">registry</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Registry.remove_component_from_entity">
 <a class="viewcode-back" href="../../../api.html#relentity.core.Registry.remove_component_from_entity">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">remove_component_from_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="s2">&quot;Entity&quot;</span><span class="p">,</span> <span class="n">component_type</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">Component</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">remove_component_from_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity_id</span><span class="p">:</span> <span class="n">uuid</span><span class="o">.</span><span class="n">UUID</span><span class="p">,</span> <span class="n">component_type</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">Component</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Removes a component of the specified type from an entity and updates the registry.</span>
 
@@ -167,19 +174,30 @@
 <span class="sd">            entity (Entity): The entity to remove the component from.</span>
 <span class="sd">            component_type (Type[Component]): The type of the component to remove.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">entity</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">component_type</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">entity</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_entity_by_id</span><span class="p">(</span><span class="n">entity_id</span><span class="p">)</span>
+
         <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">component_to_entities</span><span class="p">[</span><span class="n">component_type</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+            <span class="n">entity</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">component_type</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">UnknownComponentError</span><span class="p">(</span><span class="n">component_type</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">exc</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">component_to_entity_ids</span><span class="p">[</span><span class="n">component_type</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">entity_id</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="k">pass</span>
+
+        <span class="c1"># clean up the entity if it has no components</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">entity</span><span class="o">.</span><span class="n">components</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">entities</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span></div>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">entities</span><span class="p">[</span><span class="n">entity</span><span class="o">.</span><span class="n">id</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="Registry.get_entity_by_id">
 <a class="viewcode-back" href="../../../api.html#relentity.core.Registry.get_entity_by_id">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_entity_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity_id</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">next</span><span class="p">((</span><span class="n">entity</span> <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">entities</span> <span class="k">if</span> <span class="n">entity</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">entity_id</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span></div>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_entity_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity_id</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Entity&quot;</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">entities</span><span class="p">[</span><span class="n">entity_id</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">UnknownEntityError</span><span class="p">(</span><span class="n">entity_id</span><span class="p">)</span></div>
 </div>
 
 </pre></div>
