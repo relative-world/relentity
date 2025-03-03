@@ -70,13 +70,13 @@ class Registry:
                         for component_type in component_types
                     ]
                 ):
-                    yield EntityRef(entity_id=entity.id, registry=self)
+                    yield EntityRef(entity_id=entity.id, _registry=self)
         else:
             entity_ids = set(self.component_to_entity_ids.get(component_types[0], []))
             for component_type in component_types[1:]:
                 entity_ids &= set(self.component_to_entity_ids.get(component_type, []))
             for entity_id in list(entity_ids):
-                yield EntityRef(entity_id=entity_id, registry=self)
+                yield EntityRef(entity_id=entity_id, _registry=self)
 
     async def remove_component_from_entity(self, entity_id: uuid.UUID, component_type: Type[Component]) -> None:
         """

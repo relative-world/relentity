@@ -142,16 +142,17 @@ class LocationSystem(SpatialSystem):
                     except UnknownComponentError:
                         pass
 
-                    await entity.add_component(Located(contained_by=area_entity_ref))
+                    await entity.add_component(Located(area_entity_ref=area_entity_ref))
                     event = AreaEvent(entity_ref=entity_ref, area_entity_ref=area_entity_ref)
                     await entity.event_bus.emit(AREA_ENTERED_EVENT_TYPE, event)
-                    await area.event_bus.emit(AREA_ENTERED_EVENT_TYPE, event)
+                    await area_entity.event_bus.emit(AREA_ENTERED_EVENT_TYPE, event)
 
             old_refs = existing_entity_refs - _updated_entity_refs
             for entity_ref in old_refs:
                 entity = await entity_ref.resolve()
                 event = AreaEvent(entity_ref=entity_ref, area_entity_ref=area_entity_ref)
+                await self.registry.remove_component_from_entity(entity.id, Located)
                 await entity.event_bus.emit(AREA_EXITED_EVENT_TYPE, event)
-                await area.event_bus.emit(AREA_EXITED_EVENT_TYPE, event)
+                await area_entity.event_bus.emit(AREA_EXITED_EVENT_TYPE, event)
 
             area._entities = _updated_entity_refs

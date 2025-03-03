@@ -166,4 +166,4 @@ class Located(Component):
         area (Area): The area the entity is located in.
     """
 
-    contained_by: EntityRef
+    area_entity_ref: EntityRef

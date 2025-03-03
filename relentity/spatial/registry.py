@@ -32,7 +32,7 @@ class SpatialRegistry(Registry):
                 dist = sqrt((position.x - centroid.x) ** 2 + (position.y - centroid.y) ** 2)
                 if dist <= distance:
                     if all([await entity.get_component(component_type) for component_type in component_types]):
-                        yield EntityRef(entity_id=entity.id, registry=self)
+                        yield EntityRef(entity_id=entity.id, _registry=self)
 
     async def entities_within_area(self, area: Area) -> AsyncIterator[EntityRef]:
         """
@@ -47,4 +47,4 @@ class SpatialRegistry(Registry):
         for entity in self.entities.values():
             position = await entity.get_component(Position)
             if position and point_in_polygon(position.x, position.y, area.geometry):
-                yield EntityRef(entity.id, self)
+                yield EntityRef(entity_id=entity.id, _registry=self)
