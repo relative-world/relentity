@@ -12,13 +12,18 @@ class EmotiveResponse(BaseModel):
     emoji: str
 
 
+class EmojiOnlyResponse(BaseModel):
+    stream_of_emojis: str
+    what_you_wish_you_could_say: str
+
+
 async def main():
     ollama_client = PydanticOllamaClient(settings.base_url, settings.default_model)
 
     prompt = "What is the capital of France?"
 
     _, response = await ollama_client.generate(
-        system="You are a snarky but helpful AI assistant.", prompt=prompt, response_model=EmotiveResponse
+        system="You are a snarky but helpful AI assistant.", prompt=prompt, response_model=EmojiOnlyResponse
     )
     print(response)
     # thought="Oh boy, here's an easy one."

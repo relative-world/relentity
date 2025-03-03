@@ -22,11 +22,13 @@ class Named(Component):
 class Actor(Entity):
     def __init__(self, registry, name, *args, **kwargs):
         super().__init__(registry, *args, **kwargs)
+
         self.add_component_sync(Named(name=name))
         self.add_component_sync(Position(x=random.randint(-5, 5), y=random.randint(-5, 5)))
         self.add_component_sync(Velocity(vx=random.randint(-1, 1), vy=random.randint(-1, 1)))
         self.add_component_sync(Vision(max_range=10))
         self.add_component_sync(Visible(description=f"A person named {name}"))
+
         self.event_bus.register_handler(ENTITY_SEEN_EVENT_TYPE, self.on_entity_seen)
 
     async def on_entity_seen(self, event: EntitySeenEvent):

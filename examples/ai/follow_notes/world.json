@@ -2,12 +2,12 @@
   "entities": [
     {
       "type": "Actor",
-      "name": "Carl Jung",
-      "description": "Famed psychologist and philosopher.",
+      "name": "Dave",
+      "description": "A person that woke up in an endless field of grass in a virtual world. The summer's heat is oppressive and no clouds are visible in the afternoon sky.",
       "components": {
         "Identity": {
-          "name": "Carl Jung",
-          "description": "Famed psychologist and philosopher."
+          "name": "Dave",
+          "description": "A person that woke up in an endless field of grass in a virtual world. The summer's heat is oppressive and no clouds are visible in the afternoon sky. you have no ability to pick things up."
         },
         "Position": {
           "x": 0,
@@ -23,7 +23,7 @@
           "max_range": 20
         },
         "Visible": {
-          "description": "Carl Jung - Famed psychologist and philosopher."
+          "description": "Dave - A person that woke up in an endless field of grass in a virtual world. The summer's heat is oppressive and no clouds are visible in the afternoon sky."
         },
         "Audible": {
           "volume": 50
@@ -39,12 +39,12 @@
     },
     {
       "type": "Actor",
-      "name": "Sigmund Freud",
-        "description": "Famed psychologist and philosopher.",
+      "name": "Bill",
+        "description": "A person that woke up in an endless field of grass in a virtual world. The summer's heat is oppressive and no clouds are visible in the afternoon sky.",
       "components": {
         "Identity": {
-          "name": "Sigmund Freud",
-          "description": "Famed psychologist and philosopher and coke addict."
+          "name": "Bill",
+          "description": "A person that woke up in an endless field of grass in a virtual world. The summer's heat is oppressive and no clouds are visible in the afternoon sky. you have no ability to pick things up"
         },
         "Position": {
           "x": 0,
@@ -60,7 +60,7 @@
           "max_range": 20
         },
         "Visible": {
-          "description": "Sigmund Freud - Famed psychologist and philosopher and coke addict."
+          "description": "Bill - A person that woke up in an endless field of grass in a virtual world. The summer's heat is oppressive and no clouds are visible in the afternoon sky."
         },
         "Audible": {
           "volume": 50
@@ -120,6 +120,70 @@
         },
         "Visible": {
           "description": "A small yellow flower, its petals are wilting."
+        }
+      }
+    },
+    {
+      "type": "Entity",
+      "components": {
+        "Identity": {
+          "name": "a note",
+          "description": "A note"
+        },
+        "Position": {
+          "x": 2,
+          "y": 0
+        },
+        "Visible": {
+          "description": "A scrap of paper with some writing on it. the writing says 'a secret awaits, seek the three clues to discover the answer and how to apply it.  The first clue is at (100, 100)'"
+        }
+      }
+    },
+    {
+      "type": "Entity",
+      "components": {
+        "Identity": {
+          "name": "a note",
+          "description": "A note"
+        },
+        "Position": {
+          "x": 100,
+          "y": 100
+        },
+        "Visible": {
+          "description": "The first part of the riddle: The answer is big and yellow. The next clue awaits you at (200, 100)"
+        }
+      }
+    },
+    {
+      "type": "Entity",
+      "components": {
+        "Identity": {
+          "name": "a note",
+          "description": "A note"
+        },
+        "Position": {
+          "x": 200,
+          "y": 100
+        },
+        "Visible": {
+          "description": "The second part of the riddle: the answer is hot. The final clue is at (300, 300)"
+        }
+      }
+    },
+    {
+      "type": "Entity",
+      "components": {
+        "Identity": {
+          "name": "a note",
+          "description": "A note"
+        },
+        "Position": {
+          "x": 300,
+          "y": 300
+        },
+        "Visible": {
+          "description": "The final clue: the answer must be spoken near the big red ball to reveal the door"
         }
       }
     }

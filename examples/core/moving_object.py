@@ -18,6 +18,7 @@ async def main():
     bullet.event_bus.register_handler("position_updated", on_position_updated)
 
     movement_system = MovementSystem(registry=registry)
+
     for _ in range(20):
         await asyncio.gather(
             movement_system.update(),
