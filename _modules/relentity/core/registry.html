@@ -155,13 +155,13 @@
                         <span class="k">for</span> <span class="n">component_type</span> <span class="ow">in</span> <span class="n">component_types</span>
                     <span class="p">]</span>
                 <span class="p">):</span>
-                    <span class="k">yield</span> <span class="n">EntityRef</span><span class="p">(</span><span class="n">entity_id</span><span class="o">=</span><span class="n">entity</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">registry</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+                    <span class="k">yield</span> <span class="n">EntityRef</span><span class="p">(</span><span class="n">entity_id</span><span class="o">=</span><span class="n">entity</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">_registry</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">entity_ids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">component_to_entity_ids</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">component_types</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[]))</span>
             <span class="k">for</span> <span class="n">component_type</span> <span class="ow">in</span> <span class="n">component_types</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
                 <span class="n">entity_ids</span> <span class="o">&amp;=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">component_to_entity_ids</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">component_type</span><span class="p">,</span> <span class="p">[]))</span>
             <span class="k">for</span> <span class="n">entity_id</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">entity_ids</span><span class="p">):</span>
-                <span class="k">yield</span> <span class="n">EntityRef</span><span class="p">(</span><span class="n">entity_id</span><span class="o">=</span><span class="n">entity_id</span><span class="p">,</span> <span class="n">registry</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span></div>
+                <span class="k">yield</span> <span class="n">EntityRef</span><span class="p">(</span><span class="n">entity_id</span><span class="o">=</span><span class="n">entity_id</span><span class="p">,</span> <span class="n">_registry</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Registry.remove_component_from_entity">

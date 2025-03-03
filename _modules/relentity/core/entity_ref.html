@@ -86,13 +86,20 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Safe entity reference that avoids dangling references.&quot;&quot;&quot;</span>
 
     <span class="n">entity_id</span><span class="p">:</span> <span class="n">uuid</span><span class="o">.</span><span class="n">UUID</span>
-    <span class="n">registry</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">PrivateAttr</span><span class="p">()]</span>
+    <span class="n">_registry</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">PrivateAttr</span><span class="p">()]</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="EntityRef.__init__">
+<a class="viewcode-back" href="../../../api.html#relentity.core.EntityRef.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">_registry</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_registry</span> <span class="o">=</span> <span class="n">_registry</span></div>
+
 
 <div class="viewcode-block" id="EntityRef.resolve">
 <a class="viewcode-back" href="../../../api.html#relentity.core.EntityRef.resolve">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">resolve</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;Entity&quot;</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Resolve to the entity if it still exists, None otherwise.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">get_entity_by_id</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity_id</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_registry</span><span class="o">.</span><span class="n">get_entity_by_id</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity_id</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="EntityRef.is_valid">
@@ -100,7 +107,10 @@
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">is_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the referenced entity still exists.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span></div>
-</div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity_id</span><span class="p">)</span></div>
 
 </pre></div>
 

@@ -71,11 +71,12 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#relentity.core.EntityRef"><code class="docutils literal notranslate"><span class="pre">EntityRef</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.core.EntityRef.__init__"><code class="docutils literal notranslate"><span class="pre">EntityRef.__init__()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#relentity.core.EntityRef.is_valid"><code class="docutils literal notranslate"><span class="pre">EntityRef.is_valid()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#relentity.core.EntityRef.model_config"><code class="docutils literal notranslate"><span class="pre">EntityRef.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.core.EntityRef.model_post_init"><code class="docutils literal notranslate"><span class="pre">EntityRef.model_post_init()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#relentity.core.EntityRef.resolve"><code class="docutils literal notranslate"><span class="pre">EntityRef.resolve()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#relentity.core.EntityRef.entity_id"><code class="docutils literal notranslate"><span class="pre">EntityRef.entity_id</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#relentity.core.EntityRef.registry"><code class="docutils literal notranslate"><span class="pre">EntityRef.registry</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#relentity.core.Event"><code class="docutils literal notranslate"><span class="pre">Event</span></code></a><ul>
@@ -514,8 +515,17 @@ Inherits from Pydantic’s BaseModel to provide data validation and serializatio
 
 <dl class="py class">
 <dt class="sig sig-object py" id="relentity.core.EntityRef">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">relentity.core.</span></span><span class="sig-name descname"><span class="pre">EntityRef</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">entity_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/uuid.html#uuid.UUID" title="(in Python v3.13)"><span class="pre">UUID</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">registry</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Annotated" title="(in Python v3.13)"><span class="pre">Annotated</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ModelPrivateAttr</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="pre">PydanticUndefined</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/core/entity_ref.html#EntityRef"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.core.EntityRef" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">relentity.core.</span></span><span class="sig-name descname"><span class="pre">EntityRef</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_registry</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entity_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/uuid.html#uuid.UUID" title="(in Python v3.13)"><span class="pre">UUID</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/core/entity_ref.html#EntityRef"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.core.EntityRef" title="Link to this definition"></a></dt>
 <dd><p>Safe entity reference that avoids dangling references.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="relentity.core.EntityRef.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_registry</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/core/entity_ref.html#EntityRef.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.core.EntityRef.__init__" title="Link to this definition"></a></dt>
+<dd><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<cite>ValidationError</cite>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><cite>self</cite> is explicitly positional-only to allow <cite>self</cite> as a field name.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="relentity.core.EntityRef.is_valid">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_valid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="_modules/relentity/core/entity_ref.html#EntityRef.is_valid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.core.EntityRef.is_valid" title="Link to this definition"></a></dt>
@@ -529,6 +539,21 @@ Inherits from Pydantic’s BaseModel to provide data validation and serializatio
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="relentity.core.EntityRef.model_post_init">
+<span class="sig-name descname"><span class="pre">model_post_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#relentity.core.EntityRef.model_post_init" title="Link to this definition"></a></dt>
+<dd><p>This function is meant to behave like a BaseModel method to initialise private attributes.</p>
+<p>It takes context as an argument since that’s what pydantic-core passes when calling it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self</strong> – The BaseModel instance.</p></li>
+<li><p><strong>context</strong> – The context.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="relentity.core.EntityRef.resolve">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">resolve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#relentity.core.Entity" title="relentity.core.Entity"><span class="pre">Entity</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/relentity/core/entity_ref.html#EntityRef.resolve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.core.EntityRef.resolve" title="Link to this definition"></a></dt>
 <dd><p>Resolve to the entity if it still exists, None otherwise.</p>
@@ -537,11 +562,6 @@ Inherits from Pydantic’s BaseModel to provide data validation and serializatio
 <dl class="py attribute">
 <dt class="sig sig-object py" id="relentity.core.EntityRef.entity_id">
 <span class="sig-name descname"><span class="pre">entity_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/uuid.html#uuid.UUID" title="(in Python v3.13)"><span class="pre">UUID</span></a></em><a class="headerlink" href="#relentity.core.EntityRef.entity_id" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="relentity.core.EntityRef.registry">
-<span class="sig-name descname"><span class="pre">registry</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Annotated" title="(in Python v3.13)"><span class="pre">Annotated</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ModelPrivateAttr</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="pre">PydanticUndefined</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#relentity.core.EntityRef.registry" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
