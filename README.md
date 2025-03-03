@@ -1,6 +1,6 @@
 # Relentity
 
-![Python package](https://github.com/relative-world/relentity/blob/main/.github/workflows/multivariant-tests.yml/badge.svg)
+![Build Status](https://github.com/relative-world/relentity/actions/workflows/multivariant-tests.yml/badge.svg)
 
 ## Overview
 
