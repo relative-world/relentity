@@ -6,7 +6,7 @@ authors = ["Tyler Evans <tyler@poorlythoughtout.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.9"
 pydantic = "^2.10.6"
 ollama = "^0.4.7"
 orjson = "^3.10.15"
