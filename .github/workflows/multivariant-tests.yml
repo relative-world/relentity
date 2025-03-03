@@ -27,11 +27,4 @@ jobs:
         poetry install
     - name: Test with pytest
       run: |
-        poetry run pytest --cov --junitxml=pytest-results-${{ matrix.python-version }}.xml
-    - name: Test Repor
-      uses: dorny/test-reporter@v1
-      if: success() || failure()    # run this step even if previous step failed
-      with:
-        name: Pytest Tests            # Name of the check run which will be created
-        path: pytest-results-${{ matrix.python-version }}.xml    # Path to test results
-        reporter: jest-junit        # Format of test results
+        poetry run pytest
