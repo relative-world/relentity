@@ -1,0 +1,265 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>relentity.ai.pydantic_ollama.tools &mdash; relentity 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+
+  
+    <link rel="canonical" href="https://tyevans.github.io/relentity/_modules/relentity/ai/pydantic_ollama/tools.html" />
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            relentity
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">relentity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">relentity.ai.pydantic_ollama.tools</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for relentity.ai.pydantic_ollama.tools</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">inspect</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">traceback</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">wraps</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Annotated</span><span class="p">,</span> <span class="n">Awaitable</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">PrivateAttr</span>
+
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="n">TOOL_CALLING_SYSTEM_PROMPT</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">[TOOLS]</span><span class="si">{tool_definitions_json}</span><span class="s2">[/TOOLS]</span>
+
+<span class="s2">To call a tool, include the following in your response:</span>
+
+<span class="s2">```</span>
+<span class="s2">{{</span>
+<span class="s2">    &quot;tool_call&quot;: {{</span>
+<span class="s2">        &quot;function_name&quot;: &lt;function name&gt;,</span>
+<span class="s2">        &quot;function_args: &lt;object with function arguments&gt;</span>
+<span class="s2">    }}</span>
+<span class="s2">}}</span>
+<span class="s2">```</span>
+<span class="s2">You will be allowed a single tool call and a single response per iteration.</span>
+<span class="s2">The output of your tool call will be provided to you in the next iteration.</span>
+<span class="s2">On the next iteration, any state changes induced by tool calls will be reflected in your world.</span>
+<span class="s2">If you do not wish to call a tool, simply provide a response.</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="ToolCallRequest">
+<a class="viewcode-back" href="../../../../api.html#relentity.ai.ToolCallRequest">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ToolCallRequest</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">function_name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">function_args</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="ToolCallResponse">
+<a class="viewcode-back" href="../../../../api.html#relentity.ai.ToolCallResponse">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ToolCallResponse</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">tool_call</span><span class="p">:</span> <span class="n">ToolCallRequest</span>
+    <span class="n">result</span><span class="p">:</span> <span class="n">Any</span></div>
+
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">FunctionSchemaFunction</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">parameters</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+    <span class="n">required</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">FunctionSchema</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;function&quot;</span>
+    <span class="n">_callable</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">callable</span><span class="p">,</span> <span class="n">PrivateAttr</span><span class="p">()]</span>
+    <span class="n">function</span><span class="p">:</span> <span class="n">FunctionSchemaFunction</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ParameterDefinition</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">properties</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="ToolDefinition">
+<a class="viewcode-back" href="../../../../api.html#relentity.ai.ToolDefinition">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ToolDefinition</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">parameters</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">py_type_to_param_type</span><span class="p">(</span><span class="n">annotation</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">annotation</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;string&quot;</span>
+    <span class="k">elif</span> <span class="n">annotation</span> <span class="ow">is</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;integer&quot;</span>
+    <span class="k">elif</span> <span class="n">annotation</span> <span class="ow">is</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;number&quot;</span>
+    <span class="k">elif</span> <span class="n">annotation</span> <span class="ow">is</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;boolean&quot;</span>
+    <span class="k">elif</span> <span class="n">annotation</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;array&quot;</span>
+    <span class="k">elif</span> <span class="n">annotation</span> <span class="ow">is</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;object&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;string&quot;</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">function_to_schema</span><span class="p">(</span><span class="n">function</span><span class="p">:</span> <span class="nb">callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FunctionSchema</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;It&#39;ll do it&#39;s best to convert a function to a schema.&quot;&quot;&quot;</span>
+    <span class="n">signature</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">function</span><span class="p">)</span>
+    <span class="n">required</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">parameter</span> <span class="ow">in</span> <span class="n">signature</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">parameter</span><span class="o">.</span><span class="n">default</span> <span class="o">==</span> <span class="n">inspect</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">empty</span> <span class="ow">and</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;self&quot;</span><span class="p">,</span> <span class="s2">&quot;actor&quot;</span><span class="p">}:</span>
+            <span class="n">required</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="n">fs</span> <span class="o">=</span> <span class="n">FunctionSchema</span><span class="p">(</span>
+        <span class="n">function</span><span class="o">=</span><span class="n">FunctionSchemaFunction</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">function</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="n">function</span><span class="o">.</span><span class="vm">__doc__</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">=</span><span class="p">{</span>
+                <span class="n">name</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">py_type_to_param_type</span><span class="p">(</span><span class="n">parameter</span><span class="o">.</span><span class="n">annotation</span><span class="p">),</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">parameter</span><span class="o">.</span><span class="n">annotation</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+                <span class="p">}</span>
+                <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">parameter</span> <span class="ow">in</span> <span class="n">signature</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;self&quot;</span><span class="p">,</span> <span class="s2">&quot;actor&quot;</span><span class="p">}</span>
+            <span class="p">},</span>
+            <span class="n">required</span><span class="o">=</span><span class="n">required</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">fs</span><span class="o">.</span><span class="n">_callable</span> <span class="o">=</span> <span class="n">function</span>
+    <span class="k">return</span> <span class="n">fs</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">tools_to_schema</span><span class="p">(</span><span class="n">tools</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">callable</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">FunctionSchema</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;It&#39;ll do it&#39;s best to convert a function to a schema.&quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">function</span> <span class="ow">in</span> <span class="n">tools</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">result</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">function_to_schema</span><span class="p">(</span><span class="n">function</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">call_tool</span><span class="p">(</span><span class="n">tools</span><span class="p">,</span> <span class="n">tool_call</span><span class="p">):</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tool call: </span><span class="si">{</span><span class="n">tool_call</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">function</span> <span class="o">=</span> <span class="n">tools</span><span class="p">[</span><span class="n">tool_call</span><span class="o">.</span><span class="n">function_name</span><span class="p">]</span><span class="o">.</span><span class="n">_callable</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">function</span><span class="p">(</span><span class="o">**</span><span class="p">(</span><span class="n">tool_call</span><span class="o">.</span><span class="n">function_args</span><span class="p">))</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">ToolCallResponse</span><span class="p">(</span>
+        <span class="n">tool_call</span><span class="o">=</span><span class="n">tool_call</span><span class="p">,</span>
+        <span class="n">result</span><span class="o">=</span><span class="n">result</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<div class="viewcode-block" id="tool">
+<a class="viewcode-back" href="../../../../api.html#relentity.ai.tool">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">tool</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="nb">callable</span> <span class="o">|</span> <span class="n">Awaitable</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Decorator to mark a function as a tool&quot;&quot;&quot;</span>
+    <span class="n">func</span><span class="o">.</span><span class="n">_is_tool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="n">func</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">wrap_with_actor</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">actor</span><span class="p">):</span>
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># Insert actor as second parameter (after self)</span>
+        <span class="c1"># and shift remaining positional args</span>
+        <span class="k">if</span> <span class="n">args</span><span class="p">:</span>
+            <span class="n">new_args</span> <span class="o">=</span> <span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">actor</span><span class="p">)</span> <span class="o">+</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">new_args</span> <span class="o">=</span> <span class="p">(</span><span class="n">actor</span><span class="p">,)</span>
+
+        <span class="c1"># Call with new args, ignoring any &#39;actor&#39; in kwargs</span>
+        <span class="n">filtered_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="s2">&quot;actor&quot;</span><span class="p">}</span>
+        <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">new_args</span><span class="p">,</span> <span class="o">**</span><span class="n">filtered_kwargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">wrapper</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Tyler Evans.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

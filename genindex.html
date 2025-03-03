@@ -77,15 +77,18 @@
  | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
  | <a href="#E"><strong>E</strong></a>
+ | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
  | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
+ | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#Q"><strong>Q</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
+ | <a href="#T"><strong>T</strong></a>
  | <a href="#U"><strong>U</strong></a>
  | <a href="#V"><strong>V</strong></a>
  | <a href="#X"><strong>X</strong></a>
@@ -95,9 +98,13 @@
 <h2 id="_">_</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#relentity.core.Entity.__init__">__init__() (relentity.core.Entity method)</a>
+      <li><a href="api.html#relentity.ai.AIDrivenSystem.__init__">__init__() (relentity.ai.AIDrivenSystem method)</a>
 
       <ul>
+        <li><a href="api.html#relentity.ai.ToolEnabledComponent.__init__">(relentity.ai.ToolEnabledComponent method)</a>
+</li>
+        <li><a href="api.html#relentity.core.Entity.__init__">(relentity.core.Entity method)</a>
+</li>
         <li><a href="api.html#relentity.core.Event.__init__">(relentity.core.Event method)</a>
 </li>
         <li><a href="api.html#relentity.core.EventBus.__init__">(relentity.core.EventBus method)</a>
@@ -110,15 +117,35 @@
 </li>
         <li><a href="api.html#relentity.spatial.SoundEvent.__init__">(relentity.spatial.SoundEvent method)</a>
 </li>
+        <li><a href="api.html#relentity.tasks.TaskedEntity.__init__">(relentity.tasks.TaskedEntity method)</a>
+</li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#relentity.ai.AIDriven._ai_event_history">_ai_event_history (relentity.ai.AIDriven attribute)</a>
+</li>
+      <li><a href="api.html#relentity.ai.AIDriven._ai_event_queue">_ai_event_queue (relentity.ai.AIDriven attribute)</a>
+</li>
+      <li><a href="api.html#relentity.ai.AIDrivenSystem._client">_client (relentity.ai.AIDrivenSystem attribute)</a>
+</li>
+      <li><a href="api.html#relentity.ai.AIDriven._hashed_event_history">_hashed_event_history (relentity.ai.AIDriven attribute)</a>
+</li>
+      <li><a href="api.html#relentity.ai.AIDriven._hashed_event_queue">_hashed_event_queue (relentity.ai.AIDriven attribute)</a>
+</li>
       <li><a href="api.html#relentity.spatial.Audible._output_queue">_output_queue (relentity.spatial.Audible attribute)</a>
 
       <ul>
         <li><a href="api.html#relentity.spatial.Hearing._output_queue">(relentity.spatial.Hearing attribute)</a>
 </li>
       </ul></li>
+      <li><a href="api.html#relentity.ai.AIDriven._prompt_queue">_prompt_queue (relentity.ai.AIDriven attribute)</a>
+</li>
+      <li><a href="api.html#relentity.ai.AIDriven._system_prompt_queue">_system_prompt_queue (relentity.ai.AIDriven attribute)</a>
+</li>
+      <li><a href="api.html#relentity.ai.ToolEnabledComponent._tools">_tools (relentity.ai.ToolEnabledComponent attribute)</a>
+</li>
+      <li><a href="api.html#relentity.ai.AIDriven._update_count">_update_count (relentity.ai.AIDriven attribute)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -129,8 +156,18 @@
 </li>
       <li><a href="api.html#relentity.core.Entity.add_component_sync">add_component_sync() (relentity.core.Entity method)</a>
 </li>
+      <li><a href="api.html#relentity.ai.AIDriven.add_event_for_consideration">add_event_for_consideration() (relentity.ai.AIDriven method)</a>
+</li>
+      <li><a href="api.html#relentity.ai.AIDriven">AIDriven (class in relentity.ai)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#relentity.ai.AIDrivenSystem">AIDrivenSystem (class in relentity.ai)</a>
+</li>
+      <li><a href="api.html#relentity.ai.AIDriven.append_prompt">append_prompt() (relentity.ai.AIDriven method)</a>
+</li>
+      <li><a href="api.html#relentity.ai.AIDriven.append_system_prompt">append_system_prompt() (relentity.ai.AIDriven method)</a>
+</li>
       <li><a href="api.html#relentity.spatial.Audible">Audible (class in relentity.spatial)</a>
 </li>
       <li><a href="api.html#relentity.spatial.AudioSystem">AudioSystem (class in relentity.spatial)</a>
@@ -153,9 +190,11 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#id1">description (relentity.core.Identity attribute)</a>, <a href="api.html#relentity.core.Identity.description">[1]</a>
+      <li><a href="api.html#relentity.ai.ToolDefinition.description">description (relentity.ai.ToolDefinition attribute)</a>
 
       <ul>
+        <li><a href="api.html#id1">(relentity.core.Identity attribute)</a>, <a href="api.html#relentity.core.Identity.description">[1]</a>
+</li>
         <li><a href="api.html#id7">(relentity.spatial.Visible attribute)</a>, <a href="api.html#relentity.spatial.Visible.description">[1]</a>
 </li>
       </ul></li>
@@ -194,6 +233,18 @@
       <li><a href="api.html#relentity.core.Entity.event_bus">event_bus (relentity.core.Entity attribute)</a>
 </li>
       <li><a href="api.html#relentity.core.EventBus">EventBus (class in relentity.core)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="F">F</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#relentity.ai.ToolCallRequest.function_args">function_args (relentity.ai.ToolCallRequest attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#relentity.ai.ToolCallRequest.function_name">function_name (relentity.ai.ToolCallRequest attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -243,9 +294,29 @@
 </li>
       <li><a href="api.html#id10">max_speed (relentity.spatial.MovementSystem attribute)</a>, <a href="api.html#relentity.spatial.MovementSystem.max_speed">[1]</a>
 </li>
-      <li><a href="api.html#relentity.core.Component.model_config">model_config (relentity.core.Component attribute)</a>
+      <li><a href="api.html#id13">model (relentity.ai.AIDriven attribute)</a>, <a href="api.html#relentity.ai.AIDriven.model">[1]</a>
+</li>
+      <li><a href="api.html#relentity.ai.AIDriven.model_config">model_config (relentity.ai.AIDriven attribute)</a>
 
       <ul>
+        <li><a href="api.html#relentity.ai.PromptRenderableComponent.model_config">(relentity.ai.PromptRenderableComponent attribute)</a>
+</li>
+        <li><a href="api.html#relentity.ai.SystemPromptRenderableComponent.model_config">(relentity.ai.SystemPromptRenderableComponent attribute)</a>
+</li>
+        <li><a href="api.html#relentity.ai.TextPromptComponent.model_config">(relentity.ai.TextPromptComponent attribute)</a>
+</li>
+        <li><a href="api.html#relentity.ai.TextSystemPromptComponent.model_config">(relentity.ai.TextSystemPromptComponent attribute)</a>
+</li>
+        <li><a href="api.html#relentity.ai.ToolCallRequest.model_config">(relentity.ai.ToolCallRequest attribute)</a>
+</li>
+        <li><a href="api.html#relentity.ai.ToolCallResponse.model_config">(relentity.ai.ToolCallResponse attribute)</a>
+</li>
+        <li><a href="api.html#relentity.ai.ToolDefinition.model_config">(relentity.ai.ToolDefinition attribute)</a>
+</li>
+        <li><a href="api.html#relentity.ai.ToolEnabledComponent.model_config">(relentity.ai.ToolEnabledComponent attribute)</a>
+</li>
+        <li><a href="api.html#relentity.core.Component.model_config">(relentity.core.Component attribute)</a>
+</li>
         <li><a href="api.html#relentity.core.Identity.model_config">(relentity.core.Identity attribute)</a>
 </li>
         <li><a href="api.html#relentity.spatial.Audible.model_config">(relentity.spatial.Audible attribute)</a>
@@ -260,12 +331,18 @@
 </li>
         <li><a href="api.html#relentity.spatial.Vision.model_config">(relentity.spatial.Vision attribute)</a>
 </li>
+        <li><a href="api.html#relentity.tasks.Task.model_config">(relentity.tasks.Task attribute)</a>
+</li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#relentity.spatial.Audible.model_post_init">model_post_init() (relentity.spatial.Audible method)</a>
+      <li><a href="api.html#relentity.ai.AIDriven.model_post_init">model_post_init() (relentity.ai.AIDriven method)</a>
 
       <ul>
+        <li><a href="api.html#relentity.ai.ToolEnabledComponent.model_post_init">(relentity.ai.ToolEnabledComponent method)</a>
+</li>
+        <li><a href="api.html#relentity.spatial.Audible.model_post_init">(relentity.spatial.Audible method)</a>
+</li>
         <li><a href="api.html#relentity.spatial.Hearing.model_post_init">(relentity.spatial.Hearing method)</a>
 </li>
       </ul></li>
@@ -273,9 +350,13 @@
     module
 
       <ul>
+        <li><a href="api.html#module-relentity.ai">relentity.ai</a>
+</li>
         <li><a href="api.html#module-relentity.core">relentity.core</a>
 </li>
         <li><a href="api.html#module-relentity.spatial">relentity.spatial</a>
+</li>
+        <li><a href="api.html#module-relentity.tasks">relentity.tasks</a>
 </li>
       </ul></li>
       <li><a href="api.html#relentity.spatial.MovementSystem">MovementSystem (class in relentity.spatial)</a>
@@ -286,7 +367,25 @@
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#id0">name (relentity.core.Identity attribute)</a>, <a href="api.html#relentity.core.Identity.name">[1]</a>
+      <li><a href="api.html#relentity.ai.ToolDefinition.name">name (relentity.ai.ToolDefinition attribute)</a>
+
+      <ul>
+        <li><a href="api.html#id0">(relentity.core.Identity attribute)</a>, <a href="api.html#relentity.core.Identity.name">[1]</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="O">O</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#id20">on_task_abandoned() (relentity.tasks.TaskedEntity method)</a>, <a href="api.html#relentity.tasks.TaskedEntity.on_task_abandoned">[1]</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#id21">on_task_complete() (relentity.tasks.TaskedEntity method)</a>, <a href="api.html#relentity.tasks.TaskedEntity.on_task_complete">[1]</a>
+</li>
+      <li><a href="api.html#id22">on_task_progress() (relentity.tasks.TaskedEntity method)</a>, <a href="api.html#relentity.tasks.TaskedEntity.on_task_progress">[1]</a>
 </li>
   </ul></td>
 </tr></table>
@@ -294,11 +393,17 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#relentity.ai.ToolDefinition.parameters">parameters (relentity.ai.ToolDefinition attribute)</a>
+</li>
       <li><a href="api.html#relentity.spatial.Position">Position (class in relentity.spatial)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#relentity.spatial.EntitySeenEvent.position">position (relentity.spatial.EntitySeenEvent attribute)</a>
+</li>
+      <li><a href="api.html#relentity.ai.AIDrivenSystem.process_entity">process_entity() (relentity.ai.AIDrivenSystem method)</a>
+</li>
+      <li><a href="api.html#relentity.ai.PromptRenderableComponent">PromptRenderableComponent (class in relentity.ai)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -327,14 +432,19 @@
       <li><a href="api.html#relentity.core.Entity.registry">registry (relentity.core.Entity attribute)</a>
 </li>
       <li>
+    relentity.ai
+
+      <ul>
+        <li><a href="api.html#module-relentity.ai">module</a>
+</li>
+      </ul></li>
+      <li>
     relentity.core
 
       <ul>
         <li><a href="api.html#module-relentity.core">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     relentity.spatial
 
@@ -342,9 +452,38 @@
         <li><a href="api.html#module-relentity.spatial">module</a>
 </li>
       </ul></li>
+      <li>
+    relentity.tasks
+
+      <ul>
+        <li><a href="api.html#module-relentity.tasks">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#id18">remaining_cycles (relentity.tasks.Task attribute)</a>, <a href="api.html#relentity.tasks.Task.remaining_cycles">[1]</a>
+</li>
       <li><a href="api.html#relentity.core.Entity.remove_component">remove_component() (relentity.core.Entity method)</a>
 </li>
       <li><a href="api.html#relentity.core.Registry.remove_component_from_entity">remove_component_from_entity() (relentity.core.Registry method)</a>
+</li>
+      <li><a href="api.html#relentity.ai.AIDriven.render_prompt">render_prompt() (relentity.ai.AIDriven method)</a>
+
+      <ul>
+        <li><a href="api.html#relentity.ai.PromptRenderableComponent.render_prompt">(relentity.ai.PromptRenderableComponent method)</a>
+</li>
+        <li><a href="api.html#relentity.ai.TextPromptComponent.render_prompt">(relentity.ai.TextPromptComponent method)</a>
+</li>
+      </ul></li>
+      <li><a href="api.html#relentity.ai.AIDriven.render_system_prompt">render_system_prompt() (relentity.ai.AIDriven method)</a>
+
+      <ul>
+        <li><a href="api.html#relentity.ai.SystemPromptRenderableComponent.render_system_prompt">(relentity.ai.SystemPromptRenderableComponent method)</a>
+</li>
+        <li><a href="api.html#relentity.ai.TextSystemPromptComponent.render_system_prompt">(relentity.ai.TextSystemPromptComponent method)</a>
+</li>
+      </ul></li>
+      <li><a href="api.html#relentity.ai.ToolCallResponse.result">result (relentity.ai.ToolCallResponse attribute)</a>
 </li>
       <li><a href="api.html#relentity.spatial.Audible.retrieve_queue">retrieve_queue() (relentity.spatial.Audible method)</a>
 
@@ -358,17 +497,69 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#relentity.spatial.SoundEvent.sound">sound (relentity.spatial.SoundEvent attribute)</a>
+      <li><a href="api.html#relentity.ai.AIDriven.set_prompt">set_prompt() (relentity.ai.AIDriven method)</a>
 </li>
-      <li><a href="api.html#relentity.spatial.SoundEvent.sound_type">sound_type (relentity.spatial.SoundEvent attribute)</a>
+      <li><a href="api.html#relentity.ai.AIDriven.set_system_prompt">set_system_prompt() (relentity.ai.AIDriven method)</a>
+</li>
+      <li><a href="api.html#id23">set_task() (relentity.tasks.TaskedEntity method)</a>, <a href="api.html#relentity.tasks.TaskedEntity.set_task">[1]</a>
+</li>
+      <li><a href="api.html#relentity.spatial.SoundEvent.sound">sound (relentity.spatial.SoundEvent attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#relentity.spatial.SoundEvent.sound_type">sound_type (relentity.spatial.SoundEvent attribute)</a>
+</li>
       <li><a href="api.html#relentity.spatial.SoundEvent">SoundEvent (class in relentity.spatial)</a>
 </li>
       <li><a href="api.html#relentity.spatial.SpatialRegistry">SpatialRegistry (class in relentity.spatial)</a>
 </li>
       <li><a href="api.html#relentity.core.System">System (class in relentity.core)</a>
+</li>
+      <li><a href="api.html#relentity.ai.SystemPromptRenderableComponent">SystemPromptRenderableComponent (class in relentity.ai)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="T">T</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#relentity.tasks.Task">Task (class in relentity.tasks)</a>
+</li>
+      <li><a href="api.html#id17">task (relentity.tasks.Task attribute)</a>, <a href="api.html#relentity.tasks.Task.task">[1]</a>
+</li>
+      <li><a href="api.html#relentity.tasks.Task.task_abandoned">task_abandoned() (relentity.tasks.Task method)</a>
+</li>
+      <li><a href="api.html#relentity.tasks.Task.task_complete_event">task_complete_event() (relentity.tasks.Task method)</a>
+</li>
+      <li><a href="api.html#relentity.tasks.Task.task_progress_event">task_progress_event() (relentity.tasks.Task method)</a>
+</li>
+      <li><a href="api.html#relentity.tasks.TaskedEntity">TaskedEntity (class in relentity.tasks)</a>
+</li>
+      <li><a href="api.html#relentity.tasks.TaskSystem">TaskSystem (class in relentity.tasks)</a>
+</li>
+      <li><a href="api.html#id15">text (relentity.ai.TextPromptComponent attribute)</a>, <a href="api.html#relentity.ai.TextPromptComponent.text">[1]</a>
+
+      <ul>
+        <li><a href="api.html#id16">(relentity.ai.TextSystemPromptComponent attribute)</a>, <a href="api.html#relentity.ai.TextSystemPromptComponent.text">[1]</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#relentity.ai.TextPromptComponent">TextPromptComponent (class in relentity.ai)</a>
+</li>
+      <li><a href="api.html#relentity.ai.TextSystemPromptComponent">TextSystemPromptComponent (class in relentity.ai)</a>
+</li>
+      <li><a href="api.html#relentity.ai.tool">tool() (in module relentity.ai)</a>
+</li>
+      <li><a href="api.html#relentity.ai.ToolCallResponse.tool_call">tool_call (relentity.ai.ToolCallResponse attribute)</a>
+</li>
+      <li><a href="api.html#relentity.ai.ToolCallRequest">ToolCallRequest (class in relentity.ai)</a>
+</li>
+      <li><a href="api.html#relentity.ai.ToolCallResponse">ToolCallResponse (class in relentity.ai)</a>
+</li>
+      <li><a href="api.html#relentity.ai.ToolDefinition">ToolDefinition (class in relentity.ai)</a>
+</li>
+      <li><a href="api.html#relentity.ai.ToolEnabledComponent">ToolEnabledComponent (class in relentity.ai)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -378,16 +569,24 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#relentity.core.Registry.unregister_entity">unregister_entity() (relentity.core.Registry method)</a>
 </li>
-      <li><a href="api.html#relentity.core.System.update">update() (relentity.core.System method)</a>
+      <li><a href="api.html#relentity.ai.AIDrivenSystem.update">update() (relentity.ai.AIDrivenSystem method)</a>
 
       <ul>
+        <li><a href="api.html#relentity.core.System.update">(relentity.core.System method)</a>
+</li>
         <li><a href="api.html#id12">(relentity.spatial.AudioSystem method)</a>, <a href="api.html#relentity.spatial.AudioSystem.update">[1]</a>
 </li>
         <li><a href="api.html#relentity.spatial.MovementSystem.update">(relentity.spatial.MovementSystem method)</a>
 </li>
         <li><a href="api.html#id11">(relentity.spatial.VisionSystem method)</a>, <a href="api.html#relentity.spatial.VisionSystem.update">[1]</a>
 </li>
+        <li><a href="api.html#id19">(relentity.tasks.TaskSystem method)</a>, <a href="api.html#relentity.tasks.TaskSystem.update">[1]</a>
+</li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#id14">update_interval (relentity.ai.AIDriven attribute)</a>, <a href="api.html#relentity.ai.AIDriven.update_interval">[1]</a>
+</li>
   </ul></td>
 </tr></table>
 

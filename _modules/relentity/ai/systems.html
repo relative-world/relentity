@@ -1,0 +1,233 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>relentity.ai.systems &mdash; relentity 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+    <link rel="canonical" href="https://tyevans.github.io/relentity/_modules/relentity/ai/systems.html" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            relentity
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">relentity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">relentity.ai.systems</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for relentity.ai.systems</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">relentity.ai.components</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AIDriven</span><span class="p">,</span>
+    <span class="n">ToolEnabledComponent</span><span class="p">,</span>
+    <span class="n">PromptRenderableComponent</span><span class="p">,</span>
+    <span class="n">SystemPromptRenderableComponent</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">relentity.ai.events</span><span class="w"> </span><span class="kn">import</span> <span class="n">AI_RESPONSE_EVENT_TYPE</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">relentity.ai.pydantic_ollama.client</span><span class="w"> </span><span class="kn">import</span> <span class="n">PydanticOllamaClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">relentity.ai.pydantic_ollama.responses</span><span class="w"> </span><span class="kn">import</span> <span class="n">BasicResponse</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">relentity.ai.pydantic_ollama.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">wrap_with_actor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">relentity.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Registry</span><span class="p">,</span> <span class="n">System</span><span class="p">,</span> <span class="n">Identity</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">relentity.settings</span><span class="w"> </span><span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">relentity.spatial</span><span class="w"> </span><span class="kn">import</span> <span class="n">Position</span><span class="p">,</span> <span class="n">Velocity</span>
+
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">render_basic_information</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">component_types</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Renders basic information about an entity based on its components.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        entity (Entity): The entity to render information for.</span>
+<span class="sd">        component_types (list[Type[Component]]): The types of components to include in the information.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: The rendered basic information.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">component_type</span> <span class="ow">in</span> <span class="n">component_types</span><span class="p">:</span>
+        <span class="n">component</span> <span class="o">=</span> <span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">component_type</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">component</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="k">if</span> <span class="n">component_type</span> <span class="o">==</span> <span class="n">Identity</span><span class="p">:</span>
+            <span class="n">info</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Name: </span><span class="si">{</span><span class="n">component</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="se">\n</span><span class="s2">Description: </span><span class="si">{</span><span class="n">component</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">component_type</span> <span class="o">==</span> <span class="n">Position</span><span class="p">:</span>
+            <span class="n">info</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Position: (</span><span class="si">{</span><span class="n">component</span><span class="o">.</span><span class="n">x</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">component</span><span class="o">.</span><span class="n">y</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">component_type</span> <span class="o">==</span> <span class="n">Velocity</span><span class="p">:</span>
+            <span class="n">info</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Velocity: (</span><span class="si">{</span><span class="n">component</span><span class="o">.</span><span class="n">vx</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">component</span><span class="o">.</span><span class="n">vy</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">info</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">component_type</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">component</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="AIDrivenSystem">
+<a class="viewcode-back" href="../../../api.html#relentity.ai.AIDrivenSystem">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AIDrivenSystem</span><span class="p">(</span><span class="n">System</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    System for processing entities driven by AI.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        _client (PydanticOllamaClient): The client for interacting with the AI model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="AIDrivenSystem.__init__">
+<a class="viewcode-back" href="../../../api.html#relentity.ai.AIDrivenSystem.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">registry</span><span class="p">:</span> <span class="n">Registry</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes the AIDrivenSystem with a registry and AI client.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            registry (Registry): The registry to be used by the system.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">registry</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">PydanticOllamaClient</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">base_url</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">default_model</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AIDrivenSystem.update">
+<a class="viewcode-back" href="../../../api.html#relentity.ai.AIDrivenSystem.update">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates the system by processing all entities with the AIDriven component.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tasks</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">async</span> <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">entities_with_components</span><span class="p">(</span><span class="n">AIDriven</span><span class="p">):</span>
+            <span class="n">tasks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">))</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="n">tasks</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AIDrivenSystem.process_entity">
+<a class="viewcode-back" href="../../../api.html#relentity.ai.AIDrivenSystem.process_entity">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">process_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Processes an entity with the AIDriven component.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            entity (Entity): The entity to process.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ai_driven_component</span> <span class="o">=</span> <span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">AIDriven</span><span class="p">)</span>
+        <span class="n">ai_driven_component</span><span class="o">.</span><span class="n">_update_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">ai_driven_component</span><span class="o">.</span><span class="n">_update_count</span> <span class="o">%</span> <span class="n">ai_driven_component</span><span class="o">.</span><span class="n">update_interval</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span>  <span class="c1"># Skip processing this entity</span>
+
+        <span class="n">system_prompt</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">prompt</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">tools</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">component_types</span> <span class="o">=</span> <span class="p">[</span><span class="n">Identity</span><span class="p">,</span> <span class="n">Position</span><span class="p">,</span> <span class="n">Velocity</span><span class="p">]</span>
+        <span class="n">system_prompt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="k">await</span> <span class="n">render_basic_information</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">component_types</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">component_type</span><span class="p">,</span> <span class="n">component</span> <span class="ow">in</span> <span class="n">entity</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">component_type</span><span class="p">,</span> <span class="n">ToolEnabledComponent</span><span class="p">):</span>
+                <span class="n">tools</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">component</span><span class="o">.</span><span class="n">_tools</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">component_type</span><span class="p">,</span> <span class="n">PromptRenderableComponent</span><span class="p">):</span>
+                <span class="n">prompt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="k">await</span> <span class="n">component</span><span class="o">.</span><span class="n">render_prompt</span><span class="p">())</span>
+            <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">component_type</span><span class="p">,</span> <span class="n">SystemPromptRenderableComponent</span><span class="p">):</span>
+                <span class="n">system_prompt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="k">await</span> <span class="n">component</span><span class="o">.</span><span class="n">render_system_prompt</span><span class="p">())</span>
+
+        <span class="n">system_prompt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="k">await</span> <span class="n">ai_driven_component</span><span class="o">.</span><span class="n">render_system_prompt</span><span class="p">())</span>
+        <span class="n">prompt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="k">await</span> <span class="n">ai_driven_component</span><span class="o">.</span><span class="n">render_prompt</span><span class="p">())</span>
+
+        <span class="n">prompt_str</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&lt;No input this round&gt;&quot;</span>
+        <span class="n">system_prompt_str</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">system_prompt</span><span class="p">)</span>
+
+        <span class="n">tools</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">update</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;_callable&quot;</span><span class="p">:</span> <span class="n">wrap_with_actor</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">_callable</span><span class="p">,</span> <span class="n">actor</span><span class="o">=</span><span class="n">entity</span><span class="p">)})</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">tools</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+
+        <span class="n">_</span><span class="p">,</span> <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
+            <span class="n">prompt</span><span class="o">=</span><span class="n">prompt_str</span><span class="p">,</span>
+            <span class="n">system</span><span class="o">=</span><span class="n">system_prompt_str</span><span class="p">,</span>
+            <span class="n">response_model</span><span class="o">=</span><span class="n">BasicResponse</span><span class="p">,</span>
+            <span class="n">tools</span><span class="o">=</span><span class="n">tools</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">tools</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">response</span>
+        <span class="k">if</span> <span class="n">response</span><span class="p">:</span>
+            <span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">event_bus</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">AI_RESPONSE_EVENT_TYPE</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">response</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Tyler Evans.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
