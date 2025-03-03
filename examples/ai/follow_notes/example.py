@@ -16,6 +16,7 @@ from relentity.ai import (
 )
 from relentity.ai.utils import pretty_name_entity, pretty_print_event
 from relentity.core import Entity, Identity
+from relentity.core.entities import attach_components_sync
 from relentity.spatial import (
     ENTITY_SEEN_EVENT_TYPE,
     POSITION_UPDATED_EVENT_TYPE,
@@ -61,19 +62,20 @@ class AIMovementController(ToolEnabledComponent):
 class Actor(Entity):
     def __init__(self, registry, name, description, *args, private_info=None, model="qwen2.5:14b", **kwargs):
         super().__init__(registry, *args, **kwargs)
-        self.add_component_sync(Identity(name=name, description=description))
-        self.add_component_sync(Position(x=random.randint(-10, 10), y=random.randint(-10, 10)))
-        # self.add_component_sync(Velocity(vx=0, vy=0))
-
-        if private_info:
-            self.add_component_sync(TextPromptComponent(text=private_info))
-
-        # self.add_component_sync(AIMovementController())
-        self.add_component_sync(Vision(max_range=100))
-        self.add_component_sync(Visible(description=f"{name} - {description}"))
-        self.add_component_sync(Audible(volume=100))
-        self.add_component_sync(Hearing(volume=100))
-        self.add_component_sync(AIDriven(model=model, update_interval=1))
+        components = [
+            Identity(name=name, description=description),
+            Position(x=random.randint(-10, 10), y=random.randint(-10, 10)),
+            TextPromptComponent(text=private_info) if private_info else None,
+            AIMovementController(),
+            Vision(max_range=100),
+            Visible(description=f"{name} - {description}"),
+            Audible(volume=100),
+            Hearing(volume=100),
+            AIDriven(model=model, update_interval=1),
+        ]
+        for component in components:
+            if component:
+                self.add_component_sync(component)
 
         self.event_bus.register_handler(AI_RESPONSE_EVENT_TYPE, self.on_ai_response)
         self.event_bus.register_handler(ENTITY_SEEN_EVENT_TYPE, self.on_entity_seen)
@@ -114,12 +116,13 @@ class Actor(Entity):
 class Ball(Entity):
     def __init__(self, registry, *args, **kwargs):
         super().__init__(registry, *args, **kwargs)
-        self.add_component_sync(Identity(name="a ball", description="A ball"))
-        self.add_component_sync(Position(x=0, y=1))
-        self.add_component_sync(
-            Visible(description="A large red kickball, it's well inflated and says 'Spalding' on the side.")
+        attach_components_sync(
+            self,
+            Identity(name="a ball", description="A ball"),
+            Position(x=0, y=1),
+            Visible(description="A large red kickball, it's well inflated and says 'Spalding' on the side."),
+            Hearing(),
         )
-        self.add_component_sync(Hearing())
         self.event_bus.register_handler(SOUND_HEARD_EVENT_TYPE, self.on_sound_heard_event)
 
     async def on_sound_heard_event(self, sound_event):
@@ -144,7 +147,7 @@ async def create_entity(entity_data, registry):
 
     for component_name, component_data in components.items():
         component_class = globals()[component_name]
-        entity.add_component_sync(component_class(**component_data))
+        await entity.add_component(component_class(**component_data))
 
     return entity
 

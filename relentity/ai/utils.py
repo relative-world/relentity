@@ -34,8 +34,11 @@ async def pretty_print_event(event_type: str, data, past_tense=False):
     if event_type == "position_updated":
         return f"Position updated to ({data.x}, {data.y})"
     elif event_type == "entity_seen":
-        entity_name = await pretty_name_entity(data.entity)
-        description = (await data.entity.get_component(Visible)).description
+        entity = await data.entity_ref.resolve()
+        if not entity:
+            return None
+        entity_name = await pretty_name_entity(entity)
+        description = (await entity.get_component(Visible)).description
         position = data.position
         velocity = data.velocity
         if past_tense:
@@ -52,7 +55,10 @@ async def pretty_print_event(event_type: str, data, past_tense=False):
     elif event_type == "task.abandoned":
         return f"Task abandoned: {data.task} - {data.remaining_cycles} cycles remained"
     elif event_type == SOUND_HEARD_EVENT_TYPE:
-        entity_name = await pretty_name_entity(data.entity)
+        entity = await data.entity_ref.resolve()
+        if not entity:
+            return None
+        entity_name = await pretty_name_entity(entity)
         return f"Sound heard: source={entity_name}, sound={data.sound}, type={data.sound_type}"
     elif event_type == SOUND_CREATED_EVENT_TYPE:
         return f"You said: {data.sound}"

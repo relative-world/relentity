@@ -1,8 +1,17 @@
 from relentity.core.systems import System
-from .events import SOUND_CREATED_EVENT_TYPE
+from .components import Position, Velocity, Vision, Audible, Hearing, Visible, Area, Located
+from .events import (
+    EntitySeenEvent,
+    ENTITY_SEEN_EVENT_TYPE,
+    POSITION_UPDATED_EVENT_TYPE,
+    SOUND_HEARD_EVENT_TYPE,
+    AreaEvent,
+)
+from .events import SOUND_CREATED_EVENT_TYPE, AREA_ENTERED_EVENT_TYPE, AREA_EXITED_EVENT_TYPE
 from .registry import SpatialRegistry
-from .components import Position, Velocity, Vision, Audible, Hearing, Visible
-from .events import EntitySeenEvent, ENTITY_SEEN_EVENT_TYPE, POSITION_UPDATED_EVENT_TYPE, SOUND_HEARD_EVENT_TYPE
+from ..core import Entity
+from ..core.entity_ref import EntityRef
+from ..core.exceptions import UnknownComponentError
 
 
 class SpatialSystem(System):
@@ -40,7 +49,8 @@ class MovementSystem(SpatialSystem):
         Limits the speed of entities to max_speed.
         Emits a POSITION_UPDATED_EVENT_TYPE event after updating the position.
         """
-        async for entity in self.registry.entities_with_components(Position, Velocity):
+        async for entity_ref in self.registry.entities_with_components(Position, Velocity):
+            entity = await entity_ref.resolve()
             position = await entity.get_component(Position)
             velocity = await entity.get_component(Velocity)
             speed = (velocity.vx**2 + velocity.vy**2) ** 0.5
@@ -65,14 +75,18 @@ class VisionSystem(SpatialSystem):
         Detects entities within the vision range of entities with Vision and Position components.
         Emits an ENTITY_SEEN_EVENT_TYPE event for each detected entity.
         """
-        async for entity in self.registry.entities_with_components(Vision, Position):
+        async for entity_ref in self.registry.entities_with_components(Vision, Position):
+            entity = await entity_ref.resolve()
             vision = await entity.get_component(Vision)
             position = await entity.get_component(Position)
-            async for other_entity in self.registry.entities_within_distance(position, vision.max_range, Visible):
-                if other_entity != entity:
+            async for other_entity_ref in self.registry.entities_within_distance(position, vision.max_range, Visible):
+                if other_entity_ref.entity_id != entity.id:
+                    other_entity = await other_entity_ref.resolve()
                     other_position = await other_entity.get_component(Position)
                     other_velocity = await other_entity.get_component(Velocity)
-                    event = EntitySeenEvent(entity=other_entity, position=other_position, velocity=other_velocity)
+                    event = EntitySeenEvent(
+                        entity_ref=other_entity_ref, position=other_position, velocity=other_velocity
+                    )
                     await entity.event_bus.emit(ENTITY_SEEN_EVENT_TYPE, event)
 
 
@@ -90,19 +104,54 @@ class AudioSystem(SpatialSystem):
         Emits SOUND_HEARD_EVENT_TYPE events for entities that hear sounds.
         Emits SOUND_CREATED_EVENT_TYPE events for entities that create sounds.
         """
-        async for entity in self.registry.entities_with_components(Hearing):
+        async for entity_ref in self.registry.entities_with_components(Hearing):
+            entity = await entity_ref.resolve()
             hearing = await entity.get_component(Hearing)
             sound_queue = hearing.retrieve_queue(clear=True)
             for sound_event in sound_queue:
                 await entity.event_bus.emit(SOUND_HEARD_EVENT_TYPE, sound_event)
 
-        async for entity in self.registry.entities_with_components(Audible, Position):
+        async for entity_ref in self.registry.entities_with_components(Audible, Position):
+            entity = await entity_ref.resolve()
             audio = await entity.get_component(Audible)
             position = await entity.get_component(Position)
             sound_queue = audio.retrieve_queue(clear=True)
             for sound_event in sound_queue:
                 await entity.event_bus.emit(SOUND_CREATED_EVENT_TYPE, sound_event)
-                async for other_entity in self.registry.entities_within_distance(position, audio.volume, Hearing):
-                    if other_entity != entity:
+                async for other_entity_ref in self.registry.entities_within_distance(position, audio.volume, Hearing):
+                    if other_entity_ref.entity_id != entity.id:
+                        other_entity = await other_entity_ref.resolve()
                         other_hearing = await other_entity.get_component(Hearing)
                         other_hearing.queue_sound(sound_event)
+
+
+class LocationSystem(SpatialSystem):
+    async def update(self):
+        async for area_entity_ref in self.registry.entities_with_components(Area):
+            area_entity: Entity = await area_entity_ref.resolve()
+            area: Area = await area_entity.get_component(Area)
+
+            existing_entity_refs: set[EntityRef] = area._entities
+            _updated_entity_refs: set[EntityRef] = set()
+            async for entity_ref in self.registry.entities_within_area(area):
+                _updated_entity_refs.add(entity_ref)
+                if entity_ref not in existing_entity_refs:
+                    entity = await entity_ref.resolve()
+                    try:
+                        await entity.remove_component(Located)
+                    except UnknownComponentError:
+                        pass
+
+                    await entity.add_component(Located(contained_by=area_entity_ref))
+                    event = AreaEvent(entity_ref=entity_ref, area_entity_ref=area_entity_ref)
+                    await entity.event_bus.emit(AREA_ENTERED_EVENT_TYPE, event)
+                    await area.event_bus.emit(AREA_ENTERED_EVENT_TYPE, event)
+
+            old_refs = existing_entity_refs - _updated_entity_refs
+            for entity_ref in old_refs:
+                entity = await entity_ref.resolve()
+                event = AreaEvent(entity_ref=entity_ref, area_entity_ref=area_entity_ref)
+                await entity.event_bus.emit(AREA_EXITED_EVENT_TYPE, event)
+                await area.event_bus.emit(AREA_EXITED_EVENT_TYPE, event)
+
+            area._entities = _updated_entity_refs

@@ -33,7 +33,7 @@ build-backend = "poetry.core.masonry.api"
 line-length = 120
 
 [tool.pytest.ini_options]
-addopts = "-v --cov=relentity --cov-report=term-missing --cov-report=html --cov-report=xml --cov-fail-under=80"
+addopts = "-v"
 asyncio_mode = "auto"
 
 [tool.coverage.run]

@@ -30,7 +30,8 @@ class TaskedEntity(Entity):
         existing_task = await self.get_component(Task, include_subclasses=True)
         if existing_task:
             await self.remove_component(type(existing_task))
-            await self.event_bus.emit(TASK_ABANDONED_EVENT_TYPE, existing_task)
+            if existing_task.remaining_cycles > 0:
+                await self.event_bus.emit(TASK_ABANDONED_EVENT_TYPE, existing_task)
         await self.add_component(task)
 
     async def on_task_progress(self, task: Task):

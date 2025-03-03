@@ -3,7 +3,7 @@ import logging
 import re
 from typing import Dict, List, Any, Awaitable, Pattern, Callable
 
-from .exceptions import InvalidEventNameException, InvalidEventPatternException
+from .exceptions import InvalidEventNameError, InvalidEventPatternError
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +26,7 @@ class EventBus:
             InvalidEventNameException: If the event name is invalid.
         """
         if not re.match(r"^[a-zA-Z0-9_.]+$", event_name):
-            raise InvalidEventNameException(f"Invalid event name: {event_name}")
+            raise InvalidEventNameError(f"Invalid event name: {event_name}")
 
     def validate_event_pattern(self, event_pattern: str) -> None:
         """
@@ -39,7 +39,7 @@ class EventBus:
             InvalidEventPatternException: If the event pattern is invalid.
         """
         if not re.match(r"^[a-zA-Z0-9_.\*]+$", event_pattern):
-            raise InvalidEventPatternException(f"Invalid event pattern: {event_pattern}")
+            raise InvalidEventPatternError(f"Invalid event pattern: {event_pattern}")
 
     def register_handler(self, event_pattern: str, handler: Callable[[Any], Awaitable[None]]) -> None:
         """

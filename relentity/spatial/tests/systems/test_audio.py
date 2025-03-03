@@ -22,7 +22,6 @@ def audio_system(registry):
 async def test_hearing_entity_processes_sound_queue(registry, audio_system):
     # Create entity with hearing
     hearing_entity = Entity[Position(x=0, y=0), Hearing()](registry)
-
     # Mock the emit method to track calls
     hearing_entity.event_bus.emit = AsyncMock()
 

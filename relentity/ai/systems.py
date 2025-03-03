@@ -68,7 +68,7 @@ class AIDrivenSystem(System):
         """
         tasks = []
         async for entity in self.registry.entities_with_components(AIDriven):
-            tasks.append(self.process_entity(entity))
+            tasks.append(self.process_entity(await entity.resolve()))
         await asyncio.gather(*tasks)
 
     async def process_entity(self, entity):

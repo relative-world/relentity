@@ -1,4 +1,3 @@
-import asyncio
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
@@ -21,9 +20,9 @@ def system(registry):
 
 @pytest.mark.asyncio
 async def test_update(system, registry):
-    entity = Entity[
-        Identity(name="Test Entity", description="Test description"), AIDriven(model="test-model", update_interval=1)
-    ](registry)
+    entity = Entity(registry)
+    await entity.add_component(Identity(name="Test Entity", description="Test description"))
+    await entity.add_component(AIDriven(model="test-model", update_interval=1))
     registry.register_entity(entity)
     with patch.object(system, "process_entity", new_callable=AsyncMock) as mock_process_entity:
         await system.update()

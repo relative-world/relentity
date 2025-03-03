@@ -1,4 +1,4 @@
-from typing import Callable, FrozenSet, Any, Union, List
+from typing import Callable, Any, Union, List
 
 from relentity.core import Component
 
@@ -43,11 +43,6 @@ class EntityMeta(type):
         # Convert single component to a tuple for consistent handling
         if not isinstance(components, tuple):
             components = (components,)
-
-        # Create a frozen set of component classes to ensure immutability and uniqueness
-        _component_classes: FrozenSet[Union[Component, Callable[[], Component]]] = frozenset(
-            type(component) for component in components
-        )
 
         class EntityWithComponents(cls):
             """

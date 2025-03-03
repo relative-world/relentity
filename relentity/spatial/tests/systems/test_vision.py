@@ -37,7 +37,7 @@ async def test_entity_sees_visible_entity_within_range(registry, vision_system):
     args = observer_entity.event_bus.emit.call_args[0]
     assert args[0] == ENTITY_SEEN_EVENT_TYPE
     assert isinstance(args[1], EntitySeenEvent)
-    assert args[1].entity == visible_entity
+    assert args[1].entity_ref.entity_id == visible_entity.id
     assert args[1].position.x == 50 and args[1].position.y == 0
     assert args[1].velocity.vx == 5 and args[1].velocity.vy == 0
 
@@ -84,12 +84,12 @@ async def test_entity_sees_multiple_visible_entities(registry, vision_system):
     for call in observer_entity.event_bus.emit.call_args_list:
         args = call[0]
         assert args[0] == ENTITY_SEEN_EVENT_TYPE
-        seen_entities.append(args[1].entity)
+        seen_entities.append(args[1].entity_ref.entity_id)
 
     # Verify the right entities were seen
-    assert visible_entity1 in seen_entities
-    assert visible_entity2 in seen_entities
-    assert visible_entity3 not in seen_entities
+    assert visible_entity1.id in seen_entities
+    assert visible_entity2.id in seen_entities
+    assert visible_entity3.id not in seen_entities
 
 
 @pytest.mark.asyncio

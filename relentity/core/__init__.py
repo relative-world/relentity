@@ -1,8 +1,9 @@
 from .components import Component, Identity, T
 from .entities import Entity
+from .entity_ref import EntityRef
 from .event_bus import EventBus
 from .events import Event
-from .exceptions import InvalidEventNameException, InvalidEventPatternException
+from .exceptions import InvalidEventNameError, InvalidEventPatternError
 from .metaclass import EntityMeta
 from .registry import Registry
 from .systems import System
@@ -13,11 +14,12 @@ __all__ = [
     "Identity",
     "T",
     "Entity",
+    "EntityRef",
     "Event",
     "EventBus",
     "Identity",
-    "InvalidEventNameException",
-    "InvalidEventPatternException",
+    "InvalidEventNameError",
+    "InvalidEventPatternError",
     "EntityMeta",
     "Registry",
     "System",

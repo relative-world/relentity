@@ -1,6 +1,6 @@
 import pytest
 from relentity.ai.utils import pretty_name_entity, pretty_print_event
-from relentity.core import Identity
+from relentity.core import Identity, EntityRef
 from relentity.spatial import (
     Visible,
     Velocity,
@@ -49,7 +49,9 @@ async def test_pretty_print_event_entity_seen(registry):
         Position(x=10.0, y=20.0),
     ](registry)
     data = EntitySeenEvent(
-        entity=entity, position=await entity.get_component(Position), velocity=await entity.get_component(Velocity)
+        entity_ref=EntityRef(entity_id=entity.id, registry=registry),
+        position=await entity.get_component(Position),
+        velocity=await entity.get_component(Velocity),
     )
 
     result = await pretty_print_event(ENTITY_SEEN_EVENT_TYPE, data)
@@ -62,7 +64,8 @@ async def test_pretty_print_event_entity_seen(registry):
 @pytest.mark.asyncio
 async def test_pretty_print_event_sound_heard(registry):
     entity = Entity[Identity(name="Sound Source", description="A sound source")](registry)
-    data = SoundEvent(entity=entity, sound_type="noise", sound="A loud noise")
+    entity_ref = EntityRef(entity_id=entity.id, registry=registry)
+    data = SoundEvent(entity_ref=entity_ref, sound_type="noise", sound="A loud noise")
 
     result = await pretty_print_event(SOUND_HEARD_EVENT_TYPE, data)
     assert result == "Sound heard: source=Sound Source, sound=A loud noise, type=noise"
@@ -71,7 +74,8 @@ async def test_pretty_print_event_sound_heard(registry):
 @pytest.mark.asyncio
 async def test_pretty_print_event_sound_created(registry):
     entity = Entity(registry)
-    data = SoundEvent(entity=entity, sound="Hello, world!", sound_type="speech")
+    entity_ref = EntityRef(entity_id=entity.id, registry=registry)
+    data = SoundEvent(entity_ref=entity_ref, sound="Hello, world!", sound_type="speech")
     result = await pretty_print_event(SOUND_CREATED_EVENT_TYPE, data)
     assert result == "You said: Hello, world!"
 

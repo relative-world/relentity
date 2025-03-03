@@ -2,7 +2,7 @@ from unittest.mock import AsyncMock
 
 import pytest
 
-from relentity.core.exceptions import InvalidEventNameException, InvalidEventPatternException
+from relentity.core.exceptions import InvalidEventNameError, InvalidEventPatternError
 
 
 @pytest.mark.asyncio
@@ -38,7 +38,7 @@ async def test_wildcard_pattern(event_bus):
 async def test_invalid_event_name(event_bus):
     """Test validation of event names."""
     # Arrange & Act & Assert
-    with pytest.raises(InvalidEventNameException):
+    with pytest.raises(InvalidEventNameError):
         await event_bus.emit("invalid-event-name")
 
 
@@ -46,7 +46,7 @@ async def test_invalid_event_name(event_bus):
 async def test_invalid_event_pattern(event_bus):
     """Test validation of event patterns."""
     # Arrange & Act & Assert
-    with pytest.raises(InvalidEventPatternException):
+    with pytest.raises(InvalidEventPatternError):
         event_bus.register_handler("invalid-pattern", AsyncMock())
 
 

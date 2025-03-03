@@ -1,19 +1,22 @@
-from typing import Optional, TYPE_CHECKING
+import uuid
+from typing import Optional, TYPE_CHECKING, Annotated, Any
+
+from pydantic import BaseModel, PrivateAttr
+
 
 if TYPE_CHECKING:
     from .entities import Entity
 
 
-class EntityRef:
+class EntityRef(BaseModel):
     """Safe entity reference that avoids dangling references."""
 
-    def __init__(self, entity: "Entity"):
-        self.entity_id = entity.id
-        self.registry = entity.registry
+    entity_id: uuid.UUID
+    registry: Annotated[Any, PrivateAttr()]
 
     async def resolve(self) -> Optional["Entity"]:
         """Resolve to the entity if it still exists, None otherwise."""
-        return self.registry.get_entity_by_id(self.entity_id)
+        return await self.registry.get_entity_by_id(self.entity_id)
 
     async def is_valid(self) -> bool:
         """Check if the referenced entity still exists."""

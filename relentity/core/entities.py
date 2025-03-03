@@ -44,13 +44,18 @@ class Entity(metaclass=EntityMeta):
         """
         Adds a component to the entity synchronously.
 
-        This method is primarily used for the metaclass sugar parts and should be avoided in favor of the async method.
-
         Args:
             component (Component): The component to add.
         """
-        self.components[type(component)] = component
+        component_type = type(component)
+        is_update = component_type in self.components
+        self.components[component_type] = component
         self.registry.register_entity(self)
+
+        if is_update:
+            asyncio.create_task(self.event_bus.emit(ENTITY_COMPONENT_UPDATED_EVENT, (self, component)))
+        else:
+            asyncio.create_task(self.event_bus.emit(ENTITY_COMPONENT_ADDED_EVENT, (self, component)))
 
     async def add_component(self, component: Component) -> None:
         """
@@ -83,8 +88,8 @@ class Entity(metaclass=EntityMeta):
         if not include_subclasses:
             return self.components.get(component_type)
 
-        for component in self.components.values():
-            if isinstance(component, component_type):
+        for other_component_type, component in list(self.components.items()):
+            if issubclass(other_component_type, component_type):
                 return component
         return None
 
@@ -117,6 +122,23 @@ class Entity(metaclass=EntityMeta):
         """
         Properly destroy this entity, cleaning up all references.
         """
-        await self.registry.unregister_entity(self)
+        await self.registry.unregister_entity(self.id)
         # Clear components
         self.components.clear()
+
+
+def attach_components_sync(entity, *components) -> None:
+    # Add each component to the entity
+    async def _inner():
+        for component in components:
+            if isinstance(component, Component):
+                # If the component is an instance of Component, add it directly
+                await entity.add_component(component.model_copy())
+            elif callable(component):
+                # If the component is a callable, call it to get the Component instance and add it
+                await entity.add_component(component())
+            else:
+                # Raise an error if the component is neither a Component instance nor a callable
+                raise TypeError("Component must be a Component instance or a callable")
+
+    asyncio.create_task(_inner())

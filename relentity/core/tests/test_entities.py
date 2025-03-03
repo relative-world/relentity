@@ -76,5 +76,4 @@ async def test_get_component_with_subclasses(registry):
     dog = Dog(species="canine", breed="retriever")
     await entity.add_component(dog)
 
-    # Act & Assert
     assert await entity.get_component(Animal, include_subclasses=True) == dog

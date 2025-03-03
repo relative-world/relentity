@@ -1,10 +1,13 @@
-from typing import Annotated
+from typing import Annotated, TYPE_CHECKING
 
 from pydantic import PrivateAttr, model_validator
 
 from relentity.core import Component
-from .events import SoundEvent
 from .utils import is_simple_polygon, point_in_polygon
+from ..core.entity_ref import EntityRef
+
+if TYPE_CHECKING:
+    from .events import SoundEvent
 
 
 class Position(Component):
@@ -65,9 +68,9 @@ class Audible(Component):
     """
 
     volume: float = 50.0
-    _output_queue: Annotated[list[SoundEvent], PrivateAttr()] = []
+    _output_queue: Annotated[list["SoundEvent"], PrivateAttr()] = []
 
-    def queue_sound(self, sound_event: SoundEvent):
+    def queue_sound(self, sound_event: "SoundEvent"):
         """
         Queues a sound event to be emitted by the entity.
 
@@ -102,9 +105,9 @@ class Hearing(Component):
     """
 
     volume: float = 50.0
-    _output_queue: Annotated[list[SoundEvent], PrivateAttr()] = []
+    _output_queue: Annotated[list["SoundEvent"], PrivateAttr()] = []
 
-    def queue_sound(self, sound_event: SoundEvent):
+    def queue_sound(self, sound_event: "SoundEvent"):
         """
         Queues a sound event that the entity has heard.
 
@@ -134,6 +137,7 @@ class Area(Component):
 
     center_point: tuple[float, float] = (0.0, 0.0)
     geometry: list[tuple[float, float]]
+    _entities: Annotated[set[EntityRef], PrivateAttr()] = set()
 
     @model_validator(mode="after")
     def validate_geometry(cls, self):
@@ -152,3 +156,14 @@ class Area(Component):
             bool: True if the point is within the bounds, False otherwise.
         """
         point_in_polygon(x, y, self.geometry)
+
+
+class Located(Component):
+    """
+    Component representing the location of an entity within an area.
+
+    Attributes:
+        area (Area): The area the entity is located in.
+    """
+
+    contained_by: EntityRef

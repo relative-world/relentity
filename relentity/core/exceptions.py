@@ -1,4 +1,4 @@
-class InvalidEventNameException(Exception):
+class InvalidEventNameError(Exception):
     """
     Exception raised for invalid event names.
     """
@@ -6,9 +6,17 @@ class InvalidEventNameException(Exception):
     pass
 
 
-class InvalidEventPatternException(Exception):
+class InvalidEventPatternError(Exception):
     """
     Exception raised for invalid event patterns.
     """
 
+    pass
+
+
+class UnknownEntityError(Exception):
+    pass
+
+
+class UnknownComponentError(Exception):
     pass
