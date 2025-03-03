@@ -1,10 +1,14 @@
 API Reference
-============
+=============
 
 .. automodule:: relentity.core
    :members:
-   :undoc-members:
 
 .. automodule:: relentity.spatial
    :members:
-   :undoc-members:
+
+.. automodule:: relentity.ai
+   :members:
+
+.. automodule:: relentity.tasks
+   :members:
