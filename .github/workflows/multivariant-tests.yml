@@ -27,4 +27,9 @@ jobs:
         poetry install
     - name: Test with pytest
       run: |
-        poetry run pytest --cov
+        poetry run pytest --cov --junitxml=pytest-results.xml
+    - name: Upload test results
+      uses: actions/upload-artifact@v3
+      with:
+        name: pytest-results
+        path: pytest-results.xml

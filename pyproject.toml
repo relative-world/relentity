@@ -31,6 +31,7 @@ build-backend = "poetry.core.masonry.api"
 line-length = 120
 
 [tool.pytest.ini_options]
+addopts = "-v --cov=relentity --cov-report=term-missing --cov-report=html --cov-report=xml --cov-fail-under=80"
 asyncio_mode = "auto"
 
 [tool.coverage.run]
@@ -41,6 +42,7 @@ omit = [
 
 [tool.coverage.report]
 # Include common configurations
+fail_under = 80
 omit = [
     "tests/*",
     "test_*",
