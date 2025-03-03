@@ -1,0 +1,187 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>relentity.core.metaclass &mdash; relentity 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+    <link rel="canonical" href="https://tyevans.github.io/relentity/_modules/relentity/core/metaclass.html" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            relentity
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">relentity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">relentity.core.metaclass</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for relentity.core.metaclass</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">FrozenSet</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">relentity.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Component</span>
+
+
+<div class="viewcode-block" id="EntityMeta">
+<a class="viewcode-back" href="../../../api.html#relentity.core.EntityMeta">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">EntityMeta</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    EntityMeta is a metaclass that allows the composition of Entities with components</span>
+<span class="sd">    using square braces syntax. This metaclass enables the creation of new entity types</span>
+<span class="sd">    with specified components implicitly added at instantiation time.</span>
+
+<span class="sd">    Example usage:</span>
+<span class="sd">        def get_spawn_point() -&gt; Position:</span>
+<span class="sd">            return Position(x=0, y=0)</span>
+
+<span class="sd">        Entity[get_spawn_point, Velocity(vx=0, vy=0)]</span>
+
+<span class="sd">    In this example, `get_spawn_point` is a callable that returns a Component instance,</span>
+<span class="sd">    and `Velocity(vx=0, vy=0)` is a Component instance. The resulting type is a new entity</span>
+<span class="sd">    type with these components added.</span>
+
+<span class="sd">    The callable should take no arguments and annotate its return type to be an instance of a Component subclass.</span>
+
+<span class="sd">    The square brace syntax does not instantiate the Entity itself. Instead, it creates a Entity subclass</span>
+<span class="sd">    with the specified components. When an instance of this new type is created, the components</span>
+<span class="sd">    are added to the entity as long as `super().__init__()` is called in the entity&#39;s `__init__` method.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">components</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Component</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">Component</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Component</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">Component</span><span class="p">]]]]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;EntityMeta&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method is called when square braces are used with the Entity class.</span>
+<span class="sd">        It takes a list of components, which can be either Component instances or callables</span>
+<span class="sd">        that return Component instances, and returns a new entity type with these components.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            components (Union[Component, Callable[[], Component], List[Union[Component, Callable[[], Component]]]]): A list of components to be added to the entity.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            EntityMeta: A new entity type with the specified components.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Convert single component to a tuple for consistent handling</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">components</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="n">components</span> <span class="o">=</span> <span class="p">(</span><span class="n">components</span><span class="p">,)</span>
+
+        <span class="c1"># Create a frozen set of component classes to ensure immutability and uniqueness</span>
+        <span class="n">_component_classes</span><span class="p">:</span> <span class="n">FrozenSet</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Component</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">Component</span><span class="p">]]]</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span>
+            <span class="nb">type</span><span class="p">(</span><span class="n">component</span><span class="p">)</span> <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="n">components</span>
+        <span class="p">)</span>
+
+        <span class="k">class</span><span class="w"> </span><span class="nc">EntityWithComponents</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            A new entity type with the specified components added.</span>
+
+<span class="sd">            This class inherits from the original entity class and adds the specified components</span>
+<span class="sd">            during initialization.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+
+            <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                Initialize the new entity type and add the specified components.</span>
+
+<span class="sd">                Args:</span>
+<span class="sd">                    *args: Positional arguments for the entity&#39;s initialization.</span>
+<span class="sd">                    **kwargs: Keyword arguments for the entity&#39;s initialization.</span>
+<span class="sd">                &quot;&quot;&quot;</span>
+                <span class="c1"># Call the original entity&#39;s __init__ method</span>
+                <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="c1"># Add each component to the entity</span>
+                <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="n">components</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">component</span><span class="p">,</span> <span class="n">Component</span><span class="p">):</span>
+                        <span class="c1"># If the component is an instance of Component, add it directly</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">add_component_sync</span><span class="p">(</span><span class="n">component</span><span class="o">.</span><span class="n">model_copy</span><span class="p">())</span>
+                    <span class="k">elif</span> <span class="nb">callable</span><span class="p">(</span><span class="n">component</span><span class="p">):</span>
+                        <span class="c1"># If the component is a callable, call it to get the Component instance and add it</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">add_component_sync</span><span class="p">(</span><span class="n">component</span><span class="p">())</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># Raise an error if the component is neither a Component instance nor a callable</span>
+                        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Component must be a Component instance or a callable&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">EntityWithComponents</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Tyler Evans.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

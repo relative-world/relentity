@@ -1,0 +1,228 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>relentity.spatial.systems &mdash; relentity 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+    <link rel="canonical" href="https://tyevans.github.io/relentity/_modules/relentity/spatial/systems.html" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            relentity
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">relentity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">relentity.spatial.systems</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for relentity.spatial.systems</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">relentity.core.systems</span><span class="w"> </span><span class="kn">import</span> <span class="n">System</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.events</span><span class="w"> </span><span class="kn">import</span> <span class="n">SOUND_CREATED_EVENT_TYPE</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpatialRegistry</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.components</span><span class="w"> </span><span class="kn">import</span> <span class="n">Position</span><span class="p">,</span> <span class="n">Velocity</span><span class="p">,</span> <span class="n">Vision</span><span class="p">,</span> <span class="n">Audible</span><span class="p">,</span> <span class="n">Hearing</span><span class="p">,</span> <span class="n">Visible</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.events</span><span class="w"> </span><span class="kn">import</span> <span class="n">EntitySeenEvent</span><span class="p">,</span> <span class="n">ENTITY_SEEN_EVENT_TYPE</span><span class="p">,</span> <span class="n">POSITION_UPDATED_EVENT_TYPE</span><span class="p">,</span> <span class="n">SOUND_HEARD_EVENT_TYPE</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">SpatialSystem</span><span class="p">(</span><span class="n">System</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Base class for spatial systems, providing common functionality for systems that operate on spatial entities.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        registry (SpatialRegistry): The registry to be used by the system.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">registry</span><span class="p">:</span> <span class="n">SpatialRegistry</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes the SpatialSystem with a registry.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            registry (SpatialRegistry): The registry to be used by the system.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">registry</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">registry</span> <span class="o">=</span> <span class="n">registry</span>
+
+
+<div class="viewcode-block" id="MovementSystem">
+<a class="viewcode-back" href="../../../api.html#relentity.spatial.MovementSystem">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">MovementSystem</span><span class="p">(</span><span class="n">SpatialSystem</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    System for updating the positions of entities based on their velocities.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        max_speed (float): The maximum speed an entity can move.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">max_speed</span> <span class="o">=</span> <span class="mi">30</span>
+
+<div class="viewcode-block" id="MovementSystem.update">
+<a class="viewcode-back" href="../../../api.html#relentity.spatial.MovementSystem.update">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates the positions of entities with Position and Velocity components.</span>
+<span class="sd">        Limits the speed of entities to max_speed.</span>
+<span class="sd">        Emits a POSITION_UPDATED_EVENT_TYPE event after updating the position.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">async</span> <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">entities_with_components</span><span class="p">(</span><span class="n">Position</span><span class="p">,</span> <span class="n">Velocity</span><span class="p">):</span>
+            <span class="n">position</span> <span class="o">=</span> <span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">Position</span><span class="p">)</span>
+            <span class="n">velocity</span> <span class="o">=</span> <span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">Velocity</span><span class="p">)</span>
+            <span class="n">speed</span> <span class="o">=</span> <span class="p">(</span><span class="n">velocity</span><span class="o">.</span><span class="n">vx</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">velocity</span><span class="o">.</span><span class="n">vy</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.5</span>
+            <span class="k">if</span> <span class="n">speed</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_speed</span><span class="p">:</span>
+                <span class="n">velocity</span><span class="o">.</span><span class="n">vx</span> <span class="o">=</span> <span class="n">velocity</span><span class="o">.</span><span class="n">vx</span> <span class="o">/</span> <span class="n">speed</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_speed</span>
+                <span class="n">velocity</span><span class="o">.</span><span class="n">vy</span> <span class="o">=</span> <span class="n">velocity</span><span class="o">.</span><span class="n">vy</span> <span class="o">/</span> <span class="n">speed</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_speed</span>
+            <span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">+=</span> <span class="n">velocity</span><span class="o">.</span><span class="n">vx</span>
+            <span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">+=</span> <span class="n">velocity</span><span class="o">.</span><span class="n">vy</span>
+            <span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">event_bus</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">POSITION_UPDATED_EVENT_TYPE</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="VisionSystem">
+<a class="viewcode-back" href="../../../api.html#relentity.spatial.VisionSystem">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">VisionSystem</span><span class="p">(</span><span class="n">SpatialSystem</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    System for detecting entities within the vision range of other entities.</span>
+
+<span class="sd">    Methods:</span>
+<span class="sd">        update: Detects entities within the vision range and emits ENTITY_SEEN_EVENT_TYPE events.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="VisionSystem.update">
+<a class="viewcode-back" href="../../../api.html#relentity.spatial.VisionSystem.update">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Detects entities within the vision range of entities with Vision and Position components.</span>
+<span class="sd">        Emits an ENTITY_SEEN_EVENT_TYPE event for each detected entity.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">async</span> <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">entities_with_components</span><span class="p">(</span><span class="n">Vision</span><span class="p">,</span> <span class="n">Position</span><span class="p">):</span>
+            <span class="n">vision</span> <span class="o">=</span> <span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">Vision</span><span class="p">)</span>
+            <span class="n">position</span> <span class="o">=</span> <span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">Position</span><span class="p">)</span>
+            <span class="k">async</span> <span class="k">for</span> <span class="n">other_entity</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">entities_within_distance</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">vision</span><span class="o">.</span><span class="n">max_range</span><span class="p">,</span> <span class="n">Visible</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">other_entity</span> <span class="o">!=</span> <span class="n">entity</span><span class="p">:</span>
+                    <span class="n">other_position</span> <span class="o">=</span> <span class="k">await</span> <span class="n">other_entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">Position</span><span class="p">)</span>
+                    <span class="n">other_velocity</span> <span class="o">=</span> <span class="k">await</span> <span class="n">other_entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">Velocity</span><span class="p">)</span>
+                    <span class="n">event</span> <span class="o">=</span> <span class="n">EntitySeenEvent</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="n">other_entity</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="n">other_position</span><span class="p">,</span> <span class="n">velocity</span><span class="o">=</span><span class="n">other_velocity</span><span class="p">)</span>
+                    <span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">event_bus</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">ENTITY_SEEN_EVENT_TYPE</span><span class="p">,</span> <span class="n">event</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="AudioSystem">
+<a class="viewcode-back" href="../../../api.html#relentity.spatial.AudioSystem">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AudioSystem</span><span class="p">(</span><span class="n">SpatialSystem</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    System for handling sound events and propagating them to entities with hearing capabilities.</span>
+
+<span class="sd">    Methods:</span>
+<span class="sd">        update: Processes sound events and emits SOUND_HEARD_EVENT_TYPE and SOUND_CREATED_EVENT_TYPE events.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="AudioSystem.update">
+<a class="viewcode-back" href="../../../api.html#relentity.spatial.AudioSystem.update">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Processes sound events for entities with Hearing and Audible components.</span>
+<span class="sd">        Emits SOUND_HEARD_EVENT_TYPE events for entities that hear sounds.</span>
+<span class="sd">        Emits SOUND_CREATED_EVENT_TYPE events for entities that create sounds.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">async</span> <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">entities_with_components</span><span class="p">(</span><span class="n">Hearing</span><span class="p">):</span>
+            <span class="n">hearing</span> <span class="o">=</span> <span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">Hearing</span><span class="p">)</span>
+            <span class="n">sound_queue</span> <span class="o">=</span> <span class="n">hearing</span><span class="o">.</span><span class="n">retrieve_queue</span><span class="p">(</span><span class="n">clear</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">sound_event</span> <span class="ow">in</span> <span class="n">sound_queue</span><span class="p">:</span>
+                <span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">event_bus</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">SOUND_HEARD_EVENT_TYPE</span><span class="p">,</span> <span class="n">sound_event</span><span class="p">)</span>
+
+        <span class="k">async</span> <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">entities_with_components</span><span class="p">(</span><span class="n">Audible</span><span class="p">,</span> <span class="n">Position</span><span class="p">):</span>
+            <span class="n">audio</span> <span class="o">=</span> <span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">Audible</span><span class="p">)</span>
+            <span class="n">position</span> <span class="o">=</span> <span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">Position</span><span class="p">)</span>
+            <span class="n">sound_queue</span> <span class="o">=</span> <span class="n">audio</span><span class="o">.</span><span class="n">retrieve_queue</span><span class="p">(</span><span class="n">clear</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">sound_event</span> <span class="ow">in</span> <span class="n">sound_queue</span><span class="p">:</span>
+                <span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">event_bus</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">SOUND_CREATED_EVENT_TYPE</span><span class="p">,</span> <span class="n">sound_event</span><span class="p">)</span>
+                <span class="k">async</span> <span class="k">for</span> <span class="n">other_entity</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">entities_within_distance</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">audio</span><span class="o">.</span><span class="n">volume</span><span class="p">,</span> <span class="n">Hearing</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">other_entity</span> <span class="o">!=</span> <span class="n">entity</span><span class="p">:</span>
+                        <span class="n">other_hearing</span> <span class="o">=</span> <span class="k">await</span> <span class="n">other_entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">Hearing</span><span class="p">)</span>
+                        <span class="n">other_hearing</span><span class="o">.</span><span class="n">queue_sound</span><span class="p">(</span><span class="n">sound_event</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Tyler Evans.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

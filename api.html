@@ -1,0 +1,1152 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Reference &mdash; relentity 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+    <link rel="canonical" href="https://tyevans.github.io/relentity/api.html" />
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="relentity documentation" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            relentity
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#relentity.core.Component"><code class="docutils literal notranslate"><span class="pre">Component</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.core.Component.model_config"><code class="docutils literal notranslate"><span class="pre">Component.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#relentity.core.Identity"><code class="docutils literal notranslate"><span class="pre">Identity</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.core.Identity.name"><code class="docutils literal notranslate"><span class="pre">Identity.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.core.Identity.description"><code class="docutils literal notranslate"><span class="pre">Identity.description</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.core.Identity.model_config"><code class="docutils literal notranslate"><span class="pre">Identity.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">Identity.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1"><code class="docutils literal notranslate"><span class="pre">Identity.description</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#relentity.core.Entity"><code class="docutils literal notranslate"><span class="pre">Entity</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.core.Entity.components"><code class="docutils literal notranslate"><span class="pre">Entity.components</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.core.Entity.registry"><code class="docutils literal notranslate"><span class="pre">Entity.registry</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.core.Entity.event_bus"><code class="docutils literal notranslate"><span class="pre">Entity.event_bus</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.core.Entity.__init__"><code class="docutils literal notranslate"><span class="pre">Entity.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.core.Entity.add_component"><code class="docutils literal notranslate"><span class="pre">Entity.add_component()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.core.Entity.add_component_sync"><code class="docutils literal notranslate"><span class="pre">Entity.add_component_sync()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.core.Entity.destroy"><code class="docutils literal notranslate"><span class="pre">Entity.destroy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.core.Entity.get_component"><code class="docutils literal notranslate"><span class="pre">Entity.get_component()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.core.Entity.has_components"><code class="docutils literal notranslate"><span class="pre">Entity.has_components()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.core.Entity.remove_component"><code class="docutils literal notranslate"><span class="pre">Entity.remove_component()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#relentity.core.Event"><code class="docutils literal notranslate"><span class="pre">Event</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.core.Event.__init__"><code class="docutils literal notranslate"><span class="pre">Event.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#relentity.core.EventBus"><code class="docutils literal notranslate"><span class="pre">EventBus</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.core.EventBus.__init__"><code class="docutils literal notranslate"><span class="pre">EventBus.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.core.EventBus.emit"><code class="docutils literal notranslate"><span class="pre">EventBus.emit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.core.EventBus.register_handler"><code class="docutils literal notranslate"><span class="pre">EventBus.register_handler()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.core.EventBus.validate_event_name"><code class="docutils literal notranslate"><span class="pre">EventBus.validate_event_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.core.EventBus.validate_event_pattern"><code class="docutils literal notranslate"><span class="pre">EventBus.validate_event_pattern()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#relentity.core.InvalidEventNameException"><code class="docutils literal notranslate"><span class="pre">InvalidEventNameException</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#relentity.core.InvalidEventPatternException"><code class="docutils literal notranslate"><span class="pre">InvalidEventPatternException</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#relentity.core.EntityMeta"><code class="docutils literal notranslate"><span class="pre">EntityMeta</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#relentity.core.Registry"><code class="docutils literal notranslate"><span class="pre">Registry</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.core.Registry.__init__"><code class="docutils literal notranslate"><span class="pre">Registry.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.core.Registry.entities_with_components"><code class="docutils literal notranslate"><span class="pre">Registry.entities_with_components()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.core.Registry.get_entity_by_id"><code class="docutils literal notranslate"><span class="pre">Registry.get_entity_by_id()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.core.Registry.register_entity"><code class="docutils literal notranslate"><span class="pre">Registry.register_entity()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.core.Registry.remove_component_from_entity"><code class="docutils literal notranslate"><span class="pre">Registry.remove_component_from_entity()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.core.Registry.unregister_entity"><code class="docutils literal notranslate"><span class="pre">Registry.unregister_entity()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#relentity.core.System"><code class="docutils literal notranslate"><span class="pre">System</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.core.System.__init__"><code class="docutils literal notranslate"><span class="pre">System.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.core.System.update"><code class="docutils literal notranslate"><span class="pre">System.update()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#relentity.spatial.Position"><code class="docutils literal notranslate"><span class="pre">Position</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.Position.x"><code class="docutils literal notranslate"><span class="pre">Position.x</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.Position.y"><code class="docutils literal notranslate"><span class="pre">Position.y</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.Position.model_config"><code class="docutils literal notranslate"><span class="pre">Position.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2"><code class="docutils literal notranslate"><span class="pre">Position.x</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3"><code class="docutils literal notranslate"><span class="pre">Position.y</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#relentity.spatial.Velocity"><code class="docutils literal notranslate"><span class="pre">Velocity</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.Velocity.vx"><code class="docutils literal notranslate"><span class="pre">Velocity.vx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.Velocity.vy"><code class="docutils literal notranslate"><span class="pre">Velocity.vy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.Velocity.model_config"><code class="docutils literal notranslate"><span class="pre">Velocity.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4"><code class="docutils literal notranslate"><span class="pre">Velocity.vx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5"><code class="docutils literal notranslate"><span class="pre">Velocity.vy</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#relentity.spatial.Vision"><code class="docutils literal notranslate"><span class="pre">Vision</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.Vision.max_range"><code class="docutils literal notranslate"><span class="pre">Vision.max_range</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.Vision.model_config"><code class="docutils literal notranslate"><span class="pre">Vision.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6"><code class="docutils literal notranslate"><span class="pre">Vision.max_range</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#relentity.spatial.Visible"><code class="docutils literal notranslate"><span class="pre">Visible</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.Visible.description"><code class="docutils literal notranslate"><span class="pre">Visible.description</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.Visible.model_config"><code class="docutils literal notranslate"><span class="pre">Visible.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7"><code class="docutils literal notranslate"><span class="pre">Visible.description</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#relentity.spatial.Hearing"><code class="docutils literal notranslate"><span class="pre">Hearing</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.Hearing.volume"><code class="docutils literal notranslate"><span class="pre">Hearing.volume</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.Hearing._output_queue"><code class="docutils literal notranslate"><span class="pre">Hearing._output_queue</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.Hearing.model_config"><code class="docutils literal notranslate"><span class="pre">Hearing.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.Hearing.model_post_init"><code class="docutils literal notranslate"><span class="pre">Hearing.model_post_init()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.Hearing.queue_sound"><code class="docutils literal notranslate"><span class="pre">Hearing.queue_sound()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.Hearing.retrieve_queue"><code class="docutils literal notranslate"><span class="pre">Hearing.retrieve_queue()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8"><code class="docutils literal notranslate"><span class="pre">Hearing.volume</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#relentity.spatial.Audible"><code class="docutils literal notranslate"><span class="pre">Audible</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.Audible.volume"><code class="docutils literal notranslate"><span class="pre">Audible.volume</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.Audible._output_queue"><code class="docutils literal notranslate"><span class="pre">Audible._output_queue</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.Audible.model_config"><code class="docutils literal notranslate"><span class="pre">Audible.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.Audible.model_post_init"><code class="docutils literal notranslate"><span class="pre">Audible.model_post_init()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.Audible.queue_sound"><code class="docutils literal notranslate"><span class="pre">Audible.queue_sound()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.Audible.retrieve_queue"><code class="docutils literal notranslate"><span class="pre">Audible.retrieve_queue()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id9"><code class="docutils literal notranslate"><span class="pre">Audible.volume</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#relentity.spatial.MovementSystem"><code class="docutils literal notranslate"><span class="pre">MovementSystem</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.MovementSystem.max_speed"><code class="docutils literal notranslate"><span class="pre">MovementSystem.max_speed</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id10"><code class="docutils literal notranslate"><span class="pre">MovementSystem.max_speed</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.MovementSystem.update"><code class="docutils literal notranslate"><span class="pre">MovementSystem.update()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#relentity.spatial.VisionSystem"><code class="docutils literal notranslate"><span class="pre">VisionSystem</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.VisionSystem.update"><code class="docutils literal notranslate"><span class="pre">VisionSystem.update()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id11"><code class="docutils literal notranslate"><span class="pre">VisionSystem.update()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#relentity.spatial.AudioSystem"><code class="docutils literal notranslate"><span class="pre">AudioSystem</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.AudioSystem.update"><code class="docutils literal notranslate"><span class="pre">AudioSystem.update()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id12"><code class="docutils literal notranslate"><span class="pre">AudioSystem.update()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#relentity.spatial.SpatialRegistry"><code class="docutils literal notranslate"><span class="pre">SpatialRegistry</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.SpatialRegistry.entities_within_distance"><code class="docutils literal notranslate"><span class="pre">SpatialRegistry.entities_within_distance()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#relentity.spatial.EntitySeenEvent"><code class="docutils literal notranslate"><span class="pre">EntitySeenEvent</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.EntitySeenEvent.entity"><code class="docutils literal notranslate"><span class="pre">EntitySeenEvent.entity</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.EntitySeenEvent.position"><code class="docutils literal notranslate"><span class="pre">EntitySeenEvent.position</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.EntitySeenEvent.velocity"><code class="docutils literal notranslate"><span class="pre">EntitySeenEvent.velocity</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.EntitySeenEvent.__init__"><code class="docutils literal notranslate"><span class="pre">EntitySeenEvent.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#relentity.spatial.SoundEvent"><code class="docutils literal notranslate"><span class="pre">SoundEvent</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.SoundEvent.entity"><code class="docutils literal notranslate"><span class="pre">SoundEvent.entity</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.SoundEvent.sound_type"><code class="docutils literal notranslate"><span class="pre">SoundEvent.sound_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.SoundEvent.sound"><code class="docutils literal notranslate"><span class="pre">SoundEvent.sound</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.SoundEvent.__init__"><code class="docutils literal notranslate"><span class="pre">SoundEvent.__init__()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">relentity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">API Reference</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="api-reference">
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h1>
+<dl class="py class" id="module-relentity.core">
+<dt class="sig sig-object py" id="relentity.core.Component">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">relentity.core.</span></span><span class="sig-name descname"><span class="pre">Component</span></span><a class="reference internal" href="_modules/relentity/core/components.html#Component"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.core.Component" title="Link to this definition"></a></dt>
+<dd><p>Base class for all components in the system.
+Inherits from Pydantic’s BaseModel to provide data validation and serialization.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="relentity.core.Component.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#relentity.core.Component.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="relentity.core.Identity">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">relentity.core.</span></span><span class="sig-name descname"><span class="pre">Identity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/core/components.html#Identity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.core.Identity" title="Link to this definition"></a></dt>
+<dd><p>Component that represents the identity of an entity.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="relentity.core.Identity.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#relentity.core.Identity.name" title="Link to this definition"></a></dt>
+<dd><p>The name of the entity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="relentity.core.Identity.description">
+<span class="sig-name descname"><span class="pre">description</span></span><a class="headerlink" href="#relentity.core.Identity.description" title="Link to this definition"></a></dt>
+<dd><p>A description of the entity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="relentity.core.Identity.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#relentity.core.Identity.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="relentity.core.Entity">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">relentity.core.</span></span><span class="sig-name descname"><span class="pre">Entity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">registry</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#relentity.core.Registry" title="relentity.core.Registry"><span class="pre">Registry</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/core/entities.html#Entity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.core.Entity" title="Link to this definition"></a></dt>
+<dd><p>Represents an entity in the system, which can have multiple components and interact with an event bus.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="relentity.core.Entity.components">
+<span class="sig-name descname"><span class="pre">components</span></span><a class="headerlink" href="#relentity.core.Entity.components" title="Link to this definition"></a></dt>
+<dd><p>A dictionary of components associated with the entity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict[Type[<a class="reference internal" href="#relentity.core.Component" title="relentity.core.Component">Component</a>], <a class="reference internal" href="#relentity.core.Component" title="relentity.core.Component">Component</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="relentity.core.Entity.registry">
+<span class="sig-name descname"><span class="pre">registry</span></span><a class="headerlink" href="#relentity.core.Entity.registry" title="Link to this definition"></a></dt>
+<dd><p>The registry to which the entity belongs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#relentity.core.Registry" title="relentity.core.Registry">Registry</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="relentity.core.Entity.event_bus">
+<span class="sig-name descname"><span class="pre">event_bus</span></span><a class="headerlink" href="#relentity.core.Entity.event_bus" title="Link to this definition"></a></dt>
+<dd><p>The event bus for handling events related to the entity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#relentity.core.EventBus" title="relentity.core.EventBus">EventBus</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="relentity.core.Entity.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">registry</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#relentity.core.Registry" title="relentity.core.Registry"><span class="pre">Registry</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/core/entities.html#Entity.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.core.Entity.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initializes a new entity and registers it with the given registry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>registry</strong> (<a class="reference internal" href="#relentity.core.Registry" title="relentity.core.Registry"><em>Registry</em></a>) – The registry to register the entity with.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="relentity.core.Entity.add_component">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">add_component</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">component</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#relentity.core.Component" title="relentity.core.components.Component"><span class="pre">Component</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/relentity/core/entities.html#Entity.add_component"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.core.Entity.add_component" title="Link to this definition"></a></dt>
+<dd><p>Adds a component to the entity asynchronously.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>component</strong> (<a class="reference internal" href="#relentity.core.Component" title="relentity.core.Component"><em>Component</em></a>) – The component to add.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="relentity.core.Entity.add_component_sync">
+<span class="sig-name descname"><span class="pre">add_component_sync</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">component</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#relentity.core.Component" title="relentity.core.components.Component"><span class="pre">Component</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/relentity/core/entities.html#Entity.add_component_sync"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.core.Entity.add_component_sync" title="Link to this definition"></a></dt>
+<dd><p>Adds a component to the entity synchronously.</p>
+<p>This method is primarily used for the metaclass sugar parts and should be avoided in favor of the async method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>component</strong> (<a class="reference internal" href="#relentity.core.Component" title="relentity.core.Component"><em>Component</em></a>) – The component to add.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="relentity.core.Entity.destroy">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">destroy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/relentity/core/entities.html#Entity.destroy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.core.Entity.destroy" title="Link to this definition"></a></dt>
+<dd><p>Properly destroy this entity, cleaning up all references.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="relentity.core.Entity.get_component">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_component</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">component_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.13)"><span class="pre">Type</span></a><span class="p"><span class="pre">[</span></span><span class="pre">T</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_subclasses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">T</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/relentity/core/entities.html#Entity.get_component"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.core.Entity.get_component" title="Link to this definition"></a></dt>
+<dd><p>Retrieves a component of the specified type from the entity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>component_type</strong> (<em>Type</em><em>[</em><em>T</em><em>]</em>) – The type of the component to retrieve.</p></li>
+<li><p><strong>include_subclasses</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – Whether to include subclasses of the component type.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The component of the specified type, or None if not found.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[T]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="relentity.core.Entity.has_components">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">has_components</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">component_types</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.13)"><span class="pre">Type</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#relentity.core.Component" title="relentity.core.components.Component"><span class="pre">Component</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="_modules/relentity/core/entities.html#Entity.has_components"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.core.Entity.has_components" title="Link to this definition"></a></dt>
+<dd><p>Checks if the entity has all the specified components.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>component_types</strong> (<em>Type</em><em>[</em><a class="reference internal" href="#relentity.core.Component" title="relentity.core.Component"><em>Component</em></a><em>]</em>) – The types of components to check for.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the entity has all the specified components, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="relentity.core.Entity.remove_component">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">remove_component</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">component_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.13)"><span class="pre">Type</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#relentity.core.Component" title="relentity.core.components.Component"><span class="pre">Component</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/relentity/core/entities.html#Entity.remove_component"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.core.Entity.remove_component" title="Link to this definition"></a></dt>
+<dd><p>Removes a component of the specified type from the entity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>component_type</strong> (<em>Type</em><em>[</em><a class="reference internal" href="#relentity.core.Component" title="relentity.core.Component"><em>Component</em></a><em>]</em>) – The type of the component to remove.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="relentity.core.Event">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">relentity.core.</span></span><span class="sig-name descname"><span class="pre">Event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/core/events.html#Event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.core.Event" title="Link to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="relentity.core.Event.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/core/events.html#Event.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.core.Event.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initializes an Event with a name and optional data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The name of the event.</p></li>
+<li><p><strong>data</strong> (<em>Any</em><em>, </em><em>optional</em>) – The data associated with the event. Defaults to None.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="relentity.core.EventBus">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">relentity.core.</span></span><span class="sig-name descname"><span class="pre">EventBus</span></span><a class="reference internal" href="_modules/relentity/core/event_bus.html#EventBus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.core.EventBus" title="Link to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="relentity.core.EventBus.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/core/event_bus.html#EventBus.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.core.EventBus.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initializes the EventBus with an empty dictionary of handlers.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="relentity.core.EventBus.emit">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">emit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/relentity/core/event_bus.html#EventBus.emit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.core.EventBus.emit" title="Link to this definition"></a></dt>
+<dd><p>Emits an event to all handlers that match the event name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>event_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The name of the event to emit.</p></li>
+<li><p><strong>data</strong> (<em>Any</em><em>, </em><em>optional</em>) – The data to pass to the handlers. Defaults to None.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="relentity.core.EventBus.register_handler">
+<span class="sig-name descname"><span class="pre">register_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event_pattern</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">handler</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.13)"><span class="pre">Callable</span></a><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Awaitable" title="(in Python v3.13)"><span class="pre">Awaitable</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/relentity/core/event_bus.html#EventBus.register_handler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.core.EventBus.register_handler" title="Link to this definition"></a></dt>
+<dd><p>Registers a handler for a given event pattern.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>event_pattern</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The pattern of the event to register the handler for.</p></li>
+<li><p><strong>handler</strong> (<em>Callable</em><em>[</em><em>[</em><em>Any</em><em>]</em><em>, </em><em>Awaitable</em><em>[</em><em>None</em><em>]</em><em>]</em>) – The handler to register.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="relentity.core.EventBus.validate_event_name">
+<span class="sig-name descname"><span class="pre">validate_event_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/relentity/core/event_bus.html#EventBus.validate_event_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.core.EventBus.validate_event_name" title="Link to this definition"></a></dt>
+<dd><p>Validates the event name to ensure it matches the required pattern.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>event_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The name of the event to validate.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#relentity.core.InvalidEventNameException" title="relentity.core.InvalidEventNameException"><strong>InvalidEventNameException</strong></a> – If the event name is invalid.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="relentity.core.EventBus.validate_event_pattern">
+<span class="sig-name descname"><span class="pre">validate_event_pattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event_pattern</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/relentity/core/event_bus.html#EventBus.validate_event_pattern"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.core.EventBus.validate_event_pattern" title="Link to this definition"></a></dt>
+<dd><p>Validates the event pattern to ensure it matches the required pattern.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>event_pattern</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The pattern of the event to validate.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#relentity.core.InvalidEventPatternException" title="relentity.core.InvalidEventPatternException"><strong>InvalidEventPatternException</strong></a> – If the event pattern is invalid.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="relentity.core.InvalidEventNameException">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">relentity.core.</span></span><span class="sig-name descname"><span class="pre">InvalidEventNameException</span></span><a class="reference internal" href="_modules/relentity/core/exceptions.html#InvalidEventNameException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.core.InvalidEventNameException" title="Link to this definition"></a></dt>
+<dd><p>Exception raised for invalid event names.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="relentity.core.InvalidEventPatternException">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">relentity.core.</span></span><span class="sig-name descname"><span class="pre">InvalidEventPatternException</span></span><a class="reference internal" href="_modules/relentity/core/exceptions.html#InvalidEventPatternException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.core.InvalidEventPatternException" title="Link to this definition"></a></dt>
+<dd><p>Exception raised for invalid event patterns.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="relentity.core.EntityMeta">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">relentity.core.</span></span><span class="sig-name descname"><span class="pre">EntityMeta</span></span><a class="reference internal" href="_modules/relentity/core/metaclass.html#EntityMeta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.core.EntityMeta" title="Link to this definition"></a></dt>
+<dd><p>EntityMeta is a metaclass that allows the composition of Entities with components
+using square braces syntax. This metaclass enables the creation of new entity types
+with specified components implicitly added at instantiation time.</p>
+<dl>
+<dt>Example usage:</dt><dd><dl class="simple">
+<dt>def get_spawn_point() -&gt; Position:</dt><dd><p>return Position(x=0, y=0)</p>
+</dd>
+</dl>
+<p>Entity[get_spawn_point, Velocity(vx=0, vy=0)]</p>
+</dd>
+</dl>
+<p>In this example, <cite>get_spawn_point</cite> is a callable that returns a Component instance,
+and <cite>Velocity(vx=0, vy=0)</cite> is a Component instance. The resulting type is a new entity
+type with these components added.</p>
+<p>The callable should take no arguments and annotate its return type to be an instance of a Component subclass.</p>
+<p>The square brace syntax does not instantiate the Entity itself. Instead, it creates a Entity subclass
+with the specified components. When an instance of this new type is created, the components
+are added to the entity as long as <cite>super().__init__()</cite> is called in the entity’s <cite>__init__</cite> method.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="relentity.core.Registry">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">relentity.core.</span></span><span class="sig-name descname"><span class="pre">Registry</span></span><a class="reference internal" href="_modules/relentity/core/registry.html#Registry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.core.Registry" title="Link to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="relentity.core.Registry.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/core/registry.html#Registry.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.core.Registry.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initializes the Registry with an empty set of entities and a dictionary
+mapping component types to sets of entities.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="relentity.core.Registry.entities_with_components">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">entities_with_components</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">component_types</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.13)"><span class="pre">Type</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#relentity.core.Component" title="relentity.core.components.Component"><span class="pre">Component</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_subclasses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.AsyncIterator" title="(in Python v3.13)"><span class="pre">AsyncIterator</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#relentity.core.Entity" title="relentity.core.Entity"><span class="pre">Entity</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/relentity/core/registry.html#Registry.entities_with_components"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.core.Registry.entities_with_components" title="Link to this definition"></a></dt>
+<dd><p>Yields entities that have all the specified components.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>component_types</strong> (<em>Type</em><em>[</em><a class="reference internal" href="#relentity.core.Component" title="relentity.core.Component"><em>Component</em></a><em>]</em>) – The types of components to check for.</p></li>
+<li><p><strong>include_subclasses</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – Whether to include subclasses of the component types.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Yields<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Entity</em> – An entity that has all the specified components.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="relentity.core.Registry.get_entity_by_id">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_entity_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entity_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/core/registry.html#Registry.get_entity_by_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.core.Registry.get_entity_by_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="relentity.core.Registry.register_entity">
+<span class="sig-name descname"><span class="pre">register_entity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#relentity.core.Entity" title="relentity.core.Entity"><span class="pre">Entity</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/relentity/core/registry.html#Registry.register_entity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.core.Registry.register_entity" title="Link to this definition"></a></dt>
+<dd><p>Registers an entity with the registry and updates the component-to-entities mapping.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>entity</strong> (<a class="reference internal" href="#relentity.core.Entity" title="relentity.core.Entity"><em>Entity</em></a>) – The entity to register.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="relentity.core.Registry.remove_component_from_entity">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">remove_component_from_entity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#relentity.core.Entity" title="relentity.core.Entity"><span class="pre">Entity</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">component_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.13)"><span class="pre">Type</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#relentity.core.Component" title="relentity.core.components.Component"><span class="pre">Component</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/relentity/core/registry.html#Registry.remove_component_from_entity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.core.Registry.remove_component_from_entity" title="Link to this definition"></a></dt>
+<dd><p>Removes a component of the specified type from an entity and updates the registry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>entity</strong> (<a class="reference internal" href="#relentity.core.Entity" title="relentity.core.Entity"><em>Entity</em></a>) – The entity to remove the component from.</p></li>
+<li><p><strong>component_type</strong> (<em>Type</em><em>[</em><a class="reference internal" href="#relentity.core.Component" title="relentity.core.Component"><em>Component</em></a><em>]</em>) – The type of the component to remove.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="relentity.core.Registry.unregister_entity">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">unregister_entity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#relentity.core.Entity" title="relentity.core.Entity"><span class="pre">Entity</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/relentity/core/registry.html#Registry.unregister_entity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.core.Registry.unregister_entity" title="Link to this definition"></a></dt>
+<dd><p>Remove an entity completely from the registry.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="relentity.core.System">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">relentity.core.</span></span><span class="sig-name descname"><span class="pre">System</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">registry</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#relentity.core.Registry" title="relentity.core.registry.Registry"><span class="pre">Registry</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/core/systems.html#System"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.core.System" title="Link to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="relentity.core.System.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">registry</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#relentity.core.Registry" title="relentity.core.registry.Registry"><span class="pre">Registry</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/core/systems.html#System.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.core.System.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initializes the System with a registry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>registry</strong> (<a class="reference internal" href="#relentity.core.Registry" title="relentity.core.Registry"><em>Registry</em></a>) – The registry to be used by the system.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="relentity.core.System.update">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/relentity/core/systems.html#System.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.core.System.update" title="Link to this definition"></a></dt>
+<dd><p>Updates the system. This method should be overridden by subclasses.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.13)"><strong>NotImplementedError</strong></a> – If the method is not overridden by a subclass.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class" id="module-relentity.spatial">
+<dt class="sig sig-object py" id="relentity.spatial.Position">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">relentity.spatial.</span></span><span class="sig-name descname"><span class="pre">Position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/spatial/components.html#Position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.spatial.Position" title="Link to this definition"></a></dt>
+<dd><p>Component representing the position of an entity in 2D space.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="relentity.spatial.Position.x">
+<span class="sig-name descname"><span class="pre">x</span></span><a class="headerlink" href="#relentity.spatial.Position.x" title="Link to this definition"></a></dt>
+<dd><p>The x-coordinate of the entity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="relentity.spatial.Position.y">
+<span class="sig-name descname"><span class="pre">y</span></span><a class="headerlink" href="#relentity.spatial.Position.y" title="Link to this definition"></a></dt>
+<dd><p>The y-coordinate of the entity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="relentity.spatial.Position.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#relentity.spatial.Position.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">x</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></em><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">y</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></em><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="relentity.spatial.Velocity">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">relentity.spatial.</span></span><span class="sig-name descname"><span class="pre">Velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">vx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">vy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/spatial/components.html#Velocity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.spatial.Velocity" title="Link to this definition"></a></dt>
+<dd><p>Component representing the velocity of an entity in 2D space.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="relentity.spatial.Velocity.vx">
+<span class="sig-name descname"><span class="pre">vx</span></span><a class="headerlink" href="#relentity.spatial.Velocity.vx" title="Link to this definition"></a></dt>
+<dd><p>The velocity of the entity along the x-axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="relentity.spatial.Velocity.vy">
+<span class="sig-name descname"><span class="pre">vy</span></span><a class="headerlink" href="#relentity.spatial.Velocity.vy" title="Link to this definition"></a></dt>
+<dd><p>The velocity of the entity along the y-axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="relentity.spatial.Velocity.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#relentity.spatial.Velocity.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">vx</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></em><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">vy</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></em><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="relentity.spatial.Vision">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">relentity.spatial.</span></span><span class="sig-name descname"><span class="pre">Vision</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/spatial/components.html#Vision"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.spatial.Vision" title="Link to this definition"></a></dt>
+<dd><p>Component representing the vision capability of an entity.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="relentity.spatial.Vision.max_range">
+<span class="sig-name descname"><span class="pre">max_range</span></span><a class="headerlink" href="#relentity.spatial.Vision.max_range" title="Link to this definition"></a></dt>
+<dd><p>The maximum range of vision for the entity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="relentity.spatial.Vision.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#relentity.spatial.Vision.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id6">
+<span class="sig-name descname"><span class="pre">max_range</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></em><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="relentity.spatial.Visible">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">relentity.spatial.</span></span><span class="sig-name descname"><span class="pre">Visible</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'A</span> <span class="pre">visible</span> <span class="pre">entity'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/spatial/components.html#Visible"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.spatial.Visible" title="Link to this definition"></a></dt>
+<dd><p>Component representing the visibility of an entity.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="relentity.spatial.Visible.description">
+<span class="sig-name descname"><span class="pre">description</span></span><a class="headerlink" href="#relentity.spatial.Visible.description" title="Link to this definition"></a></dt>
+<dd><p>A description of the visible entity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="relentity.spatial.Visible.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#relentity.spatial.Visible.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id7">
+<span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#id7" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="relentity.spatial.Hearing">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">relentity.spatial.</span></span><span class="sig-name descname"><span class="pre">Hearing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">50.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/spatial/components.html#Hearing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.spatial.Hearing" title="Link to this definition"></a></dt>
+<dd><p>Component representing the hearing capability of an entity.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="relentity.spatial.Hearing.volume">
+<span class="sig-name descname"><span class="pre">volume</span></span><a class="headerlink" href="#relentity.spatial.Hearing.volume" title="Link to this definition"></a></dt>
+<dd><p>The volume level of the entity’s hearing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="relentity.spatial.Hearing._output_queue">
+<span class="sig-name descname"><span class="pre">_output_queue</span></span><a class="headerlink" href="#relentity.spatial.Hearing._output_queue" title="Link to this definition"></a></dt>
+<dd><p>A private queue of sound events heard by the entity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a>[<a class="reference internal" href="#relentity.spatial.SoundEvent" title="relentity.spatial.SoundEvent">SoundEvent</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="relentity.spatial.Hearing.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#relentity.spatial.Hearing.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="relentity.spatial.Hearing.model_post_init">
+<span class="sig-name descname"><span class="pre">model_post_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#relentity.spatial.Hearing.model_post_init" title="Link to this definition"></a></dt>
+<dd><p>This function is meant to behave like a BaseModel method to initialise private attributes.</p>
+<p>It takes context as an argument since that’s what pydantic-core passes when calling it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self</strong> – The BaseModel instance.</p></li>
+<li><p><strong>context</strong> – The context.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="relentity.spatial.Hearing.queue_sound">
+<span class="sig-name descname"><span class="pre">queue_sound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sound_event</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#relentity.spatial.SoundEvent" title="relentity.spatial.events.SoundEvent"><span class="pre">SoundEvent</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/spatial/components.html#Hearing.queue_sound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.spatial.Hearing.queue_sound" title="Link to this definition"></a></dt>
+<dd><p>Queues a sound event that the entity has heard.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sound_event</strong> (<a class="reference internal" href="#relentity.spatial.SoundEvent" title="relentity.spatial.SoundEvent"><em>SoundEvent</em></a>) – The sound event to queue.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="relentity.spatial.Hearing.retrieve_queue">
+<span class="sig-name descname"><span class="pre">retrieve_queue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clear</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/spatial/components.html#Hearing.retrieve_queue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.spatial.Hearing.retrieve_queue" title="Link to this definition"></a></dt>
+<dd><p>Retrieves the queue of sound events heard by the entity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>clear</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to clear the queue after retrieval. Defaults to False.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The list of sound events in the queue.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a>[<a class="reference internal" href="#relentity.spatial.SoundEvent" title="relentity.spatial.SoundEvent">SoundEvent</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id8">
+<span class="sig-name descname"><span class="pre">volume</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></em><a class="headerlink" href="#id8" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="relentity.spatial.Audible">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">relentity.spatial.</span></span><span class="sig-name descname"><span class="pre">Audible</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">50.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/spatial/components.html#Audible"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.spatial.Audible" title="Link to this definition"></a></dt>
+<dd><p>Component representing the audibility of an entity.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="relentity.spatial.Audible.volume">
+<span class="sig-name descname"><span class="pre">volume</span></span><a class="headerlink" href="#relentity.spatial.Audible.volume" title="Link to this definition"></a></dt>
+<dd><p>The volume level of the entity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="relentity.spatial.Audible._output_queue">
+<span class="sig-name descname"><span class="pre">_output_queue</span></span><a class="headerlink" href="#relentity.spatial.Audible._output_queue" title="Link to this definition"></a></dt>
+<dd><p>A private queue of sound events to be emitted by the entity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a>[<a class="reference internal" href="#relentity.spatial.SoundEvent" title="relentity.spatial.SoundEvent">SoundEvent</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="relentity.spatial.Audible.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#relentity.spatial.Audible.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="relentity.spatial.Audible.model_post_init">
+<span class="sig-name descname"><span class="pre">model_post_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#relentity.spatial.Audible.model_post_init" title="Link to this definition"></a></dt>
+<dd><p>This function is meant to behave like a BaseModel method to initialise private attributes.</p>
+<p>It takes context as an argument since that’s what pydantic-core passes when calling it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self</strong> – The BaseModel instance.</p></li>
+<li><p><strong>context</strong> – The context.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="relentity.spatial.Audible.queue_sound">
+<span class="sig-name descname"><span class="pre">queue_sound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sound_event</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#relentity.spatial.SoundEvent" title="relentity.spatial.events.SoundEvent"><span class="pre">SoundEvent</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/spatial/components.html#Audible.queue_sound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.spatial.Audible.queue_sound" title="Link to this definition"></a></dt>
+<dd><p>Queues a sound event to be emitted by the entity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sound_event</strong> (<a class="reference internal" href="#relentity.spatial.SoundEvent" title="relentity.spatial.SoundEvent"><em>SoundEvent</em></a>) – The sound event to queue.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="relentity.spatial.Audible.retrieve_queue">
+<span class="sig-name descname"><span class="pre">retrieve_queue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clear</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/spatial/components.html#Audible.retrieve_queue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.spatial.Audible.retrieve_queue" title="Link to this definition"></a></dt>
+<dd><p>Retrieves the queue of sound events.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>clear</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to clear the queue after retrieval. Defaults to False.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The list of sound events in the queue.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a>[<a class="reference internal" href="#relentity.spatial.SoundEvent" title="relentity.spatial.SoundEvent">SoundEvent</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id9">
+<span class="sig-name descname"><span class="pre">volume</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></em><a class="headerlink" href="#id9" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="relentity.spatial.MovementSystem">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">relentity.spatial.</span></span><span class="sig-name descname"><span class="pre">MovementSystem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">registry</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#relentity.spatial.SpatialRegistry" title="relentity.spatial.registry.SpatialRegistry"><span class="pre">SpatialRegistry</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/spatial/systems.html#MovementSystem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.spatial.MovementSystem" title="Link to this definition"></a></dt>
+<dd><p>System for updating the positions of entities based on their velocities.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="relentity.spatial.MovementSystem.max_speed">
+<span class="sig-name descname"><span class="pre">max_speed</span></span><a class="headerlink" href="#relentity.spatial.MovementSystem.max_speed" title="Link to this definition"></a></dt>
+<dd><p>The maximum speed an entity can move.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id10">
+<span class="sig-name descname"><span class="pre">max_speed</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">30</span></em><a class="headerlink" href="#id10" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="relentity.spatial.MovementSystem.update">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/spatial/systems.html#MovementSystem.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.spatial.MovementSystem.update" title="Link to this definition"></a></dt>
+<dd><p>Updates the positions of entities with Position and Velocity components.
+Limits the speed of entities to max_speed.
+Emits a POSITION_UPDATED_EVENT_TYPE event after updating the position.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="relentity.spatial.VisionSystem">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">relentity.spatial.</span></span><span class="sig-name descname"><span class="pre">VisionSystem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">registry</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#relentity.spatial.SpatialRegistry" title="relentity.spatial.registry.SpatialRegistry"><span class="pre">SpatialRegistry</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/spatial/systems.html#VisionSystem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.spatial.VisionSystem" title="Link to this definition"></a></dt>
+<dd><p>System for detecting entities within the vision range of other entities.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="relentity.spatial.VisionSystem.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/spatial/systems.html#VisionSystem.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.spatial.VisionSystem.update" title="Link to this definition"></a></dt>
+<dd><p>Detects entities within the vision range and emits ENTITY_SEEN_EVENT_TYPE events.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id11">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/spatial/systems.html#VisionSystem.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id11" title="Link to this definition"></a></dt>
+<dd><p>Detects entities within the vision range of entities with Vision and Position components.
+Emits an ENTITY_SEEN_EVENT_TYPE event for each detected entity.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="relentity.spatial.AudioSystem">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">relentity.spatial.</span></span><span class="sig-name descname"><span class="pre">AudioSystem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">registry</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#relentity.spatial.SpatialRegistry" title="relentity.spatial.registry.SpatialRegistry"><span class="pre">SpatialRegistry</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/spatial/systems.html#AudioSystem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.spatial.AudioSystem" title="Link to this definition"></a></dt>
+<dd><p>System for handling sound events and propagating them to entities with hearing capabilities.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="relentity.spatial.AudioSystem.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/spatial/systems.html#AudioSystem.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.spatial.AudioSystem.update" title="Link to this definition"></a></dt>
+<dd><p>Processes sound events and emits SOUND_HEARD_EVENT_TYPE and SOUND_CREATED_EVENT_TYPE events.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id12">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/spatial/systems.html#AudioSystem.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id12" title="Link to this definition"></a></dt>
+<dd><p>Processes sound events for entities with Hearing and Audible components.
+Emits SOUND_HEARD_EVENT_TYPE events for entities that hear sounds.
+Emits SOUND_CREATED_EVENT_TYPE events for entities that create sounds.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="relentity.spatial.SpatialRegistry">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">relentity.spatial.</span></span><span class="sig-name descname"><span class="pre">SpatialRegistry</span></span><a class="reference internal" href="_modules/relentity/spatial/registry.html#SpatialRegistry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.spatial.SpatialRegistry" title="Link to this definition"></a></dt>
+<dd><p>A specialized registry for spatial entities, providing additional methods for spatial queries.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="relentity.spatial.SpatialRegistry.entities_within_distance">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">entities_within_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">centroid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#relentity.spatial.Position" title="relentity.spatial.components.Position"><span class="pre">Position</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">component_types</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.13)"><span class="pre">Type</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#relentity.core.Component" title="relentity.core.components.Component"><span class="pre">Component</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/spatial/registry.html#SpatialRegistry.entities_within_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.spatial.SpatialRegistry.entities_within_distance" title="Link to this definition"></a></dt>
+<dd><p>Yields entities within a specified distance from a given position that have the specified components.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>centroid</strong> (<a class="reference internal" href="#relentity.spatial.Position" title="relentity.spatial.Position"><em>Position</em></a>) – The central position to measure distance from.</p></li>
+<li><p><strong>distance</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – The maximum distance from the centroid.</p></li>
+<li><p><strong>component_types</strong> (<em>Type</em><em>[</em><a class="reference internal" href="#relentity.core.Component" title="relentity.core.Component"><em>Component</em></a><em>]</em>) – The types of components the entities must have.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Yields<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Entity</em> – An entity within the specified distance that has the specified components.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="relentity.spatial.EntitySeenEvent">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">relentity.spatial.</span></span><span class="sig-name descname"><span class="pre">EntitySeenEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#relentity.core.Entity" title="relentity.core.Entity"><span class="pre">Entity</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#relentity.spatial.Position" title="relentity.spatial.Position"><span class="pre">Position</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">velocity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#relentity.spatial.Velocity" title="relentity.spatial.Velocity"><span class="pre">Velocity</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/spatial/events.html#EntitySeenEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.spatial.EntitySeenEvent" title="Link to this definition"></a></dt>
+<dd><p>Event representing an entity being seen.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="relentity.spatial.EntitySeenEvent.entity">
+<span class="sig-name descname"><span class="pre">entity</span></span><a class="headerlink" href="#relentity.spatial.EntitySeenEvent.entity" title="Link to this definition"></a></dt>
+<dd><p>The entity that was seen.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#relentity.core.Entity" title="relentity.core.Entity">Entity</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="relentity.spatial.EntitySeenEvent.position">
+<span class="sig-name descname"><span class="pre">position</span></span><a class="headerlink" href="#relentity.spatial.EntitySeenEvent.position" title="Link to this definition"></a></dt>
+<dd><p>The position of the seen entity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#relentity.spatial.Position" title="relentity.spatial.Position">Position</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="relentity.spatial.EntitySeenEvent.velocity">
+<span class="sig-name descname"><span class="pre">velocity</span></span><a class="headerlink" href="#relentity.spatial.EntitySeenEvent.velocity" title="Link to this definition"></a></dt>
+<dd><p>The velocity of the seen entity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#relentity.spatial.Velocity" title="relentity.spatial.Velocity">Velocity</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="relentity.spatial.EntitySeenEvent.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#relentity.core.Entity" title="relentity.core.Entity"><span class="pre">Entity</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#relentity.spatial.Position" title="relentity.spatial.Position"><span class="pre">Position</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">velocity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#relentity.spatial.Velocity" title="relentity.spatial.Velocity"><span class="pre">Velocity</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/spatial/events.html#EntitySeenEvent.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.spatial.EntitySeenEvent.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initializes an EntitySeenEvent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>entity</strong> (<a class="reference internal" href="#relentity.core.Entity" title="relentity.core.Entity"><em>Entity</em></a>) – The entity that was seen.</p></li>
+<li><p><strong>position</strong> (<a class="reference internal" href="#relentity.spatial.Position" title="relentity.spatial.Position"><em>Position</em></a>) – The position of the seen entity.</p></li>
+<li><p><strong>velocity</strong> (<a class="reference internal" href="#relentity.spatial.Velocity" title="relentity.spatial.Velocity"><em>Velocity</em></a>) – The velocity of the seen entity.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="relentity.spatial.SoundEvent">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">relentity.spatial.</span></span><span class="sig-name descname"><span class="pre">SoundEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#relentity.core.Entity" title="relentity.core.Entity"><span class="pre">Entity</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sound_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sound</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/spatial/events.html#SoundEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.spatial.SoundEvent" title="Link to this definition"></a></dt>
+<dd><p>Event representing a sound.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="relentity.spatial.SoundEvent.entity">
+<span class="sig-name descname"><span class="pre">entity</span></span><a class="headerlink" href="#relentity.spatial.SoundEvent.entity" title="Link to this definition"></a></dt>
+<dd><p>The entity that created the sound.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#relentity.core.Entity" title="relentity.core.Entity">Entity</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="relentity.spatial.SoundEvent.sound_type">
+<span class="sig-name descname"><span class="pre">sound_type</span></span><a class="headerlink" href="#relentity.spatial.SoundEvent.sound_type" title="Link to this definition"></a></dt>
+<dd><p>The type of the sound.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="relentity.spatial.SoundEvent.sound">
+<span class="sig-name descname"><span class="pre">sound</span></span><a class="headerlink" href="#relentity.spatial.SoundEvent.sound" title="Link to this definition"></a></dt>
+<dd><p>The sound itself.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="relentity.spatial.SoundEvent.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#relentity.core.Entity" title="relentity.core.Entity"><span class="pre">Entity</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sound_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sound</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/spatial/events.html#SoundEvent.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.spatial.SoundEvent.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initializes a SoundEvent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>entity</strong> (<a class="reference internal" href="#relentity.core.Entity" title="relentity.core.Entity"><em>Entity</em></a>) – The entity that created the sound.</p></li>
+<li><p><strong>sound_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The type of the sound.</p></li>
+<li><p><strong>sound</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The sound itself.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="relentity documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Tyler Evans.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
