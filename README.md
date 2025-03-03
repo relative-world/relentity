@@ -1,5 +1,7 @@
 # Relentity
 
+![multivariant-tests](https://github.com/relative-world/relentity/blob/main/.github/workflows/multivariant-tests.yml/badge.svg)
+
 ## Overview
 
 Relentity is an asynchronous Entity-Component-System (ECS) framework for building simulations, games, and AI environments in Python. It provides a modular architecture designed for flexibility and extensibility.
