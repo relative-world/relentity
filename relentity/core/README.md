@@ -2,28 +2,21 @@
 
 ## Overview
 
-`relentity.core` is an asynchronous Entity-Component-System (ECS) framework for building simulations in Python. The framework provides a modular and flexible architecture where:
+`relentity.core` is a modern, asynchronous Entity-Component-System (ECS) framework designed to build intelligent simulations in Python. This architecture provides a foundation for integrating AI agents as first-class cognitive entities within your simulations.
 
-- **Entities** represent objects in your simulation
-- **Components** store data about these objects
-- **Systems** process entities with specific component sets
-- **Events** allow communication between different parts of the system
+## Key Features
 
-## Architecture
+- **Fully Asynchronous**: Built on Python's asyncio for high-performance, non-blocking operations
+- **Component-Based Design**: Modular data structures for maximum flexibility and composition
+- **Event-Driven Architecture**: Decoupled communication via a powerful event system
+- **AI-Ready Integration**: Seamless integration points for AI agents and behaviors
+- **Type-Safe Interfaces**: Leveraging Pydantic for reliable data validation and serialization
 
-The core system follows these principles:
+## Core Architecture
 
-1. Entities are containers for components
-2. Components are pure data structures
-3. Systems contain logic and operate on entities with specific component types
-4. The Registry maintains relationships between entities and components
-5. The EventBus enables decoupled communication
+### Components: Pure Data
 
-## Core Classes
-
-### Component
-
-Components are Pydantic models that store entity data with validation.
+Components are stateful data containers implemented as Pydantic models, providing automatic validation and serialization:
 
 ```python
 from relentity.core.components import Component
@@ -31,46 +24,51 @@ from relentity.core.components import Component
 class Health(Component):
     current: int
     maximum: int = 100
+    
+class Inventory(Component):
+    capacity: int = 10
+    items: list = []
 ```
 
-Components can be extended to create specialized data containers for any simulation needs.
+### Entities: Composable Objects
 
-### Entity
-
-Entities are containers for components that provide an interface for querying and modifying components.
+Entities are dynamic containers for components with a flexible composition system:
 
 ```python
-# Creating entities with components
+# Create entity templates with composition syntax
 Player = Entity[
     Position(x=0, y=0),
-    Velocity(vx=0, vy=0),
+    Velocity(),
     Health(current=100, maximum=100)
 ]
 
+# Instantiate entities from templates
 player = Player(registry)
+
+# Access components asynchronously
+health = await player.get_component(Health)
+health.current -= 10
 ```
 
-Key capabilities:
-- Component management (add/remove/get)
-- Event bus integration
-- Registry association
+### Registry: Efficient Queries
 
-### Registry
-
-The Registry tracks all entities and provides efficient queries for entities with specific components.
+The Registry tracks entities and enables high-performance component queries:
 
 ```python
-# Find all entities with both Position and Velocity components
-async for entity in registry.entities_with_components(Position, Velocity):
+# Find all entities with specific components
+async for entity in registry.entities_with_components(Position, Health):
     position = await entity.get_component(Position)
-    # Process entity...
+    health = await entity.get_component(Health)
+    
+    # Process entities with these components
+    if health.current < health.maximum * 0.2:
+        # Entity is at low health
+        await apply_healing(entity, position)
 ```
 
-The Registry provides the foundation for systems to efficiently process only relevant entities.
+### Systems: Logic Processors
 
-### System
-
-Systems contain the logic that operates on entities with specific component sets.
+Systems contain logic that processes entities with specific component combinations:
 
 ```python
 class MovementSystem(System):
@@ -78,90 +76,71 @@ class MovementSystem(System):
         async for entity in self.registry.entities_with_components(Position, Velocity):
             position = await entity.get_component(Position)
             velocity = await entity.get_component(Velocity)
+            
+            # Apply movement logic
             position.x += velocity.vx
             position.y += velocity.vy
 ```
 
-Systems can be extended to implement any simulation logic required.
+### EventBus: Decoupled Communication
 
-### EventBus
-
-The EventBus provides a publish-subscribe mechanism for communication between components.
+The EventBus provides a sophisticated publish-subscribe mechanism:
 
 ```python
-# Register an event handler
-entity.event_bus.register_handler("collision", on_collision)
+# Register event handlers
+entity.event_bus.register_handler("collision.*", on_collision)
+entity.event_bus.register_handler("damage.physical", on_physical_damage)
 
-# Emit an event
-await entity.event_bus.emit("collision", collision_data)
+# Emit events
+await entity.event_bus.emit("collision.wall", collision_data)
 ```
 
-The EventBus supports wildcard patterns for flexible event handling.
+## AI Integration
 
-### EntityMeta
+The framework is designed with AI integration as a core principle, enabling:
 
-The EntityMeta metaclass provides syntactic sugar for entity composition using square bracket notation.
+1. **AI-Driven Components**: Represent AI state, beliefs, and knowledge
+2. **AI System Integration**: Systems that process entities through AI models
+3. **Cognitive Event Patterns**: Communication between AI agents and environment
+4. **Tool-Based Interaction**: Structured function calling for LLMs
 
-```python
-# Create specialized entity types using component composition
-Monster = Entity[
-    Position(x=10, y=10),
-    Health(current=50, maximum=50)
-]
-```
-
-## Extension Points
-
-### Creating Custom Components
-
-Define new component types by subclassing `Component` with Pydantic fields:
+Example AI integration:
 
 ```python
-class Inventory(Component):
-    items: List[Item] = []
-    capacity: int = 10
-```
-
-### Implementing Custom Systems
-
-Create specialized simulation logic by subclassing `System` and implementing `update()`:
-
-```python
-class CombatSystem(System):
+class CognitiveSystem(System):
     async def update(self):
-        async for entity in self.registry.entities_with_components(Health, Weapon):
-            # Combat logic here
-```
-
-### Event-Driven Communication
-
-Implement decoupled interactions using events:
-
-```python
-async def on_damage(damage_data):
-    # Handle damage event
-    pass
-
-entity.event_bus.register_handler("damage.physical", on_damage)
+        async for entity in self.registry.entities_with_components(Cognitive, Perception):
+            cognitive = await entity.get_component(Cognitive)
+            perception = await entity.get_component(Perception)
+            
+            # Process entity perceptions through AI model
+            response = await cognitive.model.process(perception.observations)
+            
+            # Update entity's internal state based on AI processing
+            await entity.add_component(Decision(action=response.action))
 ```
 
 ## Complete Workflow Example
 
 ```python
-# Create registry and entities
+# Setup registry and systems
 registry = Registry()
-player = Entity[Position(x=0, y=0), Velocity(vx=0, vy=0)](registry)
-
-# Create systems
 movement_system = MovementSystem(registry)
+physics_system = PhysicsSystem(registry)
+ai_system = AgentSystem(registry)
+
+# Create entities
+player = Player(registry)
+agent = AIAgent(registry)
 
 # Main simulation loop
-async def main():
+async def simulation_loop():
     while True:
-        # Update all systems
+        # Process systems in order
+        await physics_system.update()
+        await ai_system.update()
         await movement_system.update()
-        # Process other game logic
+        
+        # Yield control to event loop
         await asyncio.sleep(1/60)  # 60 FPS
 ```
-
-This framework provides the foundation for building complex, modular simulations with clean separation of data and logic.
