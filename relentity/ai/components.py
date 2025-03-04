@@ -25,6 +25,8 @@ class AIDriven(Component):
 
     model: str
     update_interval: int = 1
+    extra_tools: dict[str, ToolDefinition] = {}
+
     _update_count: int = PrivateAttr(default=0)
     _ai_event_queue: Annotated[list[tuple[str, Any]], PrivateAttr()] = []
     _ai_event_history: Annotated[list[str], PrivateAttr()] = []

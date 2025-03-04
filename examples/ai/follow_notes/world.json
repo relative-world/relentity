@@ -5,12 +5,12 @@
       "name": "Jack",
       "location": [50, 50],
       "width": 30,
-      "color": [255, 0, 0],
-      "description": "A survivalist trying to establish order on the island.",
+      "color": [255, 100, 0],
+      "description": "A friendly guy eager to start a fire and enjoy good company. Must be within a distance of 30 to enjoy the firepit. Cannot make fires outside of the firepit. Do not stand in the firepit itself.",
       "components": {
         "Identity": {
           "name": "Jack",
-          "description": "A survivalist trying to establish order on the island."
+          "description": "A friendly guy eager to start a fire and enjoy good company. Must be within a distance of 30 to enjoy the firepit. Cannot make fires outside of the firepit. Do not stand in the firepit itself."
         },
         "Position": {
           "x": 500,
@@ -19,11 +19,11 @@
         "Velocity": {
           "vx": 0,
           "vy": 0,
-          "max_speed": 30
+          "max_speed": 20
         },
         "AIMovementController": {},
         "Vision": {
-          "max_range": 30
+          "max_range": 50
         },
         "AIDriven": {
           "model": "qwen2.5:14b",
@@ -33,15 +33,15 @@
     },
     {
       "type": "Actor",
-      "name": "Emily",
+      "name": "Mike",
       "location": [-20, 80],
       "width": 30,
-      "color": [0, 255, 0],
-      "description": "A botanist looking for edible plants to survive.",
+      "color": [0, 150, 255],
+      "description": "A storyteller excited to share tales around the fire. Must be within a distance of 30 to enjoy the firepit. Cannot make fires outside of the firepit. Do not stand in the firepit itself.",
       "components": {
         "Identity": {
-          "name": "Emily",
-          "description": "A botanist looking for edible plants to survive."
+          "name": "Mike",
+          "description": "A storyteller excited to share tales around the fire. Must be within a distance of 30 to enjoy the firepit. Cannot make fires outside of the firepit. Do not stand in the firepit itself."
         },
         "Position": {
           "x": -200,
@@ -50,11 +50,11 @@
         "Velocity": {
           "vx": 0,
           "vy": 0,
-          "max_speed": 30
+          "max_speed": 20
         },
         "AIMovementController": {},
         "Vision": {
-          "max_range": 30
+          "max_range": 50
         },
         "AIDriven": {
           "model": "qwen2.5:14b",
@@ -67,12 +67,12 @@
       "name": "Tom",
       "location": [100, -30],
       "width": 30,
-      "color": [0, 0, 255],
-      "description": "An injured man hoping to be rescued.",
+      "color": [0, 200, 100],
+      "description": "A chill dude who loves the warmth of a fire and good conversation. Must be within a distance of 30 to enjoy the firepit. Cannot make fires outside of the firepit. Do not stand in the firepit itself.",
       "components": {
         "Identity": {
           "name": "Tom",
-          "description": "An injured man hoping to be rescued."
+          "description": "A chill dude who loves the warmth of a fire and good conversation. Must be within a distance of 30 to enjoy the firepit. Cannot make fires outside of the firepit. Do not stand in the firepit itself."
         },
         "Position": {
           "x": 500,
@@ -81,69 +81,15 @@
         "Velocity": {
           "vx": 0,
           "vy": 0,
-          "max_speed": 10
+          "max_speed": 20
         },
         "AIMovementController": {},
         "Vision": {
-          "max_range": 30
+          "max_range": 50
         },
         "AIDriven": {
           "model": "qwen2.5:14b",
           "update_interval": 1
-        }
-      }
-    },
-    {
-      "type": "Entity",
-      "width": 30,
-      "color": [34, 139, 34],
-      "components": {
-        "Identity": {
-          "name": "palm tree",
-          "description": "A tall palm tree with coconuts."
-        },
-        "Position": {
-          "x": -300,
-          "y": 200
-        },
-        "Visible": {
-          "description": "A tall palm tree with coconuts swaying in the breeze."
-        }
-      }
-    },
-    {
-      "type": "Entity",
-      "width": 30,
-      "color": [139, 69, 19],
-      "components": {
-        "Identity": {
-          "name": "driftwood",
-          "description": "A large piece of driftwood, useful for building a shelter."
-        },
-        "Position": {
-          "x": 100,
-          "y": -50
-        },
-        "Visible": {
-          "description": "A large, weathered piece of driftwood, perfect for making a shelter."
-        }
-      }
-    },
-    {
-      "type": "Entity",
-      "width": 30,
-      "color": [255, 255, 0],
-      "components": {
-        "Identity": {
-          "name": "wild berries",
-          "description": "A small bush covered in edible berries."
-        },
-        "Position": {
-          "x": -500,
-          "y": 60
-        },
-        "Visible": {
-          "description": "A wild bush covered in juicy, edible berries."
         }
       }
     }

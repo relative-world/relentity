@@ -118,7 +118,7 @@ class AIDrivenSystem(System):
 
         system_prompt = []
         prompt = []
-        tools = {}
+        tools = ai_driven_component.extra_tools
 
         component_types = [Identity, Position, Velocity]
         system_prompt.append(await render_basic_information(entity, component_types))

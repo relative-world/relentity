@@ -9,33 +9,35 @@ import pygame
 from pythonjsonlogger.json import JsonFormatter
 
 from relentity.ai import (
-    AIDriven,
-    ToolEnabledComponent,
     TextPromptComponent,
     AI_RESPONSE_EVENT_TYPE,
-    tool,
     AIDrivenSystem,
 )
+from relentity.ai.components import AIDriven, ToolEnabledComponent
+from relentity.ai.pydantic_ollama.tools import tool
 from relentity.ai.utils import pretty_name_entity, pretty_print_event
-from relentity.core import Entity, Identity, System
+from relentity.core import Component, Entity, Identity, System
 from relentity.core.entities import attach_components_sync
+from relentity.spatial import Position, Area
 from relentity.spatial import (
-    ENTITY_SEEN_EVENT_TYPE,
-    SoundEvent,
-    SOUND_HEARD_EVENT_TYPE,
-    SOUND_CREATED_EVENT_TYPE,
-    Position,
     Velocity,
-    Vision,
-    Visible,
-    Audible,
-    Hearing,
     SpatialRegistry,
     MovementSystem,
 )
-from relentity.spatial.sensory import VisionSystem, AudioSystem
+from relentity.spatial.events import AREA_ENTERED_EVENT_TYPE, AREA_EXITED_EVENT_TYPE, AreaEvent
+from relentity.spatial.events import (
+    ENTITY_SEEN_EVENT_TYPE,
+    SOUND_HEARD_EVENT_TYPE,
+    SOUND_CREATED_EVENT_TYPE,
+    SoundEvent,
+)
+from relentity.spatial.sensory.components import Visible, Audible
+from relentity.spatial.sensory.components import Vision, Hearing
+from relentity.spatial.sensory.systems import VisionSystem, AudioSystem
+from relentity.spatial.systems import LocationSystem
 from relentity.tasks import Task, TaskedEntity
-from relentity.visual.components import RenderableShape, RenderableColor, RenderLayer, ShapeType, SpeechBubble
+from relentity.visual.components import RenderableColor, RenderableShape, ShapeType, RenderLayer
+from relentity.visual.components import SpeechBubble
 from relentity.visual.systems import RenderSystem
 
 # Configure logging
@@ -79,6 +81,9 @@ class MovementTaskSystem(System):
             task = await entity.get_component(MovementTask)
             position = await entity.get_component(Position)
             velocity = await entity.get_component(Velocity)
+
+            if not task:
+                continue
 
             # Calculate direction to target
             dx = task.target_x - position.x
@@ -190,6 +195,137 @@ class Ball(Entity):
             ](self.registry)
 
 
+class FireTools(ToolEnabledComponent):
+    @tool
+    async def light_fire(self, actor) -> str:
+        """Light the fire in the fire pit"""
+        fire_pit = await self._fire_pit_ref.resolve()
+        fire_pit_component = await fire_pit.get_component(FirePit)
+
+        if fire_pit_component.is_lit:
+            return "The fire is already lit."
+
+        fire_pit_component.is_lit = True
+
+        # Update visual appearance
+        visual = await fire_pit.get_component(RenderableColor)
+        visual.r, visual.g, visual.b = 255, 100, 0  # Orange-red glow
+
+        # Create sound effect
+        audible = await fire_pit.get_component(Audible)
+        from relentity.spatial.events import SoundEvent
+
+        audible.queue_sound(SoundEvent(fire_pit.entity_ref, "ambient", "The fire crackles as it burns."))
+
+        return "You've lit the fire. The flames crackle and provide warmth."
+
+    @tool
+    async def put_out_fire(self, actor) -> str:
+        """Put out the fire in the fire pit"""
+        fire_pit = await self._fire_pit_ref.resolve()
+        fire_pit_component = await fire_pit.get_component(FirePit)
+
+        if not fire_pit_component.is_lit:
+            return "The fire is already out."
+
+        fire_pit_component.is_lit = False
+
+        # Update visual appearance
+        visual = await fire_pit.get_component(RenderableColor)
+        visual.r, visual.g, visual.b = 50, 50, 50  # Dark gray
+
+        # Create sound effect
+        audible = await fire_pit.get_component(Audible)
+        from relentity.spatial.events import SoundEvent
+
+        audible.queue_sound(SoundEvent(fire_pit.entity_ref, "ambient", "The fire hisses as it goes out."))
+
+        return "You've extinguished the fire."
+
+
+class FirePit(Component):
+    """Component representing a fire pit that can be lit or extinguished"""
+
+    is_lit: bool = False
+
+    async def handle_area_entered(self, event: AreaEvent):
+        entity = await event.entity_ref.resolve()
+        print("Fire pit area entered by", entity)
+
+        # Check if the entity is AI-driven
+        ai_driven = await entity.get_component(AIDriven)
+        if ai_driven:
+            # Add fire tools to the entity
+            fire_tools = FireTools()
+            fire_tools._fire_pit_ref = event.area_entity_ref
+            await entity.add_component(fire_tools)
+
+            # Update the AI's extra_tools dictionary
+            ai_driven.extra_tools.update(fire_tools._tools)
+
+            # Notify the AI
+            status = "lit" if self.is_lit else "unlit"
+            await ai_driven.add_event_for_consideration(
+                "environment.feature", f"You've entered a fire pit area. The fire is currently {status}."
+            )
+
+    async def handle_area_exited(self, event: AreaEvent):
+        entity = await event.entity_ref.resolve()
+        print("Fire pit area entered by", entity)
+
+        # Check if the entity is AI-driven
+        ai_driven = await entity.get_component(AIDriven)
+        if ai_driven:
+            fire_tools = await entity.get_component(FireTools)
+
+            # Remove the tools from AI's extra_tools
+            for tool_name in fire_tools._tools:
+                ai_driven.extra_tools.pop(tool_name, None)
+
+            await entity.remove_component(FireTools)
+
+            await ai_driven.add_event_for_consideration(
+                "environment.feature", "You've left the fire pit area and can no longer interact with the fire."
+            )
+
+
+async def create_fire_pit(registry, x=0, y=0, radius=50):
+    """Create a fire pit entity that provides fire tools to AI entities"""
+
+    buffered_radius = radius + 50
+    fire_pit = Entity[
+        Identity(
+            name="Fire Pit",
+            description="A well stocked firepit, ready to make a fire.  A great place to make camp.  Wood and fire starting materials are already here.",
+        ),
+        Position(x=x, y=y),
+        Area(
+            center_point=(x, y),
+            geometry=[
+                (x - buffered_radius, y - buffered_radius),
+                (x, y + buffered_radius),
+                (x + buffered_radius, y - buffered_radius),
+                (x, y - buffered_radius),
+            ],
+        ),
+        Visible(
+            description="A well stocked firepit, ready to make a fire.  A great place to make camp.  Wood and fire starting materials are already here."
+        ),
+        Audible(volume=20),
+        RenderableShape(shape_type=ShapeType.RECTANGLE, radius=radius, width=radius, height=radius),
+        RenderableColor(r=50, g=50, b=50),  # Start with gray (unlit)
+        RenderLayer(layer=0),
+        FirePit(),
+    ](registry)
+
+    # Register event handlers
+    fire_pit_component = await fire_pit.get_component(FirePit)
+    fire_pit.event_bus.register_handler(AREA_ENTERED_EVENT_TYPE, fire_pit_component.handle_area_entered)
+    fire_pit.event_bus.register_handler(AREA_EXITED_EVENT_TYPE, fire_pit_component.handle_area_exited)
+
+    return fire_pit
+
+
 async def create_entity(entity_data, registry):
     entity_type = entity_data["type"]
     components = entity_data["components"]
@@ -252,12 +388,15 @@ async def main():
     vision_system = VisionSystem(registry)
     audio_system = AudioSystem(registry)
     movement_task_system = MovementTaskSystem(registry)
+    location_system = LocationSystem(registry)
 
     # Initialize all systems
     await render_system.initialize()
 
     # Game loop code remains the same
     last_time = pygame.time.get_ticks()
+
+    await create_fire_pit(registry, x=100, y=100)
 
     try:
         while render_system.running:
@@ -273,6 +412,7 @@ async def main():
             await ai_system.update(delta_time)
             await render_system.update(delta_time)
             await movement_task_system.update(delta_time)
+            await location_system.update(delta_time)
 
     finally:
         await render_system.shutdown()
