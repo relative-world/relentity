@@ -198,6 +198,12 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">entities</span><span class="p">[</span><span class="n">entity_id</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">UnknownEntityError</span><span class="p">(</span><span class="n">entity_id</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Registry.get_entity_ref">
+<a class="viewcode-back" href="../../../api.html#relentity.core.Registry.get_entity_ref">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_entity_ref</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity_id</span><span class="p">:</span> <span class="n">uuid</span><span class="o">.</span><span class="n">UUID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EntityRef</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">EntityRef</span><span class="p">(</span><span class="n">entity_id</span><span class="o">=</span><span class="n">entity_id</span><span class="p">,</span> <span class="n">_registry</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span></div>
 </div>
 
 </pre></div>

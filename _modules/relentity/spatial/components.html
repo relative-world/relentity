@@ -79,7 +79,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">..core.entity_ref</span><span class="w"> </span><span class="kn">import</span> <span class="n">EntityRef</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">.events</span><span class="w"> </span><span class="kn">import</span> <span class="n">SoundEvent</span>
+    <span class="k">pass</span>
 
 
 <div class="viewcode-block" id="Position">
@@ -111,126 +111,6 @@
 
     <span class="n">vx</span><span class="p">:</span> <span class="nb">float</span>
     <span class="n">vy</span><span class="p">:</span> <span class="nb">float</span></div>
-
-
-
-<div class="viewcode-block" id="Vision">
-<a class="viewcode-back" href="../../../api.html#relentity.spatial.Vision">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">Vision</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Component representing the vision capability of an entity.</span>
-
-<span class="sd">    Attributes:</span>
-<span class="sd">        max_range (float): The maximum range of vision for the entity.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">max_range</span><span class="p">:</span> <span class="nb">float</span></div>
-
-
-
-<div class="viewcode-block" id="Visible">
-<a class="viewcode-back" href="../../../api.html#relentity.spatial.Visible">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">Visible</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Component representing the visibility of an entity.</span>
-
-<span class="sd">    Attributes:</span>
-<span class="sd">        description (str): A description of the visible entity.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;A visible entity&quot;</span></div>
-
-
-
-<div class="viewcode-block" id="Audible">
-<a class="viewcode-back" href="../../../api.html#relentity.spatial.Audible">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">Audible</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Component representing the audibility of an entity.</span>
-
-<span class="sd">    Attributes:</span>
-<span class="sd">        volume (float): The volume level of the entity.</span>
-<span class="sd">        _output_queue (list[SoundEvent]): A private queue of sound events to be emitted by the entity.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">50.0</span>
-    <span class="n">_output_queue</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="s2">&quot;SoundEvent&quot;</span><span class="p">],</span> <span class="n">PrivateAttr</span><span class="p">()]</span> <span class="o">=</span> <span class="p">[]</span>
-
-<div class="viewcode-block" id="Audible.queue_sound">
-<a class="viewcode-back" href="../../../api.html#relentity.spatial.Audible.queue_sound">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">queue_sound</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sound_event</span><span class="p">:</span> <span class="s2">&quot;SoundEvent&quot;</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Queues a sound event to be emitted by the entity.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            sound_event (SoundEvent): The sound event to queue.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_output_queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sound_event</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="Audible.retrieve_queue">
-<a class="viewcode-back" href="../../../api.html#relentity.spatial.Audible.retrieve_queue">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">retrieve_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clear</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Retrieves the queue of sound events.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            clear (bool, optional): Whether to clear the queue after retrieval. Defaults to False.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            list[SoundEvent]: The list of sound events in the queue.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_queue</span>
-        <span class="k">if</span> <span class="n">clear</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_output_queue</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">return</span> <span class="n">output</span></div>
-</div>
-
-
-
-<div class="viewcode-block" id="Hearing">
-<a class="viewcode-back" href="../../../api.html#relentity.spatial.Hearing">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">Hearing</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Component representing the hearing capability of an entity.</span>
-
-<span class="sd">    Attributes:</span>
-<span class="sd">        volume (float): The volume level of the entity&#39;s hearing.</span>
-<span class="sd">        _output_queue (list[SoundEvent]): A private queue of sound events heard by the entity.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">50.0</span>
-    <span class="n">_output_queue</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="s2">&quot;SoundEvent&quot;</span><span class="p">],</span> <span class="n">PrivateAttr</span><span class="p">()]</span> <span class="o">=</span> <span class="p">[]</span>
-
-<div class="viewcode-block" id="Hearing.queue_sound">
-<a class="viewcode-back" href="../../../api.html#relentity.spatial.Hearing.queue_sound">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">queue_sound</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sound_event</span><span class="p">:</span> <span class="s2">&quot;SoundEvent&quot;</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Queues a sound event that the entity has heard.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            sound_event (SoundEvent): The sound event to queue.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_output_queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sound_event</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="Hearing.retrieve_queue">
-<a class="viewcode-back" href="../../../api.html#relentity.spatial.Hearing.retrieve_queue">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">retrieve_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clear</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Retrieves the queue of sound events heard by the entity.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            clear (bool, optional): Whether to clear the queue after retrieval. Defaults to False.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            list[SoundEvent]: The list of sound events in the queue.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_queue</span>
-        <span class="k">if</span> <span class="n">clear</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_output_queue</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">return</span> <span class="n">output</span></div>
-</div>
 
 
 

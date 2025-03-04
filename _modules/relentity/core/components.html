@@ -70,7 +70,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for relentity.core.components</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypeVar</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">ClassVar</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
 
 <span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">BaseModel</span><span class="p">)</span>
@@ -84,7 +84,8 @@
 <span class="sd">    Inherits from Pydantic&#39;s BaseModel to provide data validation and serialization.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">pass</span></div>
+    <span class="c1"># Class variable for dependencies</span>
+    <span class="n">dependencies</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="s2">&quot;Component&quot;</span><span class="p">]]]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span></div>
 
 
 

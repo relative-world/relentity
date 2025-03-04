@@ -70,34 +70,155 @@
            <div itemprop="articleBody">
              
   <h1>Source code for relentity.core.systems</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Registry</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Awaitable</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.components</span><span class="w"> </span><span class="kn">import</span> <span class="n">Component</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.event_bus</span><span class="w"> </span><span class="kn">import</span> <span class="n">EventBus</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Registry</span>
 
 
 <div class="viewcode-block" id="System">
 <a class="viewcode-back" href="../../../api.html#relentity.core.System">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">System</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;An enhanced System base class for processing entities with specific components.&quot;&quot;&quot;</span>
+
+    <span class="c1"># Define required components that this system processes</span>
+    <span class="n">required_components</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Component</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="c1"># System execution priority (lower numbers run first)</span>
+    <span class="n">priority</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span>
+
 <div class="viewcode-block" id="System.__init__">
 <a class="viewcode-back" href="../../../api.html#relentity.core.System.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">registry</span><span class="p">:</span> <span class="n">Registry</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Initializes the System with a registry.</span>
+<span class="sd">        Initialize the System with a registry and default settings.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            registry (Registry): The registry to be used by the system.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">registry</span> <span class="o">=</span> <span class="n">registry</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">registry</span> <span class="o">=</span> <span class="n">registry</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">event_bus</span> <span class="o">=</span> <span class="n">EventBus</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_execution_time</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">execution_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">average_execution_time</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span></div>
+
+
+<div class="viewcode-block" id="System.initialize">
+<a class="viewcode-back" href="../../../api.html#relentity.core.System.initialize">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the system. Called once before the system starts updating.</span>
+<span class="sd">        Override in subclasses to set up resources and event handlers.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
 
 
 <div class="viewcode-block" id="System.update">
 <a class="viewcode-back" href="../../../api.html#relentity.core.System.update">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delta_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Updates the system. This method should be overridden by subclasses.</span>
+<span class="sd">        Update the system. This method should be overridden by subclasses.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            delta_time (float): Time elapsed since the last update in seconds.</span>
 
 <span class="sd">        Raises:</span>
 <span class="sd">            NotImplementedError: If the method is not overridden by a subclass.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+
+<div class="viewcode-block" id="System.process">
+<a class="viewcode-back" href="../../../api.html#relentity.core.System.process">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delta_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Process the system if it&#39;s enabled, tracking execution time.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">delta_time</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+        <span class="n">execution_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_execution_time</span> <span class="o">=</span> <span class="n">execution_time</span>
+
+        <span class="c1"># Update average execution time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">execution_count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">average_execution_time</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">average_execution_time</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">execution_count</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">execution_time</span>
+        <span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">execution_count</span></div>
+
+
+<div class="viewcode-block" id="System.shutdown">
+<a class="viewcode-back" href="../../../api.html#relentity.core.System.shutdown">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Clean up resources when the system is being removed.</span>
+<span class="sd">        Override in subclasses to handle resource cleanup.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="System.handle_error">
+<a class="viewcode-back" href="../../../api.html#relentity.core.System.handle_error">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">handle_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">error</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Handle errors that occur during system update.</span>
+<span class="sd">        Override in subclasses for custom error handling.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            error (Exception): The exception that was raised.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="n">error</span></div>
+
+
+<div class="viewcode-block" id="System.configure">
+<a class="viewcode-back" href="../../../api.html#relentity.core.System.configure">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">config</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;System&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Configure the system with the given parameters.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            System: The system instance (for method chaining).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+<div class="viewcode-block" id="System.enable">
+<a class="viewcode-back" href="../../../api.html#relentity.core.System.enable">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">enable</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Enable the system.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="System.disable">
+<a class="viewcode-back" href="../../../api.html#relentity.core.System.disable">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">disable</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Disable the system.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="System.register_event_handler">
+<a class="viewcode-back" href="../../../api.html#relentity.core.System.register_event_handler">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">register_event_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event_pattern</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">handler</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Awaitable</span><span class="p">[</span><span class="kc">None</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Register an event handler for this system.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            event_pattern (str): The pattern of events to handle.</span>
+<span class="sd">            handler (Callable): The handler function to call when events occur.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">event_bus</span><span class="o">.</span><span class="n">register_handler</span><span class="p">(</span><span class="n">event_pattern</span><span class="p">,</span> <span class="n">handler</span><span class="p">)</span></div>
 </div>
 
 </pre></div>

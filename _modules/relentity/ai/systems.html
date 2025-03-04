@@ -136,20 +136,52 @@
 <span class="sd">            registry (Registry): The registry to be used by the system.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">registry</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">PydanticOllamaClient</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">base_url</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">default_model</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">PydanticOllamaClient</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">base_url</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">default_model</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_processing_entities</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="AIDrivenSystem.update">
 <a class="viewcode-back" href="../../../api.html#relentity.ai.AIDrivenSystem.update">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delta_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Updates the system by processing all entities with the AIDriven component.</span>
+<span class="sd">        Updates the system by processing entities with the AIDriven component</span>
+<span class="sd">        that are not already being processed.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">tasks</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">async</span> <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">entities_with_components</span><span class="p">(</span><span class="n">AIDriven</span><span class="p">):</span>
-            <span class="n">tasks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process_entity</span><span class="p">(</span><span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">resolve</span><span class="p">()))</span>
-        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="n">tasks</span><span class="p">)</span></div>
+        <span class="k">async</span> <span class="k">for</span> <span class="n">entity_ref</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">entities_with_components</span><span class="p">(</span><span class="n">AIDriven</span><span class="p">):</span>
+            <span class="n">resolved_entity</span> <span class="o">=</span> <span class="k">await</span> <span class="n">entity_ref</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
 
+            <span class="c1"># Skip if entity is already being processed</span>
+            <span class="k">if</span> <span class="n">resolved_entity</span><span class="o">.</span><span class="n">id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_processing_entities</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># Mark entity as being processed</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_processing_entities</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">resolved_entity</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+
+            <span class="c1"># Create a task for processing the entity</span>
+            <span class="n">task</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process_entity</span><span class="p">(</span><span class="n">resolved_entity</span><span class="p">))</span>
+
+            <span class="c1"># Set up a callback to handle task completion</span>
+            <span class="n">task</span><span class="o">.</span><span class="n">add_done_callback</span><span class="p">(</span><span class="k">lambda</span> <span class="n">t</span><span class="p">,</span> <span class="n">entity_id</span><span class="o">=</span><span class="n">resolved_entity</span><span class="o">.</span><span class="n">id</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_task_completion</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">entity_id</span><span class="p">))</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_handle_task_completion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">entity_id</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Handles the completion of an entity processing task.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            task (asyncio.Task): The completed task.</span>
+<span class="sd">            entity_id: The ID of the processed entity.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Remove the entity from the processing set</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_processing_entities</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">entity_id</span><span class="p">)</span>
+
+        <span class="c1"># Handle any exceptions that occurred during processing</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">task</span><span class="o">.</span><span class="n">cancelled</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">task</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="c1"># Log the exception (you may want to use a proper logger)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error processing entity </span><span class="si">{</span><span class="n">entity_id</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="AIDrivenSystem.process_entity">
 <a class="viewcode-back" href="../../../api.html#relentity.ai.AIDrivenSystem.process_entity">[docs]</a>

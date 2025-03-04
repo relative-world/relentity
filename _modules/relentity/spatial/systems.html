@@ -70,18 +70,14 @@
            <div itemprop="articleBody">
              
   <h1>Source code for relentity.spatial.systems</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">relentity.core.systems</span><span class="w"> </span><span class="kn">import</span> <span class="n">System</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.components</span><span class="w"> </span><span class="kn">import</span> <span class="n">Position</span><span class="p">,</span> <span class="n">Velocity</span><span class="p">,</span> <span class="n">Vision</span><span class="p">,</span> <span class="n">Audible</span><span class="p">,</span> <span class="n">Hearing</span><span class="p">,</span> <span class="n">Visible</span><span class="p">,</span> <span class="n">Area</span><span class="p">,</span> <span class="n">Located</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.components</span><span class="w"> </span><span class="kn">import</span> <span class="n">Position</span><span class="p">,</span> <span class="n">Velocity</span><span class="p">,</span> <span class="n">Area</span><span class="p">,</span> <span class="n">Located</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.events</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-    <span class="n">EntitySeenEvent</span><span class="p">,</span>
-    <span class="n">ENTITY_SEEN_EVENT_TYPE</span><span class="p">,</span>
     <span class="n">POSITION_UPDATED_EVENT_TYPE</span><span class="p">,</span>
-    <span class="n">SOUND_HEARD_EVENT_TYPE</span><span class="p">,</span>
     <span class="n">AreaEvent</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.events</span><span class="w"> </span><span class="kn">import</span> <span class="n">SOUND_CREATED_EVENT_TYPE</span><span class="p">,</span> <span class="n">AREA_ENTERED_EVENT_TYPE</span><span class="p">,</span> <span class="n">AREA_EXITED_EVENT_TYPE</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.events</span><span class="w"> </span><span class="kn">import</span> <span class="n">AREA_ENTERED_EVENT_TYPE</span><span class="p">,</span> <span class="n">AREA_EXITED_EVENT_TYPE</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpatialRegistry</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">..core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Entity</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Entity</span><span class="p">,</span> <span class="n">System</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..core.entity_ref</span><span class="w"> </span><span class="kn">import</span> <span class="n">EntityRef</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..core.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">UnknownComponentError</span>
 
@@ -108,115 +104,105 @@
 <div class="viewcode-block" id="MovementSystem">
 <a class="viewcode-back" href="../../../api.html#relentity.spatial.MovementSystem">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">MovementSystem</span><span class="p">(</span><span class="n">SpatialSystem</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    System for updating the positions of entities based on their velocities.</span>
+    <span class="n">_entity_cache</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">_cache_ttl</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">_cache_counter</span> <span class="o">=</span> <span class="p">{}</span>
 
-<span class="sd">    Attributes:</span>
-<span class="sd">        max_speed (float): The maximum speed an entity can move.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="MovementSystem.__init__">
+<a class="viewcode-back" href="../../../api.html#relentity.spatial.MovementSystem.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">registry</span><span class="p">:</span> <span class="n">SpatialRegistry</span><span class="p">,</span> <span class="n">max_speed</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">10</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes the MovementSystem with a registry and a maximum speed for entities.</span>
 
-    <span class="n">max_speed</span> <span class="o">=</span> <span class="mi">30</span>
+<span class="sd">        Args:</span>
+<span class="sd">            registry (SpatialRegistry): The registry to be used by the system.</span>
+<span class="sd">            max_speed (float, optional): The maximum speed for entities. Defaults to 10.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">registry</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_speed</span> <span class="o">=</span> <span class="n">max_speed</span>
+        <span class="c1"># Pre-calculate constants</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_speed_squared</span> <span class="o">=</span> <span class="n">max_speed</span> <span class="o">*</span> <span class="n">max_speed</span></div>
+
 
 <div class="viewcode-block" id="MovementSystem.update">
 <a class="viewcode-back" href="../../../api.html#relentity.spatial.MovementSystem.update">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Updates the positions of entities with Position and Velocity components.</span>
-<span class="sd">        Limits the speed of entities to max_speed.</span>
-<span class="sd">        Emits a POSITION_UPDATED_EVENT_TYPE event after updating the position.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delta_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Process cache expiration only every few frames to reduce overhead</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_frame_counter&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_frame_counter</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_counter</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">5</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frame_counter</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_process_cache_expiration</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_frame_counter</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># Fast path for zero delta time</span>
+        <span class="k">if</span> <span class="n">delta_time</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">delta_time</span> <span class="o">=</span> <span class="mf">0.016</span>  <span class="c1"># Default to ~60fps if not specified</span>
+
+        <span class="c1"># Reuse list to avoid allocation</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_entities_data&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_entities_data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_entities_data</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+        <span class="c1"># Collect entities using cache</span>
         <span class="k">async</span> <span class="k">for</span> <span class="n">entity_ref</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">entities_with_components</span><span class="p">(</span><span class="n">Position</span><span class="p">,</span> <span class="n">Velocity</span><span class="p">):</span>
-            <span class="n">entity</span> <span class="o">=</span> <span class="k">await</span> <span class="n">entity_ref</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
-            <span class="n">position</span> <span class="o">=</span> <span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">Position</span><span class="p">)</span>
-            <span class="n">velocity</span> <span class="o">=</span> <span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">Velocity</span><span class="p">)</span>
-            <span class="n">speed</span> <span class="o">=</span> <span class="p">(</span><span class="n">velocity</span><span class="o">.</span><span class="n">vx</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">velocity</span><span class="o">.</span><span class="n">vy</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.5</span>
-            <span class="k">if</span> <span class="n">speed</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_speed</span><span class="p">:</span>
-                <span class="n">velocity</span><span class="o">.</span><span class="n">vx</span> <span class="o">=</span> <span class="n">velocity</span><span class="o">.</span><span class="n">vx</span> <span class="o">/</span> <span class="n">speed</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_speed</span>
-                <span class="n">velocity</span><span class="o">.</span><span class="n">vy</span> <span class="o">=</span> <span class="n">velocity</span><span class="o">.</span><span class="n">vy</span> <span class="o">/</span> <span class="n">speed</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_speed</span>
-            <span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">+=</span> <span class="n">velocity</span><span class="o">.</span><span class="n">vx</span>
-            <span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">+=</span> <span class="n">velocity</span><span class="o">.</span><span class="n">vy</span>
-            <span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">event_bus</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">POSITION_UPDATED_EVENT_TYPE</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span></div>
-</div>
+            <span class="n">entity_id</span> <span class="o">=</span> <span class="n">entity_ref</span><span class="o">.</span><span class="n">entity_id</span>
+
+            <span class="k">if</span> <span class="n">entity_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entity_cache</span><span class="p">:</span>
+                <span class="n">entity</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">velocity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entity_cache</span><span class="p">[</span><span class="n">entity_id</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_cache_counter</span><span class="p">[</span><span class="n">entity_id</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">entity</span> <span class="o">=</span> <span class="k">await</span> <span class="n">entity_ref</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+                <span class="n">position</span> <span class="o">=</span> <span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">Position</span><span class="p">)</span>
+                <span class="n">velocity</span> <span class="o">=</span> <span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">Velocity</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_entity_cache</span><span class="p">[</span><span class="n">entity_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">velocity</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_cache_counter</span><span class="p">[</span><span class="n">entity_id</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_entities_data</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">entity</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">velocity</span><span class="p">))</span>
+
+        <span class="c1"># Process all entities efficiently</span>
+        <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">velocity</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entities_data</span><span class="p">:</span>
+            <span class="c1"># Skip update for stationary objects</span>
+            <span class="k">if</span> <span class="n">velocity</span><span class="o">.</span><span class="n">vx</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">velocity</span><span class="o">.</span><span class="n">vy</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># Use squared comparison</span>
+            <span class="n">speed_squared</span> <span class="o">=</span> <span class="n">velocity</span><span class="o">.</span><span class="n">vx</span> <span class="o">*</span> <span class="n">velocity</span><span class="o">.</span><span class="n">vx</span> <span class="o">+</span> <span class="n">velocity</span><span class="o">.</span><span class="n">vy</span> <span class="o">*</span> <span class="n">velocity</span><span class="o">.</span><span class="n">vy</span>
+
+            <span class="k">if</span> <span class="n">speed_squared</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_speed_squared</span><span class="p">:</span>
+                <span class="c1"># Compute scale without sqrt when possible using fast approximation</span>
+                <span class="n">inv_speed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fast_inverse_sqrt</span><span class="p">(</span><span class="n">speed_squared</span><span class="p">)</span>
+                <span class="n">scale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_speed</span> <span class="o">*</span> <span class="n">inv_speed</span>
+                <span class="n">velocity</span><span class="o">.</span><span class="n">vx</span> <span class="o">*=</span> <span class="n">scale</span>
+                <span class="n">velocity</span><span class="o">.</span><span class="n">vy</span> <span class="o">*=</span> <span class="n">scale</span>
+
+            <span class="c1"># Apply movement with delta time</span>
+            <span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">+=</span> <span class="n">velocity</span><span class="o">.</span><span class="n">vx</span> <span class="o">*</span> <span class="n">delta_time</span>
+            <span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">+=</span> <span class="n">velocity</span><span class="o">.</span><span class="n">vy</span> <span class="o">*</span> <span class="n">delta_time</span>
+
+        <span class="c1"># Emit events only for moved entities</span>
+        <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">velocity</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entities_data</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">velocity</span><span class="o">.</span><span class="n">vx</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">velocity</span><span class="o">.</span><span class="n">vy</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">event_bus</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">POSITION_UPDATED_EVENT_TYPE</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span></div>
 
 
+    <span class="k">def</span><span class="w"> </span><span class="nf">_process_cache_expiration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">entity_id</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cache_counter</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cache_counter</span><span class="p">[</span><span class="n">entity_id</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache_counter</span><span class="p">[</span><span class="n">entity_id</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache_ttl</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_entity_cache</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">entity_id</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_cache_counter</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">entity_id</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
-<div class="viewcode-block" id="VisionSystem">
-<a class="viewcode-back" href="../../../api.html#relentity.spatial.VisionSystem">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">VisionSystem</span><span class="p">(</span><span class="n">SpatialSystem</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    System for detecting entities within the vision range of other entities.</span>
-
-<span class="sd">    Methods:</span>
-<span class="sd">        update: Detects entities within the vision range and emits ENTITY_SEEN_EVENT_TYPE events.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="VisionSystem.update">
-<a class="viewcode-back" href="../../../api.html#relentity.spatial.VisionSystem.update">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Detects entities within the vision range of entities with Vision and Position components.</span>
-<span class="sd">        Emits an ENTITY_SEEN_EVENT_TYPE event for each detected entity.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">async</span> <span class="k">for</span> <span class="n">entity_ref</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">entities_with_components</span><span class="p">(</span><span class="n">Vision</span><span class="p">,</span> <span class="n">Position</span><span class="p">):</span>
-            <span class="n">entity</span> <span class="o">=</span> <span class="k">await</span> <span class="n">entity_ref</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
-            <span class="n">vision</span> <span class="o">=</span> <span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">Vision</span><span class="p">)</span>
-            <span class="n">position</span> <span class="o">=</span> <span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">Position</span><span class="p">)</span>
-            <span class="k">async</span> <span class="k">for</span> <span class="n">other_entity_ref</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">entities_within_distance</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">vision</span><span class="o">.</span><span class="n">max_range</span><span class="p">,</span> <span class="n">Visible</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">other_entity_ref</span><span class="o">.</span><span class="n">entity_id</span> <span class="o">!=</span> <span class="n">entity</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
-                    <span class="n">other_entity</span> <span class="o">=</span> <span class="k">await</span> <span class="n">other_entity_ref</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
-                    <span class="n">other_position</span> <span class="o">=</span> <span class="k">await</span> <span class="n">other_entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">Position</span><span class="p">)</span>
-                    <span class="n">other_velocity</span> <span class="o">=</span> <span class="k">await</span> <span class="n">other_entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">Velocity</span><span class="p">)</span>
-                    <span class="n">event</span> <span class="o">=</span> <span class="n">EntitySeenEvent</span><span class="p">(</span>
-                        <span class="n">entity_ref</span><span class="o">=</span><span class="n">other_entity_ref</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="n">other_position</span><span class="p">,</span> <span class="n">velocity</span><span class="o">=</span><span class="n">other_velocity</span>
-                    <span class="p">)</span>
-                    <span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">event_bus</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">ENTITY_SEEN_EVENT_TYPE</span><span class="p">,</span> <span class="n">event</span><span class="p">)</span></div>
-</div>
-
-
-
-<div class="viewcode-block" id="AudioSystem">
-<a class="viewcode-back" href="../../../api.html#relentity.spatial.AudioSystem">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">AudioSystem</span><span class="p">(</span><span class="n">SpatialSystem</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    System for handling sound events and propagating them to entities with hearing capabilities.</span>
-
-<span class="sd">    Methods:</span>
-<span class="sd">        update: Processes sound events and emits SOUND_HEARD_EVENT_TYPE and SOUND_CREATED_EVENT_TYPE events.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="AudioSystem.update">
-<a class="viewcode-back" href="../../../api.html#relentity.spatial.AudioSystem.update">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Processes sound events for entities with Hearing and Audible components.</span>
-<span class="sd">        Emits SOUND_HEARD_EVENT_TYPE events for entities that hear sounds.</span>
-<span class="sd">        Emits SOUND_CREATED_EVENT_TYPE events for entities that create sounds.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">async</span> <span class="k">for</span> <span class="n">entity_ref</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">entities_with_components</span><span class="p">(</span><span class="n">Hearing</span><span class="p">):</span>
-            <span class="n">entity</span> <span class="o">=</span> <span class="k">await</span> <span class="n">entity_ref</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
-            <span class="n">hearing</span> <span class="o">=</span> <span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">Hearing</span><span class="p">)</span>
-            <span class="n">sound_queue</span> <span class="o">=</span> <span class="n">hearing</span><span class="o">.</span><span class="n">retrieve_queue</span><span class="p">(</span><span class="n">clear</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">sound_event</span> <span class="ow">in</span> <span class="n">sound_queue</span><span class="p">:</span>
-                <span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">event_bus</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">SOUND_HEARD_EVENT_TYPE</span><span class="p">,</span> <span class="n">sound_event</span><span class="p">)</span>
-
-        <span class="k">async</span> <span class="k">for</span> <span class="n">entity_ref</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">entities_with_components</span><span class="p">(</span><span class="n">Audible</span><span class="p">,</span> <span class="n">Position</span><span class="p">):</span>
-            <span class="n">entity</span> <span class="o">=</span> <span class="k">await</span> <span class="n">entity_ref</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
-            <span class="n">audio</span> <span class="o">=</span> <span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">Audible</span><span class="p">)</span>
-            <span class="n">position</span> <span class="o">=</span> <span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">Position</span><span class="p">)</span>
-            <span class="n">sound_queue</span> <span class="o">=</span> <span class="n">audio</span><span class="o">.</span><span class="n">retrieve_queue</span><span class="p">(</span><span class="n">clear</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">sound_event</span> <span class="ow">in</span> <span class="n">sound_queue</span><span class="p">:</span>
-                <span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">event_bus</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">SOUND_CREATED_EVENT_TYPE</span><span class="p">,</span> <span class="n">sound_event</span><span class="p">)</span>
-                <span class="k">async</span> <span class="k">for</span> <span class="n">other_entity_ref</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">entities_within_distance</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">audio</span><span class="o">.</span><span class="n">volume</span><span class="p">,</span> <span class="n">Hearing</span><span class="p">):</span>
-                    <span class="k">if</span> <span class="n">other_entity_ref</span><span class="o">.</span><span class="n">entity_id</span> <span class="o">!=</span> <span class="n">entity</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
-                        <span class="n">other_entity</span> <span class="o">=</span> <span class="k">await</span> <span class="n">other_entity_ref</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
-                        <span class="n">other_hearing</span> <span class="o">=</span> <span class="k">await</span> <span class="n">other_entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">Hearing</span><span class="p">)</span>
-                        <span class="n">other_hearing</span><span class="o">.</span><span class="n">queue_sound</span><span class="p">(</span><span class="n">sound_event</span><span class="p">)</span></div>
-</div>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_fast_inverse_sqrt</span><span class="p">(</span><span class="n">number</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fast inverse square root approximation (or fallback to regular method)&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">number</span><span class="o">**</span><span class="mf">0.5</span><span class="p">)</span></div>
 
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">LocationSystem</span><span class="p">(</span><span class="n">SpatialSystem</span><span class="p">):</span>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delta_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">async</span> <span class="k">for</span> <span class="n">area_entity_ref</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">entities_with_components</span><span class="p">(</span><span class="n">Area</span><span class="p">):</span>
             <span class="n">area_entity</span><span class="p">:</span> <span class="n">Entity</span> <span class="o">=</span> <span class="k">await</span> <span class="n">area_entity_ref</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
             <span class="n">area</span><span class="p">:</span> <span class="n">Area</span> <span class="o">=</span> <span class="k">await</span> <span class="n">area_entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">Area</span><span class="p">)</span>
