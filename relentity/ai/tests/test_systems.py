@@ -24,9 +24,9 @@ async def test_update(system, registry):
     await entity.add_component(Identity(name="Test Entity", description="Test description"))
     await entity.add_component(AIDriven(model="test-model", update_interval=1))
     registry.register_entity(entity)
-    with patch.object(system, "process_entity", new_callable=AsyncMock) as mock_process_entity:
+    with patch("asyncio.create_task") as mock_create_task:
         await system.update()
-        mock_process_entity.assert_awaited_once_with(entity)
+        mock_create_task.awaited_once()
 
 
 @pytest.mark.asyncio

@@ -1,5 +1,6 @@
 from relentity.core import Identity
-from relentity.spatial import Visible, SOUND_HEARD_EVENT_TYPE, SOUND_CREATED_EVENT_TYPE
+from relentity.spatial.events import SOUND_HEARD_EVENT_TYPE, SOUND_CREATED_EVENT_TYPE
+from relentity.spatial.sensory.components import Visible
 
 
 async def pretty_name_entity(entity):

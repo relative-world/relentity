@@ -109,12 +109,14 @@ event_text = await pretty_print_event("entity_seen", entity_seen_event)
 ```python
 import asyncio
 from relentity.core import Registry, Identity
-from relentity.spatial.components import Position, Visible, Hearing, Audible
+from relentity.spatial.components import Position
+from relentity.spatial import Visible, Audible, Hearing
 from relentity.spatial.registry import SpatialRegistry
 from relentity.spatial.systems import MovementSystem
 from relentity.ai.components import AIDriven, TextSystemPromptComponent, ToolEnabledComponent
 from relentity.ai.systems import AIDrivenSystem
 from relentity.ai.pydantic_ollama.tools import tool
+
 
 # Define custom tools
 class ExplorerTools(ToolEnabledComponent):
@@ -131,7 +133,7 @@ class ExplorerTools(ToolEnabledComponent):
         elif direction == "west":
             position.x -= 1
         return f"Moved {direction} to position ({position.x}, {position.y})"
-    
+
     @tool
     async def say(self, actor, message: str) -> str:
         """Say something out loud"""
@@ -139,6 +141,7 @@ class ExplorerTools(ToolEnabledComponent):
         from relentity.spatial.events import SoundEvent
         audible.queue_sound(SoundEvent(actor, "voice", message))
         return f"Said: {message}"
+
 
 # Initialize registry and systems
 registry = SpatialRegistry()
@@ -154,7 +157,8 @@ agent = Entity[
     Hearing(),
     AIDriven(model="llama3", update_interval=1),
     ExplorerTools(),
-    TextSystemPromptComponent(text="You are an explorer in a simulated world. Use your tools to move around and interact.")
+    TextSystemPromptComponent(
+        text="You are an explorer in a simulated world. Use your tools to move around and interact.")
 ](registry)
 
 # Create environment entity
@@ -164,12 +168,14 @@ landmark = Entity[
     Visible(description="A towering tree with glowing leaves")
 ](registry)
 
+
 # Main simulation loop
 async def simulation():
     for _ in range(20):  # Run for 20 cycles
         await movement_system.update()
         await ai_system.update()
         await asyncio.sleep(1)  # 1 second between updates
+
 
 # Run the simulation
 asyncio.run(simulation())

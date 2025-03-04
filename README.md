@@ -46,8 +46,8 @@ class HealthSystem(System):
 Extensions for spatial simulations including position, movement, vision and sound:
 
 ```python
-from relentity.spatial import SpatialRegistry
-from relentity.spatial.components import Position, Velocity, Vision, Visible
+from relentity.spatial import SpatialRegistry, Vision, Visible
+from relentity.spatial.components import Position, Velocity
 
 registry = SpatialRegistry()
 observer = Entity[
@@ -120,10 +120,11 @@ relentity_model_keep_alive=300.0
 
 ```python
 import asyncio
-from relentity.spatial import SpatialRegistry
+from relentity.spatial import SpatialRegistry, Vision, Visible
 from relentity.core import Entity, Identity
-from relentity.spatial.components import Position, Velocity, Vision, Visible
-from relentity.spatial.systems import MovementSystem, VisionSystem
+from relentity.spatial.components import Position, Velocity
+from relentity.spatial.systems import MovementSystem
+from relentity.spatial.sensory import VisionSystem
 from relentity.spatial.events import ENTITY_SEEN_EVENT_TYPE
 
 # Create registry and systems
@@ -145,11 +146,14 @@ target = Entity[
     Visible()
 ](registry)
 
+
 # Register event handlers
 async def on_entity_seen(event):
     print(f"Entity seen at ({event.position.x}, {event.position.y})")
 
+
 observer.event_bus.register_handler(ENTITY_SEEN_EVENT_TYPE, on_entity_seen)
+
 
 # Main simulation loop
 async def simulation():
@@ -157,6 +161,7 @@ async def simulation():
         await movement_system.update()
         await vision_system.update()
         await asyncio.sleep(0.1)  # 10 fps
+
 
 # Run the simulation
 asyncio.run(simulation())

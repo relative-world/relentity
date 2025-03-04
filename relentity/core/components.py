@@ -1,4 +1,4 @@
-from typing import TypeVar
+from typing import TypeVar, Set, Type, ClassVar
 from pydantic import BaseModel
 
 T = TypeVar("T", bound=BaseModel)
@@ -10,7 +10,8 @@ class Component(BaseModel):
     Inherits from Pydantic's BaseModel to provide data validation and serialization.
     """
 
-    pass
+    # Class variable for dependencies
+    dependencies: ClassVar[Set[Type["Component"]]] = set()
 
 
 class Identity(Component):

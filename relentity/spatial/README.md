@@ -43,7 +43,8 @@ entity = Entity[
 Enables entities to see other visible entities within a specified range.
 
 ```python
-from relentity.spatial.components import Vision, Visible
+
+from relentity.spatial import Vision, Visible
 
 # Entity that can see up to 100 units away
 observer = Entity[Position(x=0, y=0), Vision(max_range=100)](registry)
@@ -57,7 +58,8 @@ target = Entity[Position(x=50, y=50), Visible()](registry)
 Provides sound generation and reception capabilities.
 
 ```python
-from relentity.spatial.components import Audible, Hearing
+
+from relentity.spatial import Audible, Hearing
 
 # Entity that can make sounds
 speaker = Entity[Position(x=0, y=0), Audible(volume=50)](registry)
@@ -106,14 +108,17 @@ movement_system.max_speed = 5  # Override default max speed
 Generates events when entities "see" other visible entities within their vision range.
 
 ```python
-from relentity.spatial.systems import VisionSystem
+
+from relentity.spatial.sensory import VisionSystem
 
 # Create a vision system
 vision_system = VisionSystem(registry)
 
+
 # Handle vision events
 async def on_entity_seen(event):
     print(f"Entity seen at position ({event.position.x}, {event.position.y})")
+
 
 entity.event_bus.register_handler(ENTITY_SEEN_EVENT_TYPE, on_entity_seen)
 ```
@@ -123,14 +128,17 @@ entity.event_bus.register_handler(ENTITY_SEEN_EVENT_TYPE, on_entity_seen)
 Manages sound propagation between entities with Audible and Hearing components.
 
 ```python
-from relentity.spatial.systems import AudioSystem
+
+from relentity.spatial.sensory import AudioSystem
 
 # Create an audio system
 audio_system = AudioSystem(registry)
 
+
 # Handle sound events
 async def on_sound_heard(sound_event):
     print(f"Heard sound: {sound_event.sound}")
+
 
 entity.event_bus.register_handler(SOUND_HEARD_EVENT_TYPE, on_sound_heard)
 ```
@@ -157,8 +165,10 @@ entity.event_bus.register_handler(SOUND_HEARD_EVENT_TYPE, on_sound_heard)
 ```python
 import asyncio
 from relentity.spatial.registry import SpatialRegistry
-from relentity.spatial.systems import MovementSystem, VisionSystem, AudioSystem
-from relentity.spatial.components import Position, Velocity, Vision, Visible, Audible, Hearing
+from relentity.spatial.systems import MovementSystem
+from relentity.spatial.sensory import VisionSystem, AudioSystem
+from relentity.spatial.components import Position, Velocity
+from relentity.spatial import Vision, Visible, Audible, Hearing
 from relentity.core.entities import Entity
 
 # Create a spatial registry
@@ -184,6 +194,7 @@ target = Entity[
     Audible(volume=30)
 ](registry)
 
+
 # Register event handlers
 async def on_entity_seen(event):
     print(f"Entity seen at ({event.position.x}, {event.position.y})")
@@ -192,7 +203,9 @@ async def on_entity_seen(event):
     if audible:
         audible.queue_sound(SoundEvent(event.entity, "alert", "I see you!"))
 
+
 observer.event_bus.register_handler(ENTITY_SEEN_EVENT_TYPE, on_entity_seen)
+
 
 # Main simulation loop
 async def simulation():
@@ -201,6 +214,7 @@ async def simulation():
         await vision_system.update()
         await audio_system.update()
         await asyncio.sleep(0.1)  # 10 fps
+
 
 # Run the simulation
 asyncio.run(simulation())

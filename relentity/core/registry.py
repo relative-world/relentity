@@ -107,3 +107,6 @@ class Registry:
             return self.entities[entity_id]
         except KeyError:
             raise UnknownEntityError(entity_id)
+
+    def get_entity_ref(self, entity_id: uuid.UUID) -> EntityRef:
+        return EntityRef(entity_id=entity_id, _registry=self)

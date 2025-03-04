@@ -26,7 +26,7 @@ class SpatialRegistry(Registry):
         Yields:
             Entity: An entity within the specified distance that has the specified components.
         """
-        for entity in self.entities.values():
+        for entity in list(self.entities.values()):
             position = await entity.get_component(Position)
             if position:
                 dist = sqrt((position.x - centroid.x) ** 2 + (position.y - centroid.y) ** 2)

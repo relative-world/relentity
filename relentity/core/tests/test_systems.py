@@ -30,7 +30,7 @@ class CustomSystem(System):
         super().__init__(registry)
         self.updated = False
 
-    async def update(self):
+    async def update(self, delta_time: float = 0) -> None:
         self.updated = True
 
 

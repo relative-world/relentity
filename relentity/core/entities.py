@@ -13,6 +13,7 @@ from .metaclass import EntityMeta
 
 if TYPE_CHECKING:
     from .registry import Registry
+    from .entity_ref import EntityRef
 
 
 class Entity(metaclass=EntityMeta):
@@ -39,6 +40,10 @@ class Entity(metaclass=EntityMeta):
         self.event_bus = EventBus()
         # Emit creation event
         asyncio.create_task(self.event_bus.emit(ENTITY_CREATED_EVENT, self))
+
+    @property
+    def entity_ref(self) -> "EntityRef":
+        return self.registry.get_entity_ref(self.id)
 
     def add_component_sync(self, component: Component) -> None:
         """

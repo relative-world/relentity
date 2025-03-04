@@ -61,15 +61,47 @@ class AIDrivenSystem(System):
         """
         super().__init__(registry)
         self._client = PydanticOllamaClient(settings.base_url, settings.default_model)
+        self._processing_entities = set()
 
-    async def update(self):
+    async def update(self, delta_time: float = 0) -> None:
         """
-        Updates the system by processing all entities with the AIDriven component.
+        Updates the system by processing entities with the AIDriven component
+        that are not already being processed.
         """
-        tasks = []
-        async for entity in self.registry.entities_with_components(AIDriven):
-            tasks.append(self.process_entity(await entity.resolve()))
-        await asyncio.gather(*tasks)
+        async for entity_ref in self.registry.entities_with_components(AIDriven):
+            resolved_entity = await entity_ref.resolve()
+
+            # Skip if entity is already being processed
+            if resolved_entity.id in self._processing_entities:
+                continue
+
+            # Mark entity as being processed
+            self._processing_entities.add(resolved_entity.id)
+
+            # Create a task for processing the entity
+            task = asyncio.create_task(self.process_entity(resolved_entity))
+
+            # Set up a callback to handle task completion
+            task.add_done_callback(lambda t, entity_id=resolved_entity.id: self._handle_task_completion(t, entity_id))
+
+    def _handle_task_completion(self, task, entity_id):
+        """
+        Handles the completion of an entity processing task.
+
+        Args:
+            task (asyncio.Task): The completed task.
+            entity_id: The ID of the processed entity.
+        """
+        # Remove the entity from the processing set
+        self._processing_entities.discard(entity_id)
+
+        # Handle any exceptions that occurred during processing
+        if not task.cancelled():
+            try:
+                task.result()
+            except Exception as e:
+                # Log the exception (you may want to use a proper logger)
+                print(f"Error processing entity {entity_id}: {e}")
 
     async def process_entity(self, entity):
         """

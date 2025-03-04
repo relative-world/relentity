@@ -2,34 +2,28 @@
   "entities": [
     {
       "type": "Actor",
-      "name": "Dave",
-      "description": "A person that woke up in an endless field of grass in a virtual world. The summer's heat is oppressive and no clouds are visible in the afternoon sky.",
+      "name": "Jack",
+      "location": [50, 50],
+      "width": 30,
+      "color": [255, 0, 0],
+      "description": "A survivalist trying to establish order on the island.",
       "components": {
         "Identity": {
-          "name": "Dave",
-          "description": "A person that woke up in an endless field of grass in a virtual world. The summer's heat is oppressive and no clouds are visible in the afternoon sky. you have no ability to pick things up."
+          "name": "Jack",
+          "description": "A survivalist trying to establish order on the island."
         },
         "Position": {
-          "x": 0,
-          "y": 0
+          "x": 500,
+          "y": 500
         },
         "Velocity": {
           "vx": 0,
           "vy": 0,
-          "max_speed": 40
+          "max_speed": 30
         },
         "AIMovementController": {},
         "Vision": {
-          "max_range": 20
-        },
-        "Visible": {
-          "description": "Dave - A person that woke up in an endless field of grass in a virtual world. The summer's heat is oppressive and no clouds are visible in the afternoon sky."
-        },
-        "Audible": {
-          "volume": 50
-        },
-        "Hearing": {
-          "volume": 50
+          "max_range": 30
         },
         "AIDriven": {
           "model": "qwen2.5:14b",
@@ -39,34 +33,28 @@
     },
     {
       "type": "Actor",
-      "name": "Bill",
-        "description": "A person that woke up in an endless field of grass in a virtual world. The summer's heat is oppressive and no clouds are visible in the afternoon sky.",
+      "name": "Emily",
+      "location": [-20, 80],
+      "width": 30,
+      "color": [0, 255, 0],
+      "description": "A botanist looking for edible plants to survive.",
       "components": {
         "Identity": {
-          "name": "Bill",
-          "description": "A person that woke up in an endless field of grass in a virtual world. The summer's heat is oppressive and no clouds are visible in the afternoon sky. you have no ability to pick things up"
+          "name": "Emily",
+          "description": "A botanist looking for edible plants to survive."
         },
         "Position": {
-          "x": 0,
-          "y": 0
+          "x": -200,
+          "y": 400
         },
         "Velocity": {
           "vx": 0,
           "vy": 0,
-          "max_speed": 40
+          "max_speed": 30
         },
         "AIMovementController": {},
         "Vision": {
-          "max_range": 20
-        },
-        "Visible": {
-          "description": "Bill - A person that woke up in an endless field of grass in a virtual world. The summer's heat is oppressive and no clouds are visible in the afternoon sky."
-        },
-        "Audible": {
-          "volume": 50
-        },
-        "Hearing": {
-          "volume": 50
+          "max_range": 30
         },
         "AIDriven": {
           "model": "qwen2.5:14b",
@@ -75,115 +63,87 @@
       }
     },
     {
-      "type": "Ball",
+      "type": "Actor",
+      "name": "Tom",
+      "location": [100, -30],
+      "width": 30,
+      "color": [0, 0, 255],
+      "description": "An injured man hoping to be rescued.",
       "components": {
         "Identity": {
-          "name": "a ball",
-          "description": "A ball"
+          "name": "Tom",
+          "description": "An injured man hoping to be rescued."
         },
         "Position": {
-          "x": 0,
-          "y": 1
+          "x": 500,
+          "y": -300
         },
-        "Visible": {
-          "description": "A large red kickball, it's well inflated and says 'Spalding' on the side."
+        "Velocity": {
+          "vx": 0,
+          "vy": 0,
+          "max_speed": 10
         },
-        "Hearing": {}
-      }
-    },
-    {
-      "type": "Entity",
-      "components": {
-        "Identity": {
-          "name": "a tree",
-          "description": "A tree"
+        "AIMovementController": {},
+        "Vision": {
+          "max_range": 30
         },
-        "Position": {
-          "x": 205,
-          "y": 98
-        },
-        "Visible": {
-          "description": "A large oak tree, its branches are full of leaves."
+        "AIDriven": {
+          "model": "qwen2.5:14b",
+          "update_interval": 1
         }
       }
     },
     {
       "type": "Entity",
+      "width": 30,
+      "color": [34, 139, 34],
       "components": {
         "Identity": {
-          "name": "a flower",
-          "description": "A flower"
+          "name": "palm tree",
+          "description": "A tall palm tree with coconuts."
+        },
+        "Position": {
+          "x": -300,
+          "y": 200
+        },
+        "Visible": {
+          "description": "A tall palm tree with coconuts swaying in the breeze."
+        }
+      }
+    },
+    {
+      "type": "Entity",
+      "width": 30,
+      "color": [139, 69, 19],
+      "components": {
+        "Identity": {
+          "name": "driftwood",
+          "description": "A large piece of driftwood, useful for building a shelter."
         },
         "Position": {
           "x": 100,
-          "y": 98
+          "y": -50
         },
         "Visible": {
-          "description": "A small yellow flower, its petals are wilting."
+          "description": "A large, weathered piece of driftwood, perfect for making a shelter."
         }
       }
     },
     {
       "type": "Entity",
+      "width": 30,
+      "color": [255, 255, 0],
       "components": {
         "Identity": {
-          "name": "a note",
-          "description": "A note"
+          "name": "wild berries",
+          "description": "A small bush covered in edible berries."
         },
         "Position": {
-          "x": 2,
-          "y": 0
+          "x": -500,
+          "y": 60
         },
         "Visible": {
-          "description": "A scrap of paper with some writing on it. the writing says 'a secret awaits, seek the three clues to discover the answer and how to apply it.  The first clue is at (100, 100)'"
-        }
-      }
-    },
-    {
-      "type": "Entity",
-      "components": {
-        "Identity": {
-          "name": "a note",
-          "description": "A note"
-        },
-        "Position": {
-          "x": 100,
-          "y": 100
-        },
-        "Visible": {
-          "description": "The first part of the riddle: The answer is big and yellow. The next clue awaits you at (200, 100)"
-        }
-      }
-    },
-    {
-      "type": "Entity",
-      "components": {
-        "Identity": {
-          "name": "a note",
-          "description": "A note"
-        },
-        "Position": {
-          "x": 200,
-          "y": 100
-        },
-        "Visible": {
-          "description": "The second part of the riddle: the answer is hot. The final clue is at (300, 300)"
-        }
-      }
-    },
-    {
-      "type": "Entity",
-      "components": {
-        "Identity": {
-          "name": "a note",
-          "description": "A note"
-        },
-        "Position": {
-          "x": 300,
-          "y": 300
-        },
-        "Visible": {
-          "description": "The final clue: the answer must be spoken near the big red ball to reveal the door"
+          "description": "A wild bush covered in juicy, edible berries."
         }
       }
     }

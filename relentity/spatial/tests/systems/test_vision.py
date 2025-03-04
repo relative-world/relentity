@@ -3,9 +3,10 @@ from unittest.mock import AsyncMock
 
 from relentity.core.entities import Entity
 from relentity.spatial.registry import SpatialRegistry
-from relentity.spatial.components import Position, Velocity, Vision, Visible
+from relentity.spatial.components import Position, Velocity
 from relentity.spatial.events import EntitySeenEvent, ENTITY_SEEN_EVENT_TYPE
-from relentity.spatial.systems import VisionSystem
+from relentity.spatial.sensory.components import Vision, Visible
+from relentity.spatial.sensory.systems import VisionSystem
 
 
 @pytest.fixture

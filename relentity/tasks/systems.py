@@ -11,7 +11,7 @@ class TaskSystem(System):
         update: Processes tasks for entities, updating their progress and handling completion.
     """
 
-    async def update(self):
+    async def update(self, delta_time: float = 0) -> None:
         """
         Updates the system by processing all entities with Task components.
         Decrements the remaining cycles for each task and emits progress events.

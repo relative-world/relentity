@@ -5,7 +5,6 @@ from relentity.core import Entity, Component
 from relentity.spatial import (
     SpatialRegistry,
     MovementSystem,
-    VisionSystem,
     Vision,
     Velocity,
     Position,
@@ -13,6 +12,7 @@ from relentity.spatial import (
     ENTITY_SEEN_EVENT_TYPE,
     EntitySeenEvent,
 )
+from relentity.spatial.sensory import VisionSystem
 
 
 class Named(Component):

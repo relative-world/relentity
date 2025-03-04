@@ -1,20 +1,24 @@
 import pytest
+
 from relentity.ai.utils import pretty_name_entity, pretty_print_event
+from relentity.core import Entity
 from relentity.core import Identity, EntityRef
 from relentity.spatial import (
-    Visible,
     Velocity,
     Position,
-    ENTITY_SEEN_EVENT_TYPE,
     POSITION_UPDATED_EVENT_TYPE,
-    SOUND_HEARD_EVENT_TYPE,
-    SOUND_CREATED_EVENT_TYPE,
     SpatialRegistry,
 )
-from relentity.tasks.events import TASK_PROGRESS_EVENT_TYPE, TASK_COMPLETE_EVENT_TYPE, TASK_ABANDONED_EVENT_TYPE
-from relentity.core import Entity
-from relentity.spatial.events import EntitySeenEvent, SoundEvent
+from relentity.spatial.events import (
+    EntitySeenEvent,
+    SoundEvent,
+    ENTITY_SEEN_EVENT_TYPE,
+    SOUND_CREATED_EVENT_TYPE,
+    SOUND_HEARD_EVENT_TYPE,
+)
+from relentity.spatial.sensory.components import Visible
 from relentity.tasks.components import Task
+from relentity.tasks.events import TASK_PROGRESS_EVENT_TYPE, TASK_COMPLETE_EVENT_TYPE, TASK_ABANDONED_EVENT_TYPE
 
 
 @pytest.fixture
