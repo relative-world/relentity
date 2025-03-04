@@ -35,7 +35,7 @@ async def main():
         (0, 255, 255),  # Cyan
     ]
 
-    # Create 50 random entities
+    # Create 250 random entities
     for i in range(250):
         color = random.choice(colors)
         size = random.randint(5, 15)
@@ -84,7 +84,6 @@ async def main():
             await collision_system.update(delta_time)
             await movement_system.update(delta_time)
             await render_system.update(delta_time)
-            # Control frame rate
 
     finally:
         await render_system.shutdown()
