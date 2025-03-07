@@ -137,6 +137,12 @@
 <li class="toctree-l3"><a class="reference internal" href="#id5"><code class="docutils literal notranslate"><span class="pre">Velocity.vy</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#relentity.spatial.Located"><code class="docutils literal notranslate"><span class="pre">Located</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.Located.area"><code class="docutils literal notranslate"><span class="pre">Located.area</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.Located.model_config"><code class="docutils literal notranslate"><span class="pre">Located.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.Located.area_entity_ref"><code class="docutils literal notranslate"><span class="pre">Located.area_entity_ref</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#relentity.spatial.Area"><code class="docutils literal notranslate"><span class="pre">Area</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.Area.model_config"><code class="docutils literal notranslate"><span class="pre">Area.model_config</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#relentity.spatial.Area.model_post_init"><code class="docutils literal notranslate"><span class="pre">Area.model_post_init()</span></code></a></li>
@@ -930,6 +936,34 @@ Override in subclasses to handle resource cleanup.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id5">
 <span class="sig-name descname"><span class="pre">vy</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></em><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="relentity.spatial.Located">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">relentity.spatial.</span></span><span class="sig-name descname"><span class="pre">Located</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">area_entity_ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#relentity.core.EntityRef" title="relentity.core.entity_ref.EntityRef"><span class="pre">EntityRef</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/relentity/spatial/components.html#Located"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#relentity.spatial.Located" title="Link to this definition"></a></dt>
+<dd><p>Component representing the location of an entity within an area.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="relentity.spatial.Located.area">
+<span class="sig-name descname"><span class="pre">area</span></span><a class="headerlink" href="#relentity.spatial.Located.area" title="Link to this definition"></a></dt>
+<dd><p>The area the entity is located in.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#relentity.spatial.Area" title="relentity.spatial.Area">Area</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="relentity.spatial.Located.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#relentity.spatial.Located.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="relentity.spatial.Located.area_entity_ref">
+<span class="sig-name descname"><span class="pre">area_entity_ref</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#relentity.core.EntityRef" title="relentity.core.entity_ref.EntityRef"><span class="pre">EntityRef</span></a></em><a class="headerlink" href="#relentity.spatial.Located.area_entity_ref" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
