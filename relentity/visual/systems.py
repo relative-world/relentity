@@ -37,7 +37,7 @@ class RenderSystem(System):
         self.running = False
         self.camera_x = 0
         self.camera_y = 0
-        self.zoom = 1.0
+        self.zoom = 0.75
 
     async def initialize(self) -> None:
         """Initialize pygame and create the display window."""

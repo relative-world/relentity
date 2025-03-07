@@ -1,0 +1,112 @@
+{
+  "entities": [
+    {
+      "type": "Actor",
+      "name": "Logan",
+      "location": [30, 30],
+      "width": 30,
+      "color": [255, 100, 0],
+      "description": "Logan",
+      "components": {
+        "Identity": {
+          "name": "Logan",
+          "description": "Logan crouched near the firepit, rubbing his gloved hands together. He was the strategist of the group, always thinking ahead. It was his idea to take this route through the mountains, though none of them expected the storm to hit so suddenly. He had led them through worse, though, and he wasn’t about to let them freeze here."
+        },
+        "Position": {
+          "x": 500,
+          "y": 500
+        }
+      }
+    },
+    {
+      "type": "Actor",
+      "name": "Mira",
+      "location": [50, 70],
+      "width": 30,
+      "color": [0, 150, 255],
+      "description": "Mira",
+      "components": {
+        "Identity": {
+          "name": "Mira",
+          "description": "Mira stomped her boots into the frozen ground, trying to keep warm. She had a lighter, but the wind made it useless. 'We need cover from this wind,' she said, already gathering rocks and scraps of wood. Always the first to act, Mira knew that standing around talking wouldn’t get the fire started."
+        },
+        "Position": {
+          "x": -200,
+          "y": 400
+        }
+      }
+    },
+    {
+      "type": "Actor",
+      "name": "Owen",
+      "location": [100, 100],
+      "width": 30,
+      "color": [0, 200, 100],
+      "description": "Owen",
+      "components": {
+        "Identity": {
+          "name": "Owen",
+          "description": "Owen clutched his pack tightly, knowing he had something useful inside. Digging through it, he found a bundle of dry tinder he'd kept from their last camp. 'This should work, if we can keep it dry,' he said, holding it up. He had a habit of keeping odds and ends, and now it might just save them."
+        },
+        "Position": {
+          "x": 500,
+          "y": -300
+        }
+      }
+    },
+    {
+      "type": "Actor",
+      "name": "Sasha",
+      "location": [150, 150],
+      "width": 30,
+      "color": [200, 50, 50],
+      "description": "Sasha",
+      "components": {
+        "Identity": {
+          "name": "Sasha",
+          "description": "Sasha was shivering but determined. She knew friction fires from survival training, and while she hated doing it, she had no choice. 'If that lighter won’t work, we’re making a bow drill,' she said, already grabbing a sturdy branch and some paracord."
+        },
+        "Position": {
+          "x": -100,
+          "y": -400
+        }
+      }
+    },
+    {
+      "type": "Actor",
+      "name": "Elias",
+      "location": [180, 180],
+      "width": 30,
+      "color": [100, 100, 255],
+      "description": "Elias",
+      "components": {
+        "Identity": {
+          "name": "Elias",
+          "description": "Elias was pacing, keeping watch for any more signs of snowfall. 'We don’t have long,' he said, scanning the treeline. He’d always been the cautious one, keeping them safe from the elements and unexpected dangers. If they didn’t get the fire going soon, he feared some of them wouldn’t make it through the night."
+        },
+        "Position": {
+          "x": 400,
+          "y": 0
+        }
+      }
+    },
+    {
+      "type": "Actor",
+      "name": "Nia",
+      "location": [200, 200],
+      "width": 30,
+      "color": [150, 75, 0],
+      "description": "Nia",
+      "components": {
+        "Identity": {
+          "name": "Nia",
+          "description": "Nia was the quiet one, but she was always thinking. As the others scrambled, she knelt down near the firepit and started forming a windbreak with logs and packed snow. She didn’t need to say much—her actions spoke for themselves. If they were going to light this fire, they needed a foundation first."
+        },
+        "Position": {
+          "x": -300,
+          "y": 300
+        }
+      }
+    }
+  ]
+}

@@ -13,11 +13,11 @@ from relentity.ai import (
     AI_RESPONSE_EVENT_TYPE,
     AIDrivenSystem,
 )
-from relentity.ai.components import AIDriven, ToolEnabledComponent
+from relentity.ai.components import AIDriven, ToolEnabledComponent, SystemPromptRenderableComponent
 from relentity.ai.pydantic_ollama.tools import tool
+from relentity.ai.systems import EmotiveResponse
 from relentity.ai.utils import pretty_name_entity, pretty_print_event
 from relentity.core import Component, Entity, Identity, System
-from relentity.core.entities import attach_components_sync
 from relentity.spatial import Position, Area
 from relentity.spatial import (
     Velocity,
@@ -74,6 +74,26 @@ class AIMovementController(ToolEnabledComponent):
         return f"Moving to coordinates ({x}, {y})"
 
 
+class GoalTrackingController(SystemPromptRenderableComponent, ToolEnabledComponent):
+    goal_stack: list[str] = []
+
+    async def render_system_prompt(self) -> str:
+        print(f">>> Current goals (priority order): {', '.join(self.goal_stack[:5])}")
+        return f"Current short term goals (priority order): {', '.join(self.goal_stack[:5])}"
+
+    @tool
+    async def add_task_to_tracker(self, actor, goal: str) -> str:
+        """Add a task you wish to track.  Surfaced on every evaluation cycle.  If one is not currently set, set one."""
+        await actor.emit("goal.added", goal=goal)
+        self.goal_stack.append(goal)
+
+    @tool
+    async def mark_current_task_done(self, actor):
+        goal = self.goal_stack[-1]
+        await actor.emit("goal.complete", goal=goal)
+        self.goal_stack = self.goal_stack[:-1]
+
+
 class MovementTaskSystem(System):
     async def update(self, delta_time: float = 0) -> None:
         async for entity_ref in self.registry.entities_with_components(MovementTask, Position, Velocity):
@@ -115,7 +135,7 @@ class Actor(TaskedEntity):
         *args,
         location=None,
         private_info=None,
-        model="qwen2.5:14b",
+        model="qwen2.5:1.5b",
         **kwargs,
     ):
         super().__init__(registry, *args, **kwargs)
@@ -128,8 +148,8 @@ class Actor(TaskedEntity):
             AIMovementController(),
             Vision(max_range=1000),
             Visible(description=f"{name} - {description}"),
-            Audible(volume=1000),
-            Hearing(volume=1000),
+            Audible(volume=150),
+            Hearing(volume=150),
             AIDriven(model=model, update_interval=1),
             RenderableShape(shape_type=ShapeType.CIRCLE, radius=width // 2),
             RenderableColor(r=color[0], g=color[1], b=color[2]),
@@ -144,6 +164,10 @@ class Actor(TaskedEntity):
         self.event_bus.register_handler(ENTITY_SEEN_EVENT_TYPE, self.on_entity_seen)
         self.event_bus.register_handler(SOUND_HEARD_EVENT_TYPE, self.on_sound_heard_event)
         self.event_bus.register_handler(SOUND_CREATED_EVENT_TYPE, self.on_sound_created_event)
+        self.event_bus.register_handler("goal.added", self.on_goal_added)
+        self.event_bus.register_handler("goal.complete", self.on_goal_complete)
+        self.event_bus.register_handler(AREA_ENTERED_EVENT_TYPE, self.on_area_entered)
+        self.event_bus.register_handler(AREA_EXITED_EVENT_TYPE, self.on_area_exited)
 
     async def on_entity_seen(self, event):
         if event.entity_ref.entity_id is self.id:
@@ -151,10 +175,12 @@ class Actor(TaskedEntity):
         ai_driven = await self.get_component(AIDriven)
         await ai_driven.add_event_for_consideration(ENTITY_SEEN_EVENT_TYPE, event, hash_key=event.entity_ref.entity_id)
 
-    async def on_ai_response(self, response):
+    async def on_ai_response(self, response: EmotiveResponse):
         audio = await self.get_component(Audible)
-        sound_event = SoundEvent(self.entity_ref, "speech", response.text)
-        audio.queue_sound(sound_event)
+        print(response)
+        if response.speech:
+            sound_event = SoundEvent(self.entity_ref, "speech", response.speech)
+            audio.queue_sound(sound_event)
 
     async def on_sound_heard_event(self, sound_event):
         ai_driven = await self.get_component(AIDriven)
@@ -173,26 +199,17 @@ class Actor(TaskedEntity):
         await self.add_component(speech_bubble)
         await ai_driven.add_event_for_consideration(SOUND_CREATED_EVENT_TYPE, sound_event)
 
+    async def on_goal_added(self, event):
+        print("added", event)
 
-class Ball(Entity):
-    def __init__(self, registry, *args, **kwargs):
-        super().__init__(registry, *args, **kwargs)
-        attach_components_sync(
-            self,
-            Identity(name="a ball", description="A ball"),
-            Position(x=0, y=1),
-            Visible(description="A large red kickball, it's well inflated and says 'Spalding' on the side."),
-            Hearing(),
-        )
-        self.event_bus.register_handler(SOUND_HEARD_EVENT_TYPE, self.on_sound_heard_event)
+    async def on_goal_complete(self, event):
+        print("completed", event)
 
-    async def on_sound_heard_event(self, sound_event):
-        if "the sun" in sound_event.sound.lower():
-            Entity[
-                Identity(name="a mysterious door", description="A mysterious door"),
-                Position(x=10, y=0),
-                Visible(description="A mysterious door"),
-            ](self.registry)
+    async def on_area_entered(self, event):
+        print(self, "entered", event)
+
+    async def on_area_exited(self, event):
+        print(self, "exited", event)
 
 
 class FireTools(ToolEnabledComponent):
@@ -201,6 +218,7 @@ class FireTools(ToolEnabledComponent):
         """Light the fire in the fire pit"""
         fire_pit = await self._fire_pit_ref.resolve()
         fire_pit_component = await fire_pit.get_component(FirePit)
+        visible_component = await fire_pit.get_component(Visible)
 
         if fire_pit_component.is_lit:
             return "The fire is already lit."
@@ -211,11 +229,7 @@ class FireTools(ToolEnabledComponent):
         visual = await fire_pit.get_component(RenderableColor)
         visual.r, visual.g, visual.b = 255, 100, 0  # Orange-red glow
 
-        # Create sound effect
-        audible = await fire_pit.get_component(Audible)
-        from relentity.spatial.events import SoundEvent
-
-        audible.queue_sound(SoundEvent(fire_pit.entity_ref, "ambient", "The fire crackles as it burns."))
+        visible_component.description = "A roaring fire in a fire pit, providing warmth and light."
 
         return "You've lit the fire. The flames crackle and provide warmth."
 
@@ -224,6 +238,7 @@ class FireTools(ToolEnabledComponent):
         """Put out the fire in the fire pit"""
         fire_pit = await self._fire_pit_ref.resolve()
         fire_pit_component = await fire_pit.get_component(FirePit)
+        visible_component = await fire_pit.get_component(Visible)
 
         if not fire_pit_component.is_lit:
             return "The fire is already out."
@@ -234,11 +249,9 @@ class FireTools(ToolEnabledComponent):
         visual = await fire_pit.get_component(RenderableColor)
         visual.r, visual.g, visual.b = 50, 50, 50  # Dark gray
 
-        # Create sound effect
-        audible = await fire_pit.get_component(Audible)
-        from relentity.spatial.events import SoundEvent
-
-        audible.queue_sound(SoundEvent(fire_pit.entity_ref, "ambient", "The fire hisses as it goes out."))
+        visible_component.description = (
+            "A well stocked firepit, ready to make a fire.  Wood and fire starting materials are already here."
+        )
 
         return "You've extinguished the fire."
 
@@ -250,7 +263,6 @@ class FirePit(Component):
 
     async def handle_area_entered(self, event: AreaEvent):
         entity = await event.entity_ref.resolve()
-        print("Fire pit area entered by", entity)
 
         # Check if the entity is AI-driven
         ai_driven = await entity.get_component(AIDriven)
@@ -263,15 +275,8 @@ class FirePit(Component):
             # Update the AI's extra_tools dictionary
             ai_driven.extra_tools.update(fire_tools._tools)
 
-            # Notify the AI
-            status = "lit" if self.is_lit else "unlit"
-            await ai_driven.add_event_for_consideration(
-                "environment.feature", f"You've entered a fire pit area. The fire is currently {status}."
-            )
-
     async def handle_area_exited(self, event: AreaEvent):
         entity = await event.entity_ref.resolve()
-        print("Fire pit area entered by", entity)
 
         # Check if the entity is AI-driven
         ai_driven = await entity.get_component(AIDriven)
@@ -284,10 +289,6 @@ class FirePit(Component):
 
             await entity.remove_component(FireTools)
 
-            await ai_driven.add_event_for_consideration(
-                "environment.feature", "You've left the fire pit area and can no longer interact with the fire."
-            )
-
 
 async def create_fire_pit(registry, x=0, y=0, radius=50):
     """Create a fire pit entity that provides fire tools to AI entities"""
@@ -295,7 +296,7 @@ async def create_fire_pit(registry, x=0, y=0, radius=50):
     buffered_radius = radius + 50
     fire_pit = Entity[
         Identity(
-            name="Fire Pit",
+            name="The Fire Pit",
             description="A well stocked firepit, ready to make a fire.  A great place to make camp.  Wood and fire starting materials are already here.",
         ),
         Position(x=x, y=y),
@@ -332,7 +333,6 @@ async def create_entity(entity_data, registry):
 
     if entity_type == "Actor":
         location = entity_data.get("location")
-        print(location)
 
         entity = Actor(
             registry,
@@ -342,9 +342,6 @@ async def create_entity(entity_data, registry):
             entity_data["color"],
             location=location,
         )
-
-    elif entity_type == "Ball":
-        entity = Ball(registry)
     else:
         entity = Entity(registry)
 
@@ -374,7 +371,7 @@ def get_world_data(world_filename):
 
 
 async def main():
-    world_filename = "world.json"
+    world_filename = "survivors.json"
     registry = SpatialRegistry()
     config_data = get_world_data(world_filename)
 

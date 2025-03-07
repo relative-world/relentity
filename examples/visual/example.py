@@ -18,9 +18,12 @@ async def main():
     registry = SpatialRegistry()
 
     # Create systems
-    movement_system = MovementSystem(registry, max_speed=300)
+    movement_system = MovementSystem(registry, max_speed=500)
     render_system = RenderSystem(registry, width=800, height=800, title="Bouncing Balls Simulation")
     collision_system = CollisionSystem(registry)
+
+    # boundary walls
+    boundary_size = 400
 
     # Initialize renderer
     await render_system.initialize()
@@ -35,15 +38,21 @@ async def main():
         (0, 255, 255),  # Cyan
     ]
 
+    v_const = 500
+    num_balls = 100
+
     # Create 250 random entities
-    for i in range(250):
+    for i in range(num_balls):
         color = random.choice(colors)
         size = random.randint(5, 15)
 
         Entity[
             Identity(name=f"Ball-{i}", description="A ball"),
-            Position(x=random.uniform(-300, 300), y=random.uniform(-300, 300)),
-            Velocity(vx=random.uniform(-200, 200), vy=random.uniform(-200, 200)),
+            Position(
+                x=random.uniform(-boundary_size + 1, boundary_size - 1),
+                y=random.uniform(-boundary_size + 1, boundary_size - 1),
+            ),
+            Velocity(vx=random.uniform(-v_const, v_const), vy=random.uniform(-v_const, v_const)),
             ShapeBody(
                 shape_type=BodyShapeType.CIRCLE,
                 radius=size,
@@ -52,9 +61,6 @@ async def main():
             RenderableColor(r=color[0], g=color[1], b=color[2]),
             RenderLayer(layer=0),
         ](registry)
-
-    # Add boundary walls
-    boundary_size = 400
 
     # Create the game loop
     last_time = pygame.time.get_ticks()
@@ -84,6 +90,10 @@ async def main():
             await collision_system.update(delta_time)
             await movement_system.update(delta_time)
             await render_system.update(delta_time)
+
+            sleep_time = (1 / 60) - delta_time
+            if sleep_time > 0:
+                await asyncio.sleep(sleep_time)
 
     finally:
         await render_system.shutdown()

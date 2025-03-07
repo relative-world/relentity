@@ -1,0 +1,20 @@
+{
+  "entities": [
+    {
+      "type": "Actor",
+      "name": "Vexil Thorn",
+      "description": "A lanky, red-skinned tiefling with curling black horns and piercing yellow eyes. Vexil is a fast-talking rogue with a sharp wit and a love for elaborate cons.",
+      "location": [100, 0],
+      "width": 30,
+      "color": [180, 0, 0]
+    },
+    {
+      "type": "Actor",
+      "name": "Etta Wren",
+      "description": "A stocky, gray-haired woman with warm brown eyes and a perpetual smirk. Etta is a retired airship captain who now runs a small but thriving black-market trading post.",
+      "location": [0, -100],
+      "width": 30,
+      "color": [0, 0, 255]
+    }
+  ]
+}

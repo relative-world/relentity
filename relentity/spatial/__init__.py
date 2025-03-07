@@ -1,4 +1,4 @@
-from .components import Position, Velocity, Area
+from .components import Position, Velocity, Area, Located
 from .systems import MovementSystem
 from .registry import SpatialRegistry
 from .events import (
@@ -8,6 +8,7 @@ from .events import (
 __all__ = [
     "Position",
     "Velocity",
+    "Located",
     "Area",
     "MovementSystem",
     "SpatialRegistry",

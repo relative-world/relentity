@@ -1,0 +1,94 @@
+{
+  "entities": [
+    {
+      "type": "Actor",
+      "name": "Logan",
+      "location": [90, 150],
+      "width": 30,
+      "color": [255, 100, 0],
+      "description": "Logan",
+      "components": {
+        "Identity": {
+          "name": "Logan",
+          "description": "Logan crouched near the firepit, rubbing his gloved hands together. He was the strategist of the group, always thinking ahead. It was his idea to take this route through the mountains, though none of them expected the storm to hit so suddenly. He had led them through worse, though, and he wasn’t about to let them freeze here."
+        },
+        "Position": {
+          "x": 90,
+          "y": 150
+        }
+      }
+    },
+    {
+      "type": "Actor",
+      "name": "Mia",
+      "location": [40, 30],
+      "width": 30,
+      "color": [0, 150, 255],
+      "description": "Mia",
+      "components": {
+        "Identity": {
+          "name": "Mia",
+          "description": "Mia sat on a log, her flashlight gripped tightly in her hands. She was the group's skeptic, always questioning, always wary. But tonight, the forest felt different, alive with an unnatural presence. She had known Logan since college and trusted his instincts—but something in the trees made her question everything."
+        },
+        "Position": {
+          "x": 40,
+          "y": 130
+        }
+      }
+    },
+    {
+      "type": "Actor",
+      "name": "Derek",
+      "location": [50, 30],
+      "width": 30,
+      "color": [0, 255, 100],
+      "description": "Derek",
+      "components": {
+        "Identity": {
+          "name": "Derek",
+          "description": "Derek leaned against a tree, trying to suppress the growing unease in his gut. He was the muscle of the group, the one who laughed off danger—until now. The howl that cut through the night sent ice through his veins. He knew stories about these woods, but he never believed them. He was about to learn how wrong he was."
+        },
+        "Position": {
+          "x": -150,
+          "y": -30
+        }
+      }
+    },
+    {
+      "type": "Actor",
+      "name": "Sophia",
+      "location": [60, 30],
+      "width": 30,
+      "color": [200, 0, 200],
+      "description": "Sophia",
+      "components": {
+        "Identity": {
+          "name": "Sophia",
+          "description": "Sophia knelt by the fire, her fingers tracing symbols in the dirt. She had studied folklore for years, half out of curiosity, half out of a sense that there was more to the world than people saw. The moment she heard the snarl from the darkness, she knew—this was no ordinary predator. They were being hunted."
+        },
+        "Position": {
+          "x": -60,
+          "y": 30
+        }
+      }
+    },
+    {
+      "type": "Actor",
+      "name": "The Werewolf",
+      "location": [70, 30],
+      "width": 50,
+      "color": [50, 50, 50],
+      "description": "The Werewolf",
+      "components": {
+        "Identity": {
+          "name": "The Werewolf",
+          "description": "It stood at the edge of the firelight, yellow eyes gleaming with pure hatred. This was no mindless beast—it remembered, it resented. Long ago, it had been human, but that was a past long buried under fur and fury. The sight of the four campers awoke something deep within—a hunger for vengeance, for blood, for an end to the loneliness of the curse."
+        },
+        "Position": {
+          "x": 70,
+          "y": -30
+        }
+      }
+    }
+  ]
+}

@@ -43,9 +43,9 @@ async def pretty_print_event(event_type: str, data, past_tense=False):
         position = data.position
         velocity = data.velocity
         if past_tense:
-            result = f"You last saw {entity_name} at ({position.x}, {position.y}) - ({description})"
+            result = f'You last saw "{entity_name}" at ({position.x}, {position.y}) - ({description})'
         else:
-            result = f"You see {entity_name} is at ({position.x}, {position.y}) - ({description})"
+            result = f'You see "{entity_name}" at ({position.x}, {position.y}) - ({description})'
         if velocity is not None:
             result += f" moving at velocity ({velocity.vx}, {velocity.vy})"
         return result

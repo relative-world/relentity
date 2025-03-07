@@ -1,5 +1,7 @@
 import asyncio
 
+from pydantic import BaseModel
+
 from relentity.ai.components import (
     AIDriven,
     ToolEnabledComponent,
@@ -8,11 +10,17 @@ from relentity.ai.components import (
 )
 from relentity.ai.events import AI_RESPONSE_EVENT_TYPE
 from relentity.ai.pydantic_ollama.client import PydanticOllamaClient
-from relentity.ai.pydantic_ollama.responses import BasicResponse
 from relentity.ai.pydantic_ollama.tools import wrap_with_actor
+from relentity.ai.utils import pretty_name_entity
 from relentity.core import Registry, System, Identity
 from relentity.settings import settings
-from relentity.spatial import Position, Velocity
+from relentity.spatial import Position, Velocity, Located
+
+
+class EmotiveResponse(BaseModel):
+    emotion: str | None = None
+    speech: str | None = None
+    thought: str | None = None
 
 
 async def render_basic_information(entity, component_types):
@@ -32,12 +40,18 @@ async def render_basic_information(entity, component_types):
         if not component:
             continue
 
-        if component_type == Identity:
-            info.append(f"Name: {component.name}\nDescription: {component.description}")
+        if component_type == Located:
+            area_entity = await component.area_entity_ref.resolve()
+            area_name = await pretty_name_entity(area_entity)
+            info.append(f"Currently located at: {area_name}")
+        elif component_type == Identity:
+            info.append(
+                f'Your characters name is "{component.name}"\nThis is a description of your character: {component.description}'
+            )
         elif component_type == Position:
-            info.append(f"Position: ({component.x}, {component.y})")
+            info.append(f"Position: ({component.x:.2f}, {component.y:.2f})")
         elif component_type == Velocity:
-            info.append(f"Velocity: ({component.vx}, {component.vy})")
+            info.append(f"Velocity: ({component.vx:.2f}, {component.vy:.2f})")
         else:
             info.append(f"{component_type.__name__}: {component}")
 
@@ -120,7 +134,7 @@ class AIDrivenSystem(System):
         prompt = []
         tools = ai_driven_component.extra_tools
 
-        component_types = [Identity, Position, Velocity]
+        component_types = [Identity, Position, Velocity, Located]
         system_prompt.append(await render_basic_information(entity, component_types))
         for component_type, component in entity.components.items():
             if issubclass(component_type, ToolEnabledComponent):
@@ -135,13 +149,16 @@ class AIDrivenSystem(System):
 
         prompt_str = "\n".join(prompt) or "<No input this round>"
         system_prompt_str = "\n".join(system_prompt)
+        print("\n" + prompt_str)
+        print("=" * 80)
+        print(system_prompt_str + "\n")
 
         tools = {k: v.copy(update={"_callable": wrap_with_actor(v._callable, actor=entity)}) for k, v in tools.items()}
 
         _, response = await self._client.generate(
             prompt=prompt_str,
             system=system_prompt_str,
-            response_model=BasicResponse,
+            response_model=EmotiveResponse,
             tools=tools,
         )
         if tools:

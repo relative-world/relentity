@@ -1,0 +1,329 @@
+{
+  "entities": [
+    {
+      "type": "Actor",
+      "name": "Alex",
+      "location": [
+        50,
+        50
+      ],
+      "width": 30,
+      "color": [
+        255,
+        0,
+        0
+      ],
+      "description": "Alex",
+      "components": {
+        "Identity": {
+          "name": "Alex",
+          "description": "Alex stood near the speakers, bobbing his head to the beat. He had been the one to organize the party, ensuring everything was perfect. With a drink in one hand and a wide grin, he watched as his friends enjoyed themselves."
+        },
+        "Position": {
+          "x": 200,
+          "y": 200
+        }
+      }
+    },
+    {
+      "type": "Actor",
+      "name": "Bailey",
+      "location": [
+        80,
+        60
+      ],
+      "width": 30,
+      "color": [
+        0,
+        255,
+        0
+      ],
+      "description": "Bailey",
+      "components": {
+        "Identity": {
+          "name": "Bailey",
+          "description": "Bailey was mixing drinks behind the counter, showing off their bartending skills. They laughed as they flipped a bottle mid-air, catching it smoothly. 'Who wants a signature cocktail?' they called."
+        },
+        "Position": {
+          "x": 300,
+          "y": 100
+        }
+      }
+    },
+    {
+      "type": "Actor",
+      "name": "Charlie",
+      "location": [
+        120,
+        80
+      ],
+      "width": 30,
+      "color": [
+        0,
+        0,
+        255
+      ],
+      "description": "Charlie",
+      "components": {
+        "Identity": {
+          "name": "Charlie",
+          "description": "Charlie was on the dance floor, spinning and moving effortlessly. They had a natural rhythm, encouraging others to join in. 'Come on, don’t just stand there!' they cheered, pulling a hesitant friend into the crowd."
+        },
+        "Position": {
+          "x": 400,
+          "y": 300
+        }
+      }
+    },
+    {
+      "type": "Actor",
+      "name": "Dani",
+      "location": [
+        140,
+        100
+      ],
+      "width": 30,
+      "color": [
+        255,
+        255,
+        0
+      ],
+      "description": "Dani",
+      "components": {
+        "Identity": {
+          "name": "Dani",
+          "description": "Dani lounged on a couch, engaged in deep conversation about philosophy. 'It’s all about perception,' they mused, sipping a drink as their audience nodded thoughtfully."
+        },
+        "Position": {
+          "x": 500,
+          "y": 250
+        }
+      }
+    },
+    {
+      "type": "Actor",
+      "name": "Elliot",
+      "location": [
+        160,
+        120
+      ],
+      "width": 30,
+      "color": [
+        255,
+        165,
+        0
+      ],
+      "description": "Elliot",
+      "components": {
+        "Identity": {
+          "name": "Elliot",
+          "description": "Elliot was outside near the bonfire, strumming a guitar. Their music drew a small crowd, people singing along and swaying to the melody. The flickering flames added warmth to the chilly night."
+        },
+        "Position": {
+          "x": 600,
+          "y": 400
+        }
+      }
+    },
+    {
+      "type": "Actor",
+      "name": "Felix",
+      "location": [
+        180,
+        140
+      ],
+      "width": 30,
+      "color": [
+        128,
+        0,
+        128
+      ],
+      "description": "Felix",
+      "components": {
+        "Identity": {
+          "name": "Felix",
+          "description": "Felix was at the snack table, piling a plate high with chips and salsa. 'You guys need to eat something!' they called, always looking out for their friends."
+        },
+        "Position": {
+          "x": 700,
+          "y": 350
+        }
+      }
+    },
+    {
+      "type": "Actor",
+      "name": "G",
+      "location": [
+        10,
+        20
+      ],
+      "width": 30,
+      "color": [
+        255,
+        200,
+        0
+      ],
+      "description": "G",
+      "components": {
+        "Identity": {
+          "name": "G",
+          "description": "G stood near the snack table, absentmindedly stirring a drink with a straw. Always the observer, G preferred to watch the social dynamics unfold rather than dive in headfirst. They were here because Alex was an old friend, but large gatherings weren’t really their scene."
+        },
+        "Position": {
+          "x": 200,
+          "y": 100
+        }
+      }
+    },
+    {
+      "type": "Actor",
+      "name": "H",
+      "location": [
+        50,
+        80
+      ],
+      "width": 30,
+      "color": [
+        0,
+        150,
+        255
+      ],
+      "description": "H",
+      "components": {
+        "Identity": {
+          "name": "H",
+          "description": "H was deep in conversation near the fireplace, gesturing wildly as they told a story. Charismatic and full of energy, they always managed to be at the center of attention. Tonight was no exception."
+        },
+        "Position": {
+          "x": -150,
+          "y": 300
+        }
+      }
+    },
+    {
+      "type": "Actor",
+      "name": "I",
+      "location": [
+        100,
+        120
+      ],
+      "width": 30,
+      "color": [
+        100,
+        255,
+        100
+      ],
+      "description": "I",
+      "components": {
+        "Identity": {
+          "name": "I",
+          "description": "I lounged on the couch with a drink in hand, listening more than speaking. A skilled listener, they had a way of making people feel like they were the only one in the room. They were waiting for the right moment to contribute to the conversation."
+        },
+        "Position": {
+          "x": 350,
+          "y": -200
+        }
+      }
+    },
+    {
+      "type": "Actor",
+      "name": "J",
+      "location": [
+        130,
+        150
+      ],
+      "width": 30,
+      "color": [
+        200,
+        50,
+        150
+      ],
+      "description": "J",
+      "components": {
+        "Identity": {
+          "name": "J",
+          "description": "J was in the kitchen, expertly mixing cocktails. They took pride in their bartending skills, and parties were their stage. Every time someone took a sip of one of their drinks and smiled, J considered it a personal victory."
+        },
+        "Position": {
+          "x": -50,
+          "y": -100
+        }
+      }
+    },
+    {
+      "type": "Actor",
+      "name": "K",
+      "location": [
+        160,
+        180
+      ],
+      "width": 30,
+      "color": [
+        50,
+        200,
+        200
+      ],
+      "description": "K",
+      "components": {
+        "Identity": {
+          "name": "K",
+          "description": "K stood awkwardly by the doorway, debating whether to leave or stay. They never quite felt comfortable at parties, but they promised Alex they’d show up. Now, they just needed to find a reason to stay a little longer."
+        },
+        "Position": {
+          "x": 400,
+          "y": 50
+        }
+      }
+    },
+    {
+      "type": "Actor",
+      "name": "Y",
+      "location": [
+        200,
+        220
+      ],
+      "width": 30,
+      "color": [
+        100,
+        75,
+        150
+      ],
+      "description": "Y",
+      "components": {
+        "Identity": {
+          "name": "Y",
+          "description": "Y was the life of the dance floor, moving with an effortless rhythm. They didn’t care who was watching or what anyone thought—they just loved to dance. As the music changed, Y adjusted their steps without missing a beat."
+        },
+        "Position": {
+          "x": -250,
+          "y": 250
+        }
+      }
+    },
+    {
+      "type": "Actor",
+      "name": "Zara",
+      "location": [
+        260,
+        220
+      ],
+      "width": 30,
+      "color": [
+        75,
+        0,
+        130
+      ],
+      "description": "Zara",
+      "components": {
+        "Identity": {
+          "name": "Zara",
+          "description": "Zara was in the corner sketching the scene, capturing the energy of the party with quick, expressive lines. 'This is going to be a masterpiece,' they murmured."
+        },
+        "Position": {
+          "x": 1000,
+          "y": 500
+        }
+      }
+    }
+  ]
+}
