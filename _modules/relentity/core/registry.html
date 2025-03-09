@@ -204,6 +204,13 @@
 <a class="viewcode-back" href="../../../api.html#relentity.core.Registry.get_entity_ref">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_entity_ref</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity_id</span><span class="p">:</span> <span class="n">uuid</span><span class="o">.</span><span class="n">UUID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EntityRef</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">EntityRef</span><span class="p">(</span><span class="n">entity_id</span><span class="o">=</span><span class="n">entity_id</span><span class="p">,</span> <span class="n">_registry</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Registry.remove_entity">
+<a class="viewcode-back" href="../../../api.html#relentity.core.Registry.remove_entity">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">remove_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity_id</span><span class="p">:</span> <span class="n">uuid</span><span class="o">.</span><span class="n">UUID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove an entity completely from the registry.&quot;&quot;&quot;</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">unregister_entity</span><span class="p">(</span><span class="n">entity_id</span><span class="p">)</span></div>
 </div>
 
 </pre></div>

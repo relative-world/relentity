@@ -191,11 +191,7 @@
 
         <span class="c1"># Handle any exceptions that occurred during processing</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">task</span><span class="o">.</span><span class="n">cancelled</span><span class="p">():</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">task</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
-            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                <span class="c1"># Log the exception (you may want to use a proper logger)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error processing entity </span><span class="si">{</span><span class="n">entity_id</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">task</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
 
 <div class="viewcode-block" id="AIDrivenSystem.process_entity">
 <a class="viewcode-back" href="../../../api.html#relentity.ai.AIDrivenSystem.process_entity">[docs]</a>
@@ -243,10 +239,13 @@
             <span class="n">response_model</span><span class="o">=</span><span class="n">EmotiveResponse</span><span class="p">,</span>
             <span class="n">tools</span><span class="o">=</span><span class="n">tools</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="k">if</span> <span class="n">tools</span><span class="p">:</span>
-            <span class="n">response</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">response</span>
+        <span class="c1"># if tools:</span>
+        <span class="c1">#     response = response.response</span>
         <span class="k">if</span> <span class="n">response</span><span class="p">:</span>
-            <span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">event_bus</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">AI_RESPONSE_EVENT_TYPE</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">entity</span><span class="o">.</span><span class="n">event_bus</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span>
+                <span class="n">AI_RESPONSE_EVENT_TYPE</span><span class="p">,</span>
+                <span class="n">response</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="k">return</span> <span class="n">response</span></div>
 </div>
 
