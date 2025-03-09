@@ -1,4 +1,4 @@
-from typing import Generic, TypeVar
+from typing import Generic, TypeVar, Any
 
 from pydantic import BaseModel
 
@@ -15,3 +15,9 @@ DataT = TypeVar("DataT")
 class TooledResponse(BaseModel, Generic[DataT]):
     response: DataT | None = None
     tool_call: ToolCallRequest | None = None
+
+
+class ResolvedTooledResponse(BaseModel, Generic[DataT]):
+    response: DataT | None = None
+    tool_call: ToolCallRequest | None = None
+    tool_call_result: Any = None

@@ -31,9 +31,11 @@ from relentity.spatial.events import (
     SOUND_CREATED_EVENT_TYPE,
     SoundEvent,
 )
-from relentity.spatial.sensory.components import Visible, Audible
-from relentity.spatial.sensory.components import Vision, Hearing
-from relentity.spatial.sensory.systems import VisionSystem, AudioSystem
+from relentity.spatial.sound import Audible
+from relentity.spatial.sound import Hearing
+from relentity.spatial.vision import Vision, Visible
+from relentity.spatial.sound import AudioSystem
+from relentity.spatial.vision import VisionSystem
 from relentity.spatial.systems import LocationSystem
 from relentity.tasks import Task, TaskedEntity
 from relentity.visual.components import RenderableColor, RenderableShape, ShapeType, RenderLayer
@@ -135,7 +137,7 @@ class Actor(TaskedEntity):
         *args,
         location=None,
         private_info=None,
-        model="qwen2.5:1.5b",
+        model="qwen2.5-coder:32b",
         **kwargs,
     ):
         super().__init__(registry, *args, **kwargs)

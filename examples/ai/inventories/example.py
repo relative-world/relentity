@@ -20,10 +20,11 @@ from relentity.spatial import (
     Located,
 )
 from relentity.spatial.physics.systems import CollisionSystem
-from relentity.spatial.sensory.systems import VisionSystem, AudioSystem
+from relentity.spatial.sound.systems import AudioSystem
+from relentity.spatial.vision.systems import VisionSystem
 from relentity.spatial.systems import LocationSystem
-from relentity.visual.components import RenderableColor, RenderableShape, ShapeType, RenderLayer
-from relentity.visual.systems import RenderSystem
+from relentity.rendering.components import RenderableColor, RenderableShape, ShapeType, RenderLayer
+from relentity.rendering.systems import RenderSystem
 
 # Configure logging
 logger = logging.getLogger("")

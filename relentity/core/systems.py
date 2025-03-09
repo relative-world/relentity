@@ -1,9 +1,11 @@
 import time
-from typing import Set, Type, Dict, Any, Callable, Awaitable
+from typing import Set, Type, Dict, Any, Callable, Awaitable, TYPE_CHECKING
 
 from .components import Component
 from .event_bus import EventBus
-from .registry import Registry
+
+if TYPE_CHECKING:
+    from .registry import Registry
 
 
 class System:
@@ -15,7 +17,7 @@ class System:
     # System execution priority (lower numbers run first)
     priority: int = 100
 
-    def __init__(self, registry: Registry):
+    def __init__(self, registry: "Registry"):
         """
         Initialize the System with a registry and default settings.
 

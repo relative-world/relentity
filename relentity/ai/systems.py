@@ -111,11 +111,7 @@ class AIDrivenSystem(System):
 
         # Handle any exceptions that occurred during processing
         if not task.cancelled():
-            try:
-                task.result()
-            except Exception as e:
-                # Log the exception (you may want to use a proper logger)
-                print(f"Error processing entity {entity_id}: {e}")
+            task.result()
 
     async def process_entity(self, entity):
         """
@@ -161,8 +157,11 @@ class AIDrivenSystem(System):
             response_model=EmotiveResponse,
             tools=tools,
         )
-        if tools:
-            response = response.response
+        # if tools:
+        #     response = response.response
         if response:
-            await entity.event_bus.emit(AI_RESPONSE_EVENT_TYPE, response)
+            await entity.event_bus.emit(
+                AI_RESPONSE_EVENT_TYPE,
+                response,
+            )
         return response

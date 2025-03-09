@@ -152,7 +152,7 @@
     },
     {
       "type": "Actor",
-      "name": "G",
+      "name": "George",
       "location": [
         10,
         20
@@ -163,21 +163,11 @@
         200,
         0
       ],
-      "description": "G",
-      "components": {
-        "Identity": {
-          "name": "G",
-          "description": "G stood near the snack table, absentmindedly stirring a drink with a straw. Always the observer, G preferred to watch the social dynamics unfold rather than dive in headfirst. They were here because Alex was an old friend, but large gatherings weren’t really their scene."
-        },
-        "Position": {
-          "x": 200,
-          "y": 100
-        }
-      }
+      "description": "George stood near the snack table, absentmindedly stirring a drink with a straw. Always the observer, G preferred to watch the social dynamics unfold rather than dive in headfirst. They were here because Alex was an old friend, but large gatherings weren’t really their scene."
     },
     {
       "type": "Actor",
-      "name": "H",
+      "name": "Howard",
       "location": [
         50,
         80
@@ -188,21 +178,11 @@
         150,
         255
       ],
-      "description": "H",
-      "components": {
-        "Identity": {
-          "name": "H",
-          "description": "H was deep in conversation near the fireplace, gesturing wildly as they told a story. Charismatic and full of energy, they always managed to be at the center of attention. Tonight was no exception."
-        },
-        "Position": {
-          "x": -150,
-          "y": 300
-        }
-      }
+      "description": "Howard was deep in conversation near the fireplace, gesturing wildly as they told a story. Charismatic and full of energy, they always managed to be at the center of attention. Tonight was no exception."
     },
     {
       "type": "Actor",
-      "name": "I",
+      "name": "Imani",
       "location": [
         100,
         120
@@ -213,21 +193,11 @@
         255,
         100
       ],
-      "description": "I",
-      "components": {
-        "Identity": {
-          "name": "I",
-          "description": "I lounged on the couch with a drink in hand, listening more than speaking. A skilled listener, they had a way of making people feel like they were the only one in the room. They were waiting for the right moment to contribute to the conversation."
-        },
-        "Position": {
-          "x": 350,
-          "y": -200
-        }
-      }
+      "description": "Imani lounged on the couch with a drink in hand, listening more than speaking. A skilled listener, they had a way of making people feel like they were the only one in the room. They were waiting for the right moment to contribute to the conversation."
     },
     {
       "type": "Actor",
-      "name": "J",
+      "name": "John",
       "location": [
         130,
         150
@@ -238,21 +208,11 @@
         50,
         150
       ],
-      "description": "J",
-      "components": {
-        "Identity": {
-          "name": "J",
-          "description": "J was in the kitchen, expertly mixing cocktails. They took pride in their bartending skills, and parties were their stage. Every time someone took a sip of one of their drinks and smiled, J considered it a personal victory."
-        },
-        "Position": {
-          "x": -50,
-          "y": -100
-        }
-      }
+      "description": "John was in the kitchen, expertly mixing cocktails. They took pride in their bartending skills, and parties were their stage. Every time someone took a sip of one of their drinks and smiled, J considered it a personal victory."
     },
     {
       "type": "Actor",
-      "name": "K",
+      "name": "Kyle",
       "location": [
         160,
         180
@@ -263,21 +223,11 @@
         200,
         200
       ],
-      "description": "K",
-      "components": {
-        "Identity": {
-          "name": "K",
-          "description": "K stood awkwardly by the doorway, debating whether to leave or stay. They never quite felt comfortable at parties, but they promised Alex they’d show up. Now, they just needed to find a reason to stay a little longer."
-        },
-        "Position": {
-          "x": 400,
-          "y": 50
-        }
-      }
+      "description": "Kyle stood awkwardly by the doorway, debating whether to leave or stay. They never quite felt comfortable at parties, but they promised Alex they’d show up. Now, they just needed to find a reason to stay a little longer."
     },
     {
       "type": "Actor",
-      "name": "Y",
+      "name": "Yvonne",
       "location": [
         200,
         220
@@ -288,17 +238,7 @@
         75,
         150
       ],
-      "description": "Y",
-      "components": {
-        "Identity": {
-          "name": "Y",
-          "description": "Y was the life of the dance floor, moving with an effortless rhythm. They didn’t care who was watching or what anyone thought—they just loved to dance. As the music changed, Y adjusted their steps without missing a beat."
-        },
-        "Position": {
-          "x": -250,
-          "y": 250
-        }
-      }
+      "description": "Yvonne was the life of the dance floor, moving with an effortless rhythm. They didn’t care who was watching or what anyone thought—they just loved to dance. As the music changed, Y adjusted their steps without missing a beat."
     },
     {
       "type": "Actor",
@@ -313,17 +253,7 @@
         0,
         130
       ],
-      "description": "Zara",
-      "components": {
-        "Identity": {
-          "name": "Zara",
-          "description": "Zara was in the corner sketching the scene, capturing the energy of the party with quick, expressive lines. 'This is going to be a masterpiece,' they murmured."
-        },
-        "Position": {
-          "x": 1000,
-          "y": 500
-        }
-      }
+      "description": "Zara was in the corner sketching the scene, capturing the energy of the party with quick, expressive lines. 'This is going to be a masterpiece,' they murmured."
     }
   ]
 }

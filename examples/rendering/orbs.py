@@ -9,8 +9,8 @@ from relentity.spatial.components import Position, Velocity
 from relentity.spatial.systems import MovementSystem
 from relentity.spatial.physics.systems import CollisionSystem
 from relentity.spatial.physics.components import ShapeBody, ShapeType as BodyShapeType
-from relentity.visual.components import RenderableShape, RenderableColor, ShapeType, RenderLayer
-from relentity.visual.systems import RenderSystem
+from relentity.rendering.components import RenderableShape, RenderableColor, ShapeType, RenderLayer
+from relentity.rendering.systems import RenderSystem
 
 
 async def main():

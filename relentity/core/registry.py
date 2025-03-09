@@ -110,3 +110,7 @@ class Registry:
 
     def get_entity_ref(self, entity_id: uuid.UUID) -> EntityRef:
         return EntityRef(entity_id=entity_id, _registry=self)
+
+    async def remove_entity(self, entity_id: uuid.UUID) -> None:
+        """Remove an entity completely from the registry."""
+        await self.unregister_entity(entity_id)

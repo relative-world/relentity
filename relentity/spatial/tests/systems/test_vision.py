@@ -5,8 +5,8 @@ from relentity.core.entities import Entity
 from relentity.spatial.registry import SpatialRegistry
 from relentity.spatial.components import Position, Velocity
 from relentity.spatial.events import EntitySeenEvent, ENTITY_SEEN_EVENT_TYPE
-from relentity.spatial.sensory.components import Vision, Visible
-from relentity.spatial.sensory.systems import VisionSystem
+from relentity.spatial.vision import Vision, Visible
+from relentity.spatial.vision import VisionSystem
 
 
 @pytest.fixture

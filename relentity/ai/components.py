@@ -134,13 +134,7 @@ class AIDriven(Component):
         output = self._system_prompt_queue
         if clear:
             self._system_prompt_queue = []
-        return (
-            "\n".join(output)
-            + "\n100 most recent events:"
-            + "\n".join(self._ai_event_history[-100::])
-            + "\ndistinct memories"
-            + "\n".join(rendered_events)
-        )
+        return "\n".join(output)
 
 
 class PromptRenderableComponent(Component):

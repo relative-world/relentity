@@ -6,7 +6,7 @@ from ollama import AsyncClient as AsyncOllamaClient, GenerateResponse
 from pydantic import BaseModel
 
 from .json import maybe_parse_json, fix_json_response, inline_json_schema_defs
-from .responses import BasicResponse, TooledResponse
+from .responses import BasicResponse, TooledResponse, ResolvedTooledResponse
 from .tools import call_tool, ToolCallResponse, ToolDefinition, TOOL_CALLING_SYSTEM_PROMPT
 from relentity.settings import settings
 
@@ -58,6 +58,7 @@ class PydanticOllamaClient:
         Returns:
             BaseModel: The validated response model.
         """
+        _response_model = response_model
         if tools:
             response_model = TooledResponse[response_model]
 
@@ -99,7 +100,14 @@ class PydanticOllamaClient:
         response_obj = response_model.model_validate(data)
         if tools:
             if response_obj.tool_call:
-                await call_tool(tools, response_obj.tool_call)
+                result = await call_tool(tools, response_obj.tool_call)
+                response_obj = ResolvedTooledResponse[_response_model](
+                    response=response_obj.response, tool_call=response_obj.tool_call, tool_call_result=result
+                )
+            else:
+                response_obj = ResolvedTooledResponse[_response_model](
+                    response=response_obj.response, tool_call=None, tool_call_result=None
+                )
         return response, response_obj
 
 

@@ -5,8 +5,8 @@ from relentity.core.entities import Entity
 from relentity.spatial.registry import SpatialRegistry
 from relentity.spatial.components import Position
 from relentity.spatial.events import SoundEvent, SOUND_HEARD_EVENT_TYPE, SOUND_CREATED_EVENT_TYPE
-from relentity.spatial.sensory.components import Hearing, Audible
-from relentity.spatial.sensory.systems import AudioSystem
+from relentity.spatial.sound import Hearing, Audible
+from relentity.spatial.sound import AudioSystem
 
 
 @pytest.fixture

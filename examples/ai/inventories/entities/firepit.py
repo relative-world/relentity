@@ -2,8 +2,9 @@ from relentity.ai import ToolEnabledComponent, tool, AIDriven
 from relentity.core import Component, Entity, Identity
 from relentity.spatial import Position, Area
 from relentity.spatial.events import AreaEvent, AREA_ENTERED_EVENT_TYPE, AREA_EXITED_EVENT_TYPE
-from relentity.spatial.sensory.components import Visible, Audible
-from relentity.visual.components import RenderableColor, RenderableShape, ShapeType, RenderLayer
+from relentity.spatial.sound.components import Audible
+from relentity.spatial.vision.components import Visible
+from relentity.rendering.components import RenderableColor, RenderableShape, ShapeType, RenderLayer
 
 
 class FireTools(ToolEnabledComponent):
